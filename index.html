@@ -642,68 +642,6 @@
   .teacher-panel.active {
     display: block;
   }
-
-  /* ---------- Player Controls Styling ---------- */
-  .player-controls-bar {
-    background: #fff;
-    border: 2px solid var(--paper-darker);
-    border-radius: 16px;
-    padding: 12px 16px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 4px 12px rgba(44,74,62,0.04);
-  }
-  .player-btn {
-    background: var(--jade);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.1s, background 0.2s;
-  }
-  .player-btn:hover {
-    transform: scale(1.05);
-    background: var(--seal-dark);
-  }
-  .player-progress-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .player-progress-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--paper-dark);
-    border-radius: 4px;
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
-  }
-  .player-progress-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--jade);
-    border-radius: 4px;
-    transition: width 0.1s linear;
-  }
-  .player-time-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--ink-soft);
-    font-family: var(--mono);
-    font-weight: 700;
-  }
 </style>
 </head>
 <body>
@@ -907,21 +845,6 @@
 
       <div class="video-container" id="video-display-area">
         <span>Đang tải video bài học... 📺</span>
-      </div>
-
-      <!-- TÍCH HỢP PLAYER CONTROLS (Thanh điều khiển tùy chỉnh audio/video) -->
-      <div class="player-controls-bar" id="custom-player-controls">
-        <button class="player-btn" id="pc-play-pause-btn" title="Phát / Tạm dừng">▶</button>
-        <button class="player-btn" id="pc-replay-btn" title="Nghe lại (-5s)">↺</button>
-        <div class="player-progress-container">
-          <div class="player-progress-bar" id="pc-progress-bar">
-            <div class="player-progress-fill" id="pc-progress-fill"></div>
-          </div>
-          <div class="player-time-info">
-            <span id="pc-current-time">00:00</span>
-            <span id="pc-duration">00:00</span>
-          </div>
-        </div>
       </div>
 
       <div class="dictation-input-area">
@@ -1841,6 +1764,7 @@ const videoTeacherPasswordInput = document.getElementById("video-teacher-passwor
 const cancelVideoPassBtn = document.getElementById("cancel-video-pass-btn");
 const submitVideoPassBtn = document.getElementById("submit-video-pass-btn");
 
+// Yêu cầu nhập mật khẩu khi bấm vào nút Khu vực Giáo viên
 document.getElementById("open-teacher-panel-btn").addEventListener("click", () => {
   if(teacherPanel.classList.contains("active")){
     teacherPanel.classList.remove("active");
@@ -1918,12 +1842,13 @@ function loadSelectedVideo(vObj){
   }
 
   if(embedUrl){
-    videoDisplayArea.innerHTML = `<iframe id="active-media-element" src="${embedUrl}" allowfullscreen></iframe>`;
+    videoDisplayArea.innerHTML = `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
   } else {
     videoDisplayArea.innerHTML = `<span>Chưa có link video bài học. 📺</span>`;
   }
 }
 
+// Thêm video mới từ khu vực giáo viên
 document.getElementById("add-video-item-btn").addEventListener("click", () => {
   const title = document.getElementById("new-video-title").value.trim();
   const url = document.getElementById("new-video-url").value.trim();
@@ -1982,6 +1907,7 @@ function renderTeacherVideoManagerList(){
   });
 }
 
+// Nộp bài chép chính tả
 document.getElementById("submit-dictation-btn").addEventListener("click", () => {
   const text = document.getElementById("dictation-text").value.trim();
   if(!text){
@@ -2009,71 +1935,6 @@ document.getElementById("submit-dictation-btn").addEventListener("click", () => 
   document.getElementById("dictation-text").value = "";
   alert("Gửi bài chép chính tả thành công! Bài của bạn đã được ghi nhận vào Bảng xếp hạng nộp bài sớm nhất. 🚀✨");
 });
-
-/* =========================================================
-   PLAYER CONTROLS LOGIC (Tính năng điều khiển phương tiện)
-   ========================================================= */
-const playPauseBtn = document.getElementById("pc-play-pause-btn");
-const replayBtn = document.getElementById("pc-replay-btn");
-const progressFill = document.getElementById("pc-progress-fill");
-const progressBar = document.getElementById("pc-progress-bar");
-const currentTimeEl = document.getElementById("pc-current-time");
-const durationEl = document.getElementById("pc-duration");
-
-let isPlaying = false;
-let currentSeconds = 0;
-let totalDurationSeconds = 120; // Giả lập thời gian bài phát (2 phút) hoặc tự cập nhật từ media
-let playerInterval = null;
-
-function formatTime(sec){
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60);
-  return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-}
-
-function updatePlayerUI(){
-  currentTimeEl.textContent = formatTime(currentSeconds);
-  durationEl.textContent = formatTime(totalDurationSeconds);
-  const pct = (currentSeconds / totalDurationSeconds) * 100;
-  progressFill.style.width = Math.min(100, Math.max(0, pct)) + "%";
-}
-
-playPauseBtn.addEventListener("click", () => {
-  isPlaying = !isPlaying;
-  if(isPlaying){
-    playPauseBtn.textContent = "❚❚";
-    if(playerInterval) clearInterval(playerInterval);
-    playerInterval = setInterval(() => {
-      currentSeconds++;
-      if(currentSeconds > totalDurationSeconds){
-        currentSeconds = 0;
-        isPlaying = false;
-        playPauseBtn.textContent = "▶";
-        clearInterval(playerInterval);
-      }
-      updatePlayerUI();
-    }, 1000);
-  } else {
-    playPauseBtn.textContent = "▶";
-    clearInterval(playerInterval);
-  }
-});
-
-replayBtn.addEventListener("click", () => {
-  currentSeconds = Math.max(0, currentSeconds - 5);
-  updatePlayerUI();
-});
-
-progressBar.addEventListener("click", (e) => {
-  const rect = progressBar.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const width = rect.width;
-  const clickRatio = clickX / width;
-  currentSeconds = clickRatio * totalDurationSeconds;
-  updatePlayerUI();
-});
-
-updatePlayerUI();
 
 /* =========================================================
    LEADERBOARD VIEW LOGIC
@@ -2437,10 +2298,62 @@ document.getElementById("tl-save-timer-btn").addEventListener("click", () => {
   }
   state.challengeSeconds = sec;
   saveState();
-  alert(`Đã lưu thời gian thử thách thành công (${sec} giây mỗi từ)!`);
+  alert(`Đã lưu thời gian thử thách thành công (${sec} giây)! ✨`);
 });
 
-// Khởi chạy khi tải trang
+document.getElementById("create-class-btn").addEventListener("click", () => {
+  const cName = document.getElementById("new-class-name").value.trim();
+  const cPass = document.getElementById("new-class-pass").value.trim();
+  if(!cName || !cPass){
+    alert("Vui lòng nhập đầy đủ tên lớp và mật khẩu bảo vệ!");
+    return;
+  }
+  if(state.classes[cName]){
+    alert("Lớp học này đã tồn tại trên hệ thống!");
+    return;
+  }
+  state.classes[cName] = {
+    password: cPass,
+    videos: [
+      {id: "v_init", title: "Bài tập video đầu tiên", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", note: "Chào mừng các em đến với lớp học mới! Chúc các em học tập vui vẻ ~ 🐼"}
+    ],
+    customWords: [],
+    deletedDefaultIds: []
+  };
+  saveState();
+  document.getElementById("new-class-name").value = "";
+  document.getElementById("new-class-pass").value = "";
+  renderTeacherManage();
+  alert(`Đã tạo thành công lớp "${cName}"! ✨`);
+});
+
+function renderTeacherManage(){
+  const classListManage = document.getElementById("teacher-class-list-manage");
+  classListManage.innerHTML = "";
+  Object.keys(state.classes).forEach(cName => {
+    const cData = state.classes[cName];
+    const row = document.createElement("div");
+    row.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:var(--paper); padding:10px 14px; border-radius:12px; border:2px solid var(--paper-darker);";
+    row.innerHTML = `
+      <div><strong>🏫 ${cName}</strong> (Mật khẩu: <code style="color:var(--seal-dark);">${cData.password}</code>)</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-outline select-class-manage-btn" data-name="${cName}" style="font-size:11px; padding:4px 10px;">Quản lý từ vựng lớp này</button>
+        ${Object.keys(state.classes).length > 1 ? `<button class="btn btn-bad delete-class-btn" data-name="${cName}" style="font-size:11px; padding:4px 10px;">Xóa lớp</button>` : ""}
+      </div>
+    `;
+    classListManage.appendChild(row);
+  });
+
+  classListManage.querySelectorAll(".select-class-manage-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.currentClassName = btn.dataset.name;
+      saveState();
+      renderTeacherManage();
+      alert(`Đã chuyển vùng quản lý sang lớp: ${state.currentClassName}`);
+    });
+  });
+}
+
 initClassSelector();
 </script>
 </body>
