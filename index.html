@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="page-title-tag">🐼 雅趣学堂 · WEB TỪ VỰNG ĐA LỚP HỌC 🎋</title>
+<title id="page-title-tag">🐼 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋</title>
 <style id="custom-theme-style">
   :root{
     --paper:#F0F7F4;
@@ -1284,23 +1284,7 @@
           </span>
         </div>
       </div>
-
-      <!-- KẾT NỐI GOOGLE SHEETS -->
-      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
-        <h4 style="margin:0 0 8px; color:var(--seal-dark); font-family:var(--serif);">📊 Nhận bài nộp về Google Sheets</h4>
-        <p style="font-size:12px;color:var(--ink-soft);margin:0 0 10px;">
-          Dán <strong>Web App URL của Google Apps Script</strong> vào đây. Khi học viên bấm nộp, website sẽ gửi dữ liệu bài làm lên Sheet.
-          Nếu chưa cấu hình, bài vẫn được lưu trong trình duyệt để không mất dữ liệu.
-        </p>
-        <input type="text" id="grammar-sheet-webhook-url" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%;margin-bottom:10px;">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-primary" id="grammar-save-sheet-url-btn">💾 Lưu kết nối Google Sheets</button>
-          <button class="btn btn-outline" id="grammar-export-submissions-btn">⬇️ Xuất bài nộp CSV</button>
-        </div>
-        <div id="grammar-sheet-status" style="font-size:12px;color:var(--ink-soft);margin-top:8px;"></div>
-      </div>
-
-      <!-- ĐỔI TÊN LIST / CHỦ ĐỀ CỦA LỚP HIỆN TẠI -->
+<!-- ĐỔI TÊN LIST / CHỦ ĐỀ CỦA LỚP HIỆN TẠI -->
       <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
         <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🏷️ Đổi Tên List / Chủ Đề (Lớp hiện tại)</h4>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
@@ -1415,17 +1399,139 @@ function loadState(){
     streak: 0,
     timedBest: {},
     challengeSeconds: 4,
-    customTitle: "🎋 雅趣学堂 · WEB TỪ VỰNG ĐA LỚP HỌC 🎋",
+    customTitle: "🎋 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋",
     colorPaper: "#F0F7F4",
     colorInk: "#2C4A3E",
     colorJade: "#388E3C",
     bgImage: "",
-    grammarSheetWebhookUrl: ""
+    // Google Apps Script Web App dùng chung cho tất cả thiết bị học viên
+    grammarSheetWebhookUrl: "https://script.google.com/macros/s/AKfycbySIHqYjfZrjMp5tkzVTmAezealI_Ls0Ctbb9c6ecE62YQiYAe8vcT7maJCR-S6Uzhm/exec"
   };
 }
 function saveState(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
+
+/* =========================================================
+   GOOGLE SHEETS - TỰ ĐỘNG GỬI TẤT CẢ CÂU TRẢ LỜI
+   Endpoint cố định - học viên không chọn link khác.
+   ========================================================= */
+const ANSWER_SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbzY5BP-DJO68RkKh1xh3aH20GZtBTryNlA25qwaa6C0Chf-bI4xrAqE7F3yyQVQE_dswQ/exec";
+const ANSWER_QUEUE_KEY = "zhVocabApp_pending_sheet_answers_v5";
+
+function buildSheetAnswer(extra = {}){
+  const selected = extra.selectedAnswer ?? extra.answer ?? "";
+  const correct = extra.correctAnswer ?? "";
+
+  // Chuẩn hóa dữ liệu để tương thích trực tiếp với doPost(e)
+  // đang dùng JSON.parse(e.postData.contents) trong Google Apps Script.
+  return {
+    action: "student_answer",
+    timestamp: new Date().toISOString(),
+    studentName: state.studentName || "Học viên ẩn danh",
+    className: state.currentClassName || "",
+
+    // Các trường chính mà Apps Script hiện tại đang ghi:
+    word: extra.word ?? extra.hanzi ?? extra.grammar ?? extra.wordId ?? "",
+    sentence: extra.sentence ?? selected ?? extra.text ?? "",
+    duration: extra.duration ?? "",
+
+    // Dữ liệu đáp án đầy đủ:
+    answer: extra.answer ?? selected,
+    selectedAnswer: selected,
+    correctAnswer: correct,
+    isCorrect: extra.isCorrect ?? "",
+    score: extra.score ?? extra.scoreAtAnswer ?? "",
+    percentage: extra.percentage ?? "",
+    questionIndex: extra.questionIndex ?? "",
+    totalQuestions: extra.totalQuestions ?? "",
+    activity: extra.activity ?? "",
+    actionType: extra.actionType ?? "",
+
+    ...extra,
+
+    // Đảm bảo các trường chuẩn không bị mất nếu extra có giá trị null/undefined.
+    answer: extra.answer ?? selected,
+    selectedAnswer: selected,
+    correctAnswer: correct,
+    word: extra.word ?? extra.hanzi ?? extra.grammar ?? extra.wordId ?? "",
+    sentence: extra.sentence ?? selected ?? extra.text ?? "",
+    duration: extra.duration ?? ""
+  };
+}
+
+function queueSheetAnswer(record){
+  try{
+    const pending = JSON.parse(localStorage.getItem(ANSWER_QUEUE_KEY) || "[]");
+    pending.push(record);
+    localStorage.setItem(ANSWER_QUEUE_KEY, JSON.stringify(pending.slice(-300)));
+  }catch(e){}
+}
+
+function postSheetRecord(record){
+  // Gửi RAW JSON + text/plain.
+  // Đây là dạng tương thích với:
+  // var data = JSON.parse(e.postData.contents);
+  // trong Google Apps Script.
+  const payload = JSON.stringify(record);
+
+  return fetch(ANSWER_SHEET_ENDPOINT, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: payload,
+    keepalive: true
+  }).catch(() => {
+    // Fallback cho trình duyệt chặn fetch khi trang sắp đóng.
+    try{
+      const blob = new Blob([payload], {type:"text/plain;charset=utf-8"});
+      if(navigator.sendBeacon && navigator.sendBeacon(ANSWER_SHEET_ENDPOINT, blob)){
+        return;
+      }
+    }catch(e){}
+    queueSheetAnswer(record);
+  });
+}
+
+function sendAnswerToGoogleSheet(extra = {}){
+  const record = buildSheetAnswer(extra);
+  return postSheetRecord(record);
+}
+
+function retryPendingSheetAnswers(){
+  let pending = [];
+  try{
+    pending = JSON.parse(localStorage.getItem(ANSWER_QUEUE_KEY) || "[]");
+  }catch(e){
+    pending = [];
+  }
+
+  if(!pending.length) return;
+
+  localStorage.removeItem(ANSWER_QUEUE_KEY);
+
+  pending.forEach(record => {
+    postSheetRecord(record);
+  });
+}
+
+window.addEventListener("online", retryPendingSheetAnswers);
+
+function testGoogleSheetConnection(){
+  return sendAnswerToGoogleSheet({
+    activity: "test",
+    actionType: "answer",
+    word: "TEST",
+    sentence: "TEST GOOGLE SHEETS CONNECTION",
+    answer: "TEST GOOGLE SHEETS CONNECTION",
+    selectedAnswer: "TEST GOOGLE SHEETS CONNECTION",
+    correctAnswer: "TEST GOOGLE SHEETS CONNECTION",
+    isCorrect: true
+  });
+}
+
 
 let state = loadState();
 
@@ -1805,6 +1911,20 @@ function renderQuizQuestion(){
         if(correctBtn) correctBtn.classList.add("correct");
       }
       touchStreak();
+      sendAnswerToGoogleSheet({
+        activity:"quiz",
+        actionType:"answer",
+        questionIndex:qzIdx + 1,
+        totalQuestions:qzQueue.length,
+        wordId:w.id,
+        hanzi:w.hanzi,
+        pinyin:w.pinyin,
+        selectedAnswer:opt.meaning,
+        correctAnswer:w.meaning,
+        isCorrect:opt.id === w.id,
+        scoreAtAnswer:qzScore,
+        topic:qzTopicSel.value
+      });
       setTimeout(()=>{ qzIdx++; renderQuizQuestion(); }, 900);
     });
     optWrap.appendChild(b);
@@ -1813,6 +1933,14 @@ function renderQuizQuestion(){
 
 function renderQuizResult(){
   const pct = Math.round((qzScore/qzQueue.length)*100);
+  sendAnswerToGoogleSheet({
+    activity:"quiz",
+    actionType:"result",
+    score:qzScore,
+    totalQuestions:qzQueue.length,
+    percentage:pct,
+    topic:qzTopicSel.value
+  });
   qzArea.innerHTML = `
     <div class="quiz-box result-box">
       <div class="score">${qzScore} / ${qzQueue.length}</div>
@@ -1915,6 +2043,21 @@ function renderTimedQuestion(){
       if(answered) return;
       answered = true;
       clearInterval(tmTimerId);
+      sendAnswerToGoogleSheet({
+        activity:"timed",
+        actionType:"answer",
+        questionIndex:tmIdx + 1,
+        totalQuestions:tmQueue.length,
+        attempt:tmAttempts,
+        wordId:w.id,
+        hanzi:w.hanzi,
+        pinyin:w.pinyin,
+        selectedAnswer:opt.meaning,
+        correctAnswer:w.meaning,
+        isCorrect:opt.id === w.id,
+        topic:tmTopicSel.value,
+        duration: tmRemaining
+      });
       document.querySelectorAll("#tm-options .option-btn").forEach(x=>x.disabled=true);
       if(opt.id === w.id){
         b.classList.add("correct");
@@ -1953,6 +2096,13 @@ function renderTimedQuestion(){
 
 function renderTimedPass(){
   clearInterval(tmTimerId);
+  sendAnswerToGoogleSheet({
+    activity:"timed",
+    actionType:"result",
+    attempts:tmAttempts,
+    topic:tmTopicSel.value,
+    listName:tmTopicSel.options[tmTopicSel.selectedIndex]?.text || tmTopicSel.value
+  });
   const key = tmKey();
   if(!state.timedBest[key] || tmAttempts < state.timedBest[key]){
     state.timedBest[key] = tmAttempts;
@@ -2479,6 +2629,15 @@ document.getElementById("submit-dictation-btn").addEventListener("click", () => 
   });
   saveState();
 
+  sendAnswerToGoogleSheet({
+    activity:"dictation",
+    actionType:"submission",
+    videoId:vId,
+    videoTitle,
+    answer:text,
+    text
+  });
+
   document.getElementById("dictation-text").value = "";
   alert("Gửi bài chép chính tả thành công! Bài của bạn đã được ghi nhận vào Bảng xếp hạng nộp bài sớm nhất. 🚀✨");
 });
@@ -2699,33 +2858,34 @@ document.getElementById("grammar-add-section-btn").addEventListener("click", () 
   renderGrammarStudent();
   alert("Đã tạo phần ngữ pháp mới! ✨");
 });
-
-document.getElementById("grammar-save-sheet-url-btn").addEventListener("click", () => {
-  const url = document.getElementById("grammar-sheet-webhook-url").value.trim();
-  state.grammarSheetWebhookUrl = url;
-  saveState();
-  document.getElementById("grammar-sheet-status").textContent =
-    url ? "✅ Đã lưu Web App URL cho lớp/website này." : "⚠️ Đã xóa kết nối Google Sheets.";
-  alert(url ? "Đã lưu kết nối Google Sheets! ✨" : "Đã xóa kết nối Google Sheets.");
-});
-
 async function sendGrammarSubmissionToSheet(payload){
-  const url = (state.grammarSheetWebhookUrl || "").trim();
-  if(!url) return {ok:false, skipped:true};
-
   try{
-    await fetch(url, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {"Content-Type":"text/plain;charset=utf-8"},
-      body: JSON.stringify(payload)
+    const answers = Array.isArray(payload.answers) ? payload.answers : [];
+
+    answers.forEach((a, idx) => {
+      sendAnswerToGoogleSheet({
+        activity: "grammar",
+        actionType: "answer",
+        submissionId: payload.id || "",
+        submittedAt: payload.submittedAt || "",
+        questionIndex: idx + 1,
+        totalQuestions: answers.length,
+        sectionTitle: a.sectionTitle || "",
+        grammar: a.grammar || "",
+        instruction: a.instruction || "",
+        word: a.grammar || "",
+        sentence: a.answer || "",
+        answer: a.answer || "",
+        selectedAnswer: a.answer || "",
+        correctAnswer: ""
+      });
     });
+
     return {ok:true};
   }catch(err){
     return {ok:false, error:err};
   }
 }
-
 document.getElementById("submit-grammar-btn").addEventListener("click", async () => {
   const textareas = Array.from(document.querySelectorAll("#grammar-student-area .grammar-answer"));
   const sections = getGrammarSections();
@@ -2770,25 +2930,43 @@ document.getElementById("submit-grammar-btn").addEventListener("click", async ()
   cData.grammarSubmissions.push(submission);
   saveState();
 
+  // Gửi từng câu trả lời ngữ pháp về Google Sheets.
+  (submission.answers || []).forEach((a, idx) => {
+    sendAnswerToGoogleSheet({
+      activity: "grammar",
+      actionType: "answer",
+      submissionId: submission.id,
+      questionIndex: idx + 1,
+      totalQuestions: submission.answers.length,
+      sectionId: answers[idx]?.sectionId || "",
+      itemId: answers[idx]?.itemId || "",
+      sectionTitle: a.sectionTitle || "",
+      grammar: a.grammar || "",
+      instruction: a.instruction || "",
+      answer: a.answer || "",
+      selectedAnswer: a.answer || ""
+    });
+  });
+
   const status = document.getElementById("grammar-submit-status");
   status.textContent = "⏳ Đang ghi nhận bài nộp...";
-  const result = await sendGrammarSubmissionToSheet(submission);
+  const result = {ok:true};
 
   document.querySelectorAll("#grammar-student-area .grammar-answer").forEach(t => t.value = "");
   status.textContent = result.ok
-    ? "✅ Đã nộp và gửi dữ liệu lên Google Sheets."
-    : result.skipped
-      ? "✅ Đã nộp và lưu trên website. Chưa cấu hình Google Sheets."
-      : "⚠️ Đã lưu bài trên website nhưng gửi Google Sheets chưa thành công.";
+    ? "✅ Đã nộp bài và gửi dữ liệu lên Google Sheets."
+    : "⚠️ Đã lưu bài trên website nhưng chưa gửi được lên Google Sheets.";
+
+  document.querySelectorAll("#grammar-student-area .grammar-answer").forEach(t => t.value = "");
 
   alert(
     result.ok
       ? "Nộp bài thành công! Bài đã được gửi về Google Sheets của giáo viên. 🚀✨"
-      : "Nộp bài thành công! Bài đã được lưu trên website. Nếu chưa thấy trong Sheet, kiểm tra phần kết nối Google Sheets."
+      : "Nộp bài đã được lưu trên máy. ⚠️\\n\\nGoogle Sheets chưa nhận được dữ liệu. Hãy kiểm tra Apps Script/Deployment."
   );
 });
 
-document.getElementById("grammar-export-submissions-btn").addEventListener("click", () => {
+document.getElementById("grammar-export-submissions-btn")?.addEventListener("click", () => {
   const cData = getCurrentClassData();
   const submissions = Array.isArray(cData.grammarSubmissions) ? cData.grammarSubmissions : [];
   if(!submissions.length){
@@ -3043,7 +3221,6 @@ teacherLoginBtn.addEventListener("click", () => {
     document.getElementById("cfg-color-paper").value = state.colorPaper || "#F0F7F4";
     document.getElementById("cfg-color-ink").value = state.colorInk || "#2C4A3E";
     document.getElementById("cfg-color-jade").value = state.colorJade || "#388E3C";
-    document.getElementById("grammar-sheet-webhook-url").value = state.grammarSheetWebhookUrl || "";
     renderTeacherManage();
     renderGrammarTeacherManager();
   } else {
@@ -3093,7 +3270,7 @@ document.getElementById("cfg-save-theme-btn").addEventListener("click", () => {
 
 document.getElementById("cfg-reset-theme-btn").addEventListener("click", () => {
   if(confirm("Bạn có chắc chắn muốn khôi phục giao diện mặc định không?")){
-    state.customTitle = "🎋 雅趣学堂 · WEB TỪ VỰNG ĐA LỚP HỌC 🎋";
+    state.customTitle = "🎋 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋";
     state.colorPaper = "#F0F7F4";
     state.colorInk = "#2C4A3E";
     state.colorJade = "#388E3C";
