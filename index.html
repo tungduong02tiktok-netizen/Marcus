@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="page-title-tag">🐼 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋</title>
+<title id="page-title-tag">🐼 雅趣学堂 · WEB TỪ VỰNG ĐA LỚP HỌC 🎋</title>
 <style id="custom-theme-style">
   :root{
     --paper:#F0F7F4;
@@ -37,8 +37,8 @@
   }
   ::selection{background:var(--accent);color:#fff;}
 
-  /* ---------- Màn hình hỏi tên học viên (Welcome Overlay) ---------- */
-  #welcome-overlay{
+  /* ---------- Màn hình chọn lớp học (Class Selector Overlay) ---------- */
+  #class-selector-overlay{
     position:fixed;
     inset:0;
     background:var(--paper);
@@ -51,55 +51,79 @@
     justify-content:center;
     padding:20px;
   }
-  .welcome-card{
+  .class-selector-card{
     background:#fff;
     border:3px solid var(--paper-darker);
     border-radius:28px;
-    padding:36px 28px;
-    max-width:400px;
+    padding:32px 24px;
+    max-width:460px;
     width:100%;
     text-align:center;
     box-shadow:0 12px 32px rgba(44,74,62,0.1);
+    max-height: 90vh;
+    overflow-y: auto;
   }
   .welcome-seal{
-    width:72px;height:72px;
+    width:64px;height:64px;
     border-radius:20px;
     background:var(--jade);
     color:#fff;
     display:flex;align-items:center;justify-content:center;
     font-family:var(--serif);
-    font-size:36px;
+    font-size:32px;
     font-weight:700;
     box-shadow:0 4px 0 var(--seal-dark);
-    margin:0 auto 16px;
+    margin:0 auto 12px;
     transform:rotate(-4deg);
     border:2px solid #fff;
   }
-  .welcome-card h2{
-    font-family:var(--serif);
-    font-size:24px;
-    color:var(--seal-dark);
-    margin:0 0 8px;
+  .class-list-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+    text-align: left;
   }
-  .welcome-card p{
-    font-size:13px;
-    color:var(--ink-soft);
-    margin-bottom:20px;
+  .class-item-box{
+    background: var(--paper);
+    border: 2px solid var(--paper-darker);
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.1s;
   }
-  .welcome-card input{
-    width:100%;
-    text-align:center;
-    font-size:16px;
-    padding:12px;
-    border-radius:16px;
-    border:2px solid var(--paper-darker);
-    background:var(--paper);
-    margin-bottom:16px;
-    font-weight:700;
-    color:var(--seal-dark);
+  .class-item-box:hover{
+    border-color: var(--jade);
+    background: var(--accent-light);
+    transform: translateY(-1px);
   }
-  .welcome-card input:focus{outline:none; border-color:var(--jade); box-shadow:0 0 0 3px var(--accent-light);}
-  .welcome-card button{width:100%; padding:14px; font-size:15px;}
+  .class-info h4{ margin:0 0 2px; color:var(--seal-dark); font-family:var(--serif); font-size:16px;}
+  .class-info p{ margin:0; font-size:12px; color:var(--ink-soft);}
+
+  /* Modal nhập mật khẩu lớp */
+  #class-pass-modal{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .pass-modal-card{
+    background: #fff;
+    border: 3px solid var(--paper-darker);
+    border-radius: 24px;
+    padding: 24px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
 
   /* ---------- Header ---------- */
   header{
@@ -313,10 +337,8 @@
     box-shadow:0 3px 0 var(--paper-darker);
     transition:all 0.1s ease;
   }
-  .option-btn:hover:not(:disabled){border-color:var(--jade); transform:translateY(-1px); background:#fff;}
   .option-btn.correct{background:var(--jade); border-color:var(--jade-dark); color:#fff; box-shadow:none;}
   .option-btn.wrong{background:#D32F2F; border-color:#B71C1C; color:#fff; box-shadow:none;}
-  .option-btn:disabled{cursor:default;}
 
   .result-box{text-align:center; padding:30px 10px;}
   .result-box .score{font-family:var(--serif); font-size:52px; color:var(--seal-dark);}
@@ -535,7 +557,7 @@
   }
   .sentence-card textarea:focus{outline:none; border-color:var(--jade); box-shadow:0 0 0 3px var(--accent-light);}
 
-  /* ---------- Dictation / Video Tab Styles ---------- */
+  /* ---------- Dictation / Video Tab Styles (Cute Note Style) ---------- */
   .dictation-box {
     background: #fff;
     border: 3px solid var(--paper-darker);
@@ -562,6 +584,32 @@
     height: 100%;
     border: none;
   }
+  /* Cute Teacher Note Box */
+  .teacher-note-box {
+    background: #FFFDE7;
+    border: 2px dashed #FBC02D;
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 16px;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(251, 192, 45, 0.15);
+  }
+  .teacher-note-box::before {
+    content: "💡 Nhắn nhủ từ Thầy/Cô:";
+    display: block;
+    font-weight: 700;
+    color: #F57F17;
+    font-size: 13px;
+    margin-bottom: 6px;
+    font-family: var(--serif);
+  }
+  .teacher-note-content {
+    font-size: 14px;
+    color: #5D4037;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+
   .dictation-input-area textarea {
     width: 100%;
     font-family: var(--sans);
@@ -598,14 +646,35 @@
 </head>
 <body>
 
-<!-- MÀN HÌNH NHẬP TÊN HỌC VIÊN -->
-<div id="welcome-overlay">
-  <div class="welcome-card">
+<!-- MÀN HÌNH CHỌN LỚP HỌC & NHẬP TÊN -->
+<div id="class-selector-overlay">
+  <div class="class-selector-card">
     <div class="welcome-seal">🐼</div>
-    <h2>🎋 雅趣学堂 🎋</h2>
-    <p>Chào mừng bạn đến với lớp học gấu trúc trúc xanh! Nhập tên để lưu lại tiến độ nhé ~</p>
-    <input type="text" id="welcome-name-input" placeholder="Tên của bạn..." autofocus>
-    <button class="btn btn-primary" id="welcome-submit-btn">Vào học ngay 🐼🎋</button>
+    <h2 style="font-family:var(--serif); color:var(--seal-dark); margin:0 0 6px;">🎋 雅趣学堂 · CHỌN LỚP HỌC 🎋</h2>
+    <p style="font-size:13px; color:var(--ink-soft); margin-bottom:14px;">Chọn lớp học của bạn và nhập mật khẩu do giáo viên cấp để vào học nhé ~</p>
+    
+    <div style="margin-bottom: 14px; text-align: left;">
+      <label style="font-size:12px; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:4px;">Tên của bạn:</label>
+      <input type="text" id="selector-student-name" placeholder="Ví dụ: Nguyễn Văn A..." style="width:100%;">
+    </div>
+
+    <label style="font-size:12px; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:4px; text-align: left;">Danh sách lớp học:</label>
+    <div class="class-list-container" id="class-selection-list">
+      <!-- Render dynamic classes here -->
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NHẬP MẬT KHẨU LỚP -->
+<div id="class-pass-modal">
+  <div class="pass-modal-card">
+    <h3 style="font-family:var(--serif); color:var(--seal-dark); margin-top:0;" id="modal-class-title">🔒 Nhập mật khẩu lớp</h3>
+    <p style="font-size:12px; color:var(--ink-soft); margin-bottom:14px;">Lớp này được bảo vệ bằng mật khẩu. Vui lòng nhập mật khẩu giáo viên cung cấp:</p>
+    <input type="password" id="class-password-input" placeholder="Mật khẩu lớp..." style="width:100%; margin-bottom:14px; text-align:center;">
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-outline" id="cancel-pass-btn" style="flex:1;">Hủy</button>
+      <button class="btn btn-primary" id="submit-pass-btn" style="flex:1;">Vào lớp 🐼</button>
+    </div>
   </div>
 </div>
 
@@ -616,7 +685,7 @@
     <div class="brand-seal">🐼</div>
     <div>
       <h1 id="main-header-title">🎋 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋</h1>
-      <p class="tagline">Ghi nhớ tiếng Trung nhẹ nhàng & vui vẻ cùng gấu trúc mỗi ngày ~</p>
+      <p class="tagline" id="header-class-tagline">Đang học lớp: <span id="current-class-badge" style="color:var(--seal-dark); font-weight:bold;">—</span> <button class="link-btn" id="switch-class-btn" style="margin-left:8px; font-size:12px;">[Đổi lớp]</button></p>
     </div>
   </div>
 </header>
@@ -629,7 +698,7 @@
   <button data-view="dictation">🎧 Chép chính tả video</button>
   <button data-view="progress">📈 Tiến độ</button>
   <button data-view="manage">📚 Kho từ vựng</button>
-  <button data-view="teacher-lists" style="color:var(--seal-dark); border-color:var(--seal-dark);">⚙️ Quản lý List & Giao diện (GV)</button>
+  <button data-view="teacher-lists" style="color:var(--seal-dark); border-color:var(--seal-dark);">⚙️ Quản lý Lớp & Giao diện (GV)</button>
 </nav>
 
 <main>
@@ -722,20 +791,31 @@
     </div>
     <div class="dictation-box">
       <div class="teacher-access-bar">
-        <button class="link-btn" id="open-teacher-panel-btn" style="color:var(--seal-dark);">🔒 Khu vực Giáo viên (Đổi Video)</button>
+        <button class="link-btn" id="open-teacher-panel-btn" style="color:var(--seal-dark);">🔒 Khu vực Giáo viên (Đổi Video & Note)</button>
       </div>
 
       <div class="teacher-panel" id="teacher-panel">
-        <h4 style="margin:0 0 8px; color:var(--seal-dark); font-family:var(--serif);">⚙️ Bảng Quản Trị Video Của Giáo Viên</h4>
-        <p style="font-size:12px; color:var(--ink-soft); margin-bottom:10px;">Dán link YouTube hoặc Douyin mới vào đây, học viên truy cập sau sẽ thấy video này.</p>
-        <div style="display:flex; gap:10px;">
-          <input type="text" id="teacher-video-url" placeholder="Dán link video mới..." style="flex:1;">
-          <button class="btn btn-primary" id="save-teacher-video-btn">Cập nhật video</button>
+        <h4 style="margin:0 0 8px; color:var(--seal-dark); font-family:var(--serif);">⚙️ Quản Trị Video & Note Cho Lớp Này</h4>
+        <p style="font-size:12px; color:var(--ink-soft); margin-bottom:10px;">Cập nhật link video và viết hướng dẫn (note) siêu cute để yêu cầu học sinh chép chính tả.</p>
+        
+        <div style="margin-bottom:10px;">
+          <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Link Video mới (YouTube/Douyin):</label>
+          <input type="text" id="teacher-video-url" placeholder="Dán link video..." style="width:100%;">
         </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Nội dung Note cho học sinh:</label>
+          <textarea id="teacher-note-input" placeholder="Ví dụ: Các bé nghe đoạn từ 01:00 đến 03:00 rồi chép lại thật kỹ nhé ~ 🐼" style="width:100%; height:70px; padding:10px; border-radius:12px; border:2px solid var(--paper-darker); font-family:var(--sans);"></textarea>
+        </div>
+        <button class="btn btn-primary" id="save-teacher-video-btn">Lưu Video & Note</button>
       </div>
 
       <h3 style="font-family:var(--serif); margin-top:0; color:var(--seal-dark);">🎧 Chép chính tả từ Video</h3>
-      <p style="font-size:13px; color:var(--ink-soft); margin-bottom:14px;">Xem video bài học do giáo viên cung cấp, nghe và gõ lại nội dung tiếng Trung phía bên dưới rồi bấm gửi.</p>
+      <p style="font-size:13px; color:var(--ink-soft); margin-bottom:14px;">Xem video bài học, đọc kỹ nhắn nhủ của giáo viên và gõ lại nội dung tiếng Trung phía bên dưới.</p>
+
+      <!-- Cute Teacher Note Display -->
+      <div class="teacher-note-box" id="student-teacher-note-box">
+        <div class="teacher-note-content" id="student-teacher-note-text">Thầy cô chưa có ghi chú nào cho bài tập này. Chúc các em học tốt! 🐼</div>
+      </div>
 
       <div class="video-container" id="video-display-area">
         <span>Đang tải video bài học... 📺</span>
@@ -775,24 +855,73 @@
     <div class="word-list" id="mg-list"></div>
   </section>
 
-  <!-- ============ TEACHER LISTS & CUSTOMIZATION MANAGEMENT VIEW ============ -->
+  <!-- ============ TEACHER CLASSES & MANAGEMENT VIEW ============ -->
   <section class="view" id="view-teacher-lists">
     <div id="teacher-auth-box" style="background:#fff; border:3px solid var(--paper-darker); border-radius:24px; padding:30px; text-align:center; max-width:450px; margin:40px auto;">
       <h3 style="font-family:var(--serif); color:var(--seal-dark); margin-top:0;">🔒 Khu Vực Quản Lý Của Giáo Viên</h3>
-      <p style="font-size:13px; color:var(--ink-soft); margin-bottom:20px;">Vui lòng nhập mật khẩu để thay đổi tiêu đề, màu sắc, hình nền, hoặc quản lý danh sách từ vựng.</p>
+      <p style="font-size:13px; color:var(--ink-soft); margin-bottom:20px;">Vui lòng nhập mật khẩu để tạo lớp học mới, thiết lập mật khẩu cho lớp, quản lý từ vựng và giao diện.</p>
       <input type="password" id="teacher-password-input" placeholder="Nhập mật khẩu giáo viên..." style="width:100%; margin-bottom:16px; text-align:center;">
       <button class="btn btn-primary" id="teacher-login-btn" style="width:100%;">Truy cập bảng quản trị</button>
     </div>
 
     <div id="teacher-dashboard" style="display:none;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-        <h3 style="font-family:var(--serif); color:var(--seal-dark); margin:0;">⚙️ Bảng Quản Trị Toàn Diện Của Giáo Viên</h3>
+        <h3 style="font-family:var(--serif); color:var(--seal-dark); margin:0;">⚙️ Bảng Quản Trị Đa Lớp Học</h3>
         <button class="btn btn-outline" id="teacher-logout-btn" style="font-size:12px; padding:6px 12px;">Đăng xuất</button>
       </div>
 
-      <!-- CÀI ĐẶT GIAO DIỆN, TIÊU ĐỀ & UPLOAD ẢNH -->
+      <!-- SAO LƯU & KHÔI PHỤC DỮ LIỆU -->
       <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
-        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🎨 Tùy chỉnh Tiêu đề & Giao diện Website</h4>
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">💾 Sao Lưu & Khôi Phục Dữ Liệu</h4>
+        <p style="font-size:12px; color:var(--ink-soft); margin:0 0 12px;">Tải toàn bộ dữ liệu (danh sách lớp, từ vựng, tiến độ học...) về máy dưới dạng file JSON để phòng trường hợp mất dữ liệu do xóa cache/đổi trình duyệt. Có thể khôi phục lại từ file này bất cứ lúc nào.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" id="backup-export-btn">⬇️ Xuất toàn bộ dữ liệu (JSON)</button>
+          <button class="btn btn-outline" id="backup-import-trigger-btn">⬆️ Khôi phục từ file JSON</button>
+          <input type="file" id="backup-import-file" accept=".json,application/json" style="display:none;">
+        </div>
+      </div>
+
+      <!-- TẠO LỚP HỌC MỚI & THIẾT LẬP MẬT KHẨU -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🏫 Tạo Lớp Học Mới & Đặt Mật Khẩu</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Tên lớp học *</label>
+            <input type="text" id="new-class-name" placeholder="Ví dụ: Lớp HSK 3 - Ca Tối" style="width:100%;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Mật khẩu bảo vệ lớp *</label>
+            <input type="text" id="new-class-pass" placeholder="Mật khẩu (ví dụ: 1234)" style="width:100%;">
+          </div>
+        </div>
+        <button class="btn btn-primary" id="create-class-btn">+ Thêm lớp học mới</button>
+
+        <h5 style="margin:18px 0 8px; color:var(--seal-dark); font-family:var(--serif);">Danh sách các lớp hiện có:</h5>
+        <div id="teacher-class-list-manage" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
+      <!-- SAO CHÉP LIST TỪ VỰNG GIỮA CÁC LỚP -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">📋 Sao Chép List Từ Vựng Giữa Các Lớp</h4>
+        <p style="font-size:12px; color:var(--ink-soft); margin:0 0 12px;">Chọn một List (chủ đề) từ vựng ở lớp nguồn, sau đó chọn một hoặc nhiều lớp đích để sao chép sang. Những từ đã có sẵn (trùng Hán tự) ở lớp đích sẽ tự động được bỏ qua, không tạo trùng lặp.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Lớp nguồn (copy từ lớp này)</label>
+            <select id="copy-source-class" style="width:100%;"></select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">List / Chủ đề cần copy</label>
+            <select id="copy-source-topic" style="width:100%;"></select>
+          </div>
+        </div>
+        <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Lớp đích (copy sang lớp nào) - có thể chọn nhiều lớp:</label>
+        <div id="copy-target-classes" style="display:flex; flex-direction:column; gap:6px; max-height:160px; overflow-y:auto; background:var(--paper); border:2px solid var(--paper-darker); border-radius:12px; padding:10px; margin-bottom:12px;"></div>
+        <button class="btn btn-primary" id="copy-list-btn">📋 Sao chép List sang lớp đã chọn</button>
+      </div>
+
+      <!-- CÀI ĐẶT GIAO DIỆN & TIÊU ĐỀ -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🎨 Tùy chỉnh Giao diện Website</h4>
         <div style="margin-bottom:12px;">
           <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Sửa tiêu đề trang web:</label>
           <input type="text" id="cfg-title-input" placeholder="Tiêu đề mới..." style="width:100%;">
@@ -812,7 +941,7 @@
           </div>
         </div>
         <div style="margin-bottom:14px;">
-          <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Upload ảnh nền / Ảnh giao diện (chọn file ảnh từ máy):</label>
+          <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Upload ảnh nền (chọn file ảnh từ máy):</label>
           <input type="file" id="cfg-image-file" accept="image/*" style="width:100%; padding:8px; background:var(--paper); border:2px solid var(--paper-darker); border-radius:12px;">
         </div>
         <div style="display:flex; gap:10px;">
@@ -831,9 +960,26 @@
         </div>
       </div>
 
-      <!-- Form tạo List mới / Thêm từ -->
+      <!-- ĐỔI TÊN LIST / CHỦ ĐỀ CỦA LỚP HIỆN TẠI -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🏷️ Đổi Tên List / Chủ Đề (Lớp hiện tại)</h4>
+        <p style="font-size:12px; color:var(--ink-soft); margin:0 0 12px;">Đổi tên một List sẽ áp dụng cho toàn bộ từ vựng đang thuộc List đó trong lớp hiện tại. Nếu đặt trùng tên với một List đã có, hai List sẽ tự động được gộp lại làm một.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">List hiện tại cần đổi tên</label>
+            <select id="rename-topic-select" style="width:100%;"></select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Tên List mới</label>
+            <input type="text" id="rename-topic-new" placeholder="Ví dụ: Bài 6 HSK 3" style="width:100%;">
+          </div>
+        </div>
+        <button class="btn btn-primary" id="rename-topic-btn">🏷️ Đổi tên List</button>
+      </div>
+
+      <!-- Form tạo List mới / Thêm - Sửa từ cho Lớp đang chọn -->
       <div class="add-form">
-        <div class="full"><label>✨ Thêm từ mới vào Danh sách (List)</label></div>
+        <div class="full"><label id="tl-form-title">✨ Thêm từ mới vào Danh sách (List) của lớp hiện tại</label></div>
         <div>
           <label>Chọn hoặc tạo List (Chủ đề) *</label>
           <select id="tl-topic-select" style="width:100%; padding:10px; border-radius:12px; border:2px solid var(--paper-darker);"></select>
@@ -847,19 +993,25 @@
         <div><label>Nghĩa *</label><input type="text" id="tl-meaning" placeholder="con mèo"></div>
         <div><label>Emoji minh hoạ</label><input type="text" id="tl-emoji" placeholder="🐼"></div>
         <div class="full"><label>Câu ví dụ (tuỳ chọn)</label><input type="text" id="tl-example" placeholder="我家有一只大熊猫。"></div>
-        <div class="full"><button class="btn btn-primary" id="tl-add-btn">+ Thêm từ vào List</button></div>
-      </div>
-
-      <!-- Khu vực Xóa List -->
-      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
-        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🗑 Xóa toàn bộ một List</h4>
-        <div style="display:flex; gap:10px; align-items:center;">
-          <select id="tl-delete-topic-select" style="flex:1;"></select>
-          <button class="btn btn-bad" id="tl-delete-topic-btn">Xóa List này</button>
+        <div class="full" style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" id="tl-add-btn">+ Thêm từ vào List</button>
+          <button class="btn btn-outline" id="tl-cancel-edit-btn" style="display:none;">✖ Hủy chỉnh sửa</button>
         </div>
       </div>
 
-      <h4 style="font-family:var(--serif); color:var(--seal-dark);">Danh sách từ vựng hiện có (Xóa từng từ riêng lẻ):</h4>
+      <!-- XUẤT / NHẬP TỪ VỰNG BẰNG CSV -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:16px 20px; margin:16px 0;">
+        <h4 style="margin:0 0 8px; color:var(--seal-dark); font-family:var(--serif); font-size:15px;">📄 Xuất / Nhập Từ Vựng Hàng Loạt (CSV / Excel)</h4>
+        <p style="font-size:12px; color:var(--ink-soft); margin:0 0 12px;">Xuất file CSV để chỉnh sửa hàng loạt bằng Excel/Google Sheets, rồi nhập lại. Cột theo thứ tự: Hán tự, Pinyin, Nghĩa, Emoji, List, Câu ví dụ. Từ trùng Hán tự đã có trong lớp sẽ tự động bỏ qua khi nhập.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-outline" id="csv-export-btn">⬇️ Xuất CSV lớp hiện tại</button>
+          <button class="btn btn-outline" id="csv-import-trigger-btn">⬆️ Nhập từ file CSV</button>
+          <input type="file" id="csv-import-file" accept=".csv,text/csv" style="display:none;">
+        </div>
+      </div>
+
+      <h4 style="font-family:var(--serif); color:var(--seal-dark); margin-bottom:8px;">Danh sách từ vựng của lớp hiện tại:</h4>
+      <input type="text" id="tl-search-word" placeholder="🔍 Tìm theo Hán tự / Pinyin / Nghĩa..." style="width:100%; margin-bottom:12px;">
       <div class="word-list" id="tl-word-list"></div>
     </div>
   </section>
@@ -870,19 +1022,9 @@
 
 <script>
 /* =========================================================
-   DANH SÁCH TỪ VỰNG MẶC ĐỊNH
+   STATE & LOCALSTORAGE (MULTI-CLASS SUPPORT)
    ========================================================= */
-const DEFAULT_WORDS = [
-  {id:"w1", hanzi:"反省", pinyin:"fǎnxǐng", meaning:"tự kiểm điểm, suy ngẫm lại", emoji:"🍵", topic:"Chuyên đề", level:"HSK2", example:"他犯错后认真反省。"},
-  {id:"w2", hanzi:"据说", pinyin:"jùshuō", meaning:"nghe nói rằng", emoji:"🎋", topic:"Chuyên đề", level:"HSK2", example:"据说明天会下雨。"},
-  {id:"w3", hanzi:"个性", pinyin:"gèxìng", meaning:"cá tính", emoji:"🐼", topic:"Chuyên đề", level:"HSK2", example:"她的个性很独立。"},
-  {id:"w4", hanzi:"冒险", pinyin:"màoxiǎn", meaning:"mạo hiểm, phiêu lưu", emoji:"🧗", topic:"Chuyên đề", level:"HSK2", example:"年轻人喜欢冒险。"}
-];
-
-/* =========================================================
-   STATE & LOCALSTORAGE
-   ========================================================= */
-const STORAGE_KEY = "zhVocabApp_panda_bamboo_v2";
+const STORAGE_KEY = "zhVocabApp_multiclass_panda_v3";
 
 function loadState(){
   try{
@@ -891,15 +1033,35 @@ function loadState(){
   }catch(e){}
   return {
     studentName: "",
-    customWords: [],
-    deletedDefaultIds: [],
+    currentClassName: "",
+    classes: {
+      "Lớp Cơ Bản HSK 1": {
+        password: "123",
+        globalVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        teacherNote: "Các em xem video và chép lại từ đầu đến phút 02:00 nhé ~ 🐼",
+        customWords: [
+          {id:"w1", hanzi:"反省", pinyin:"fǎnxǐng", meaning:"tự kiểm điểm, suy ngẫm lại", emoji:"🍵", topic:"Chuyên đề", level:"HSK2", example:"他犯错后认真反省。"},
+          {id:"w2", hanzi:"据说", pinyin:"jùshuō", meaning:"nghe nói rằng", emoji:"🎋", topic:"Chuyên đề", level:"HSK2", example:"据说明天会下雨。"}
+        ],
+        deletedDefaultIds: []
+      },
+      "Lớp Nâng Cao HSK 3-4": {
+        password: "456",
+        globalVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        teacherNote: "Lớp mình chú ý nghe phần hội thoại tốc độ nhanh và ghi chép đầy đủ từ mới nha! ✨",
+        customWords: [
+          {id:"w3", hanzi:"个性", pinyin:"gèxìng", meaning:"cá tính", emoji:"🐼", topic:"Chuyên đề", level:"HSK2", example:"她的个性很独立。"},
+          {id:"w4", hanzi:"冒险", pinyin:"màoxiǎn", meaning:"mạo hiểm, phiêu lưu", emoji:"🧗", topic:"Chuyên đề", level:"HSK2", example:"年轻人喜欢冒险。"}
+        ],
+        deletedDefaultIds: []
+      }
+    },
     learned: {},        
     lastStudyDate: null,
     streak: 0,
     timedBest: {},
-    globalVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     challengeSeconds: 4,
-    customTitle: "🎋 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋",
+    customTitle: "🎋 雅趣学堂 · WEB TỪ VỰNG ĐA LỚP HỌC 🎋",
     colorPaper: "#F0F7F4",
     colorInk: "#2C4A3E",
     colorJade: "#388E3C",
@@ -912,7 +1074,6 @@ function saveState(){
 
 let state = loadState();
 
-// Áp dụng cấu hình giao diện tùy chỉnh khi tải trang
 function applyCustomTheme(){
   if(state.customTitle){
     document.getElementById("page-title-tag").textContent = state.customTitle;
@@ -935,43 +1096,31 @@ function applyCustomTheme(){
 }
 applyCustomTheme();
 
-const welcomeOverlay = document.getElementById("welcome-overlay");
-const welcomeNameInput = document.getElementById("welcome-name-input");
-const welcomeSubmitBtn = document.getElementById("welcome-submit-btn");
-
-function initWelcome(){
-  if(state.studentName){
-    welcomeOverlay.style.display = "none";
-    welcomeNameInput.value = state.studentName;
-    document.getElementById("sc-student-name").textContent = state.studentName;
-    document.getElementById("dc-student-name").textContent = state.studentName;
-    renderSentenceStudentList();
-  } else {
-    welcomeOverlay.style.display = "flex";
+// Helper lấy dữ liệu của lớp hiện tại
+function getCurrentClassData(){
+  if(!state.currentClassName || !state.classes[state.currentClassName]){
+    const keys = Object.keys(state.classes);
+    state.currentClassName = keys[0] || "Lớp Mặc Định";
   }
+  return state.classes[state.currentClassName];
 }
 
-welcomeSubmitBtn.addEventListener("click", () => {
-  const name = welcomeNameInput.value.trim();
-  if(!name){
-    alert("Vui lòng nhập tên của bạn trước khi vào web nhé!");
-    return;
-  }
-  state.studentName = name;
-  saveState();
-  welcomeOverlay.style.display = "none";
-  document.getElementById("sc-student-name").textContent = state.studentName;
-  document.getElementById("dc-student-name").textContent = state.studentName;
-  renderSentenceStudentList();
-});
+const DEFAULT_WORDS = [
+  {id:"d1", hanzi:"你好", pinyin:"nǐ hǎo", meaning:"xin chào", emoji:"👋", topic:"Giao tiếp cơ bản", level:"HSK1", example:"你好，很高兴认识你。"},
+  {id:"d2", hanzi:"谢谢", pinyin:"xièxie", meaning:"cảm ơn", emoji:"🙏", topic:"Giao tiếp cơ bản", level:"HSK1", example:"谢谢你的帮助。"}
+];
 
-welcomeNameInput.addEventListener("keydown", (e) => {
-  if(e.key === "Enter") welcomeSubmitBtn.click();
-});
+// Lấy toàn bộ từ vựng (mặc định + tự thêm) của MỘT lớp bất kỳ theo tên lớp
+function getWordsOfClass(cName){
+  const cData = state.classes[cName];
+  if(!cData) return [];
+  const activeDefaults = DEFAULT_WORDS.filter(w => !(cData.deletedDefaultIds || []).includes(w.id));
+  return activeDefaults.concat(cData.customWords || []);
+}
 
 function allWords(){
-  const activeDefaults = DEFAULT_WORDS.filter(w => !state.deletedDefaultIds.includes(w.id));
-  return activeDefaults.concat(state.customWords);
+  getCurrentClassData(); // đảm bảo state.currentClassName hợp lệ
+  return getWordsOfClass(state.currentClassName);
 }
 
 function touchStreak(){
@@ -988,7 +1137,107 @@ function touchStreak(){
 }
 
 /* =========================================================
-   TABS
+   HỆ THỐNG CHỌN LỚP & NHẬP MẬT KHẨU
+   ========================================================= */
+const classSelectorOverlay = document.getElementById("class-selector-overlay");
+const classSelectionList = document.getElementById("class-selection-list");
+const selectorStudentName = document.getElementById("selector-student-name");
+
+const classPassModal = document.getElementById("class-pass-modal");
+const modalClassTitle = document.getElementById("modal-class-title");
+const classPasswordInput = document.getElementById("class-password-input");
+const cancelPassBtn = document.getElementById("cancel-pass-btn");
+const submitPassBtn = document.getElementById("submit-pass-btn");
+
+let selectedTargetClass = "";
+
+function initClassSelector(){
+  if(state.studentName) selectorStudentName.value = state.studentName;
+  renderClassSelectionList();
+}
+
+function renderClassSelectionList(){
+  classSelectionList.innerHTML = "";
+  const classNames = Object.keys(state.classes);
+  if(classNames.length === 0){
+    classSelectionList.innerHTML = '<div class="empty-note">Chưa có lớp học nào được tạo.</div>';
+    return;
+  }
+  classNames.forEach(cName => {
+    const item = document.createElement("div");
+    item.className = "class-item-box";
+    item.innerHTML = `
+      <div class="class-info">
+        <h4>🏫 ${cName}</h4>
+        <p>Bấm để vào học cùng thầy cô 🐼</p>
+      </div>
+      <div style="font-size: 18px;">🔒</div>
+    `;
+    item.addEventListener("click", () => {
+      const sName = selectorStudentName.value.trim();
+      if(!sName){
+        alert("Vui lòng nhập tên của bạn trước khi chọn lớp nhé!");
+        selectorStudentName.focus();
+        return;
+      }
+      state.studentName = sName;
+      selectedTargetClass = cName;
+      
+      const cData = state.classes[cName];
+      if(!cData.password){
+        // Nếu lớp không có mật khẩu thì vào thẳng
+        enterClass(cName);
+      } else {
+        // Mở modal nhập mật khẩu
+        modalClassTitle.textContent = `🔒 Mật khẩu cho lớp: ${cName}`;
+        classPasswordInput.value = "";
+        classPassModal.style.display = "flex";
+        classPasswordInput.focus();
+      }
+    });
+    classSelectionList.appendChild(item);
+  });
+}
+
+cancelPassBtn.addEventListener("click", () => {
+  classPassModal.style.display = "none";
+});
+
+submitPassBtn.addEventListener("click", () => {
+  const enteredPass = classPasswordInput.value.trim();
+  const cData = state.classes[selectedTargetClass];
+  if(enteredPass === cData.password){
+    classPassModal.style.display = "none";
+    enterClass(selectedTargetClass);
+  } else {
+    alert("Mật khẩu lớp học không chính xác! Vui lòng thử lại.");
+    classPasswordInput.focus();
+  }
+});
+
+classPasswordInput.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") submitPassBtn.click();
+});
+
+function enterClass(cName){
+  state.currentClassName = cName;
+  saveState();
+  classSelectorOverlay.style.display = "none";
+  document.getElementById("current-class-badge").textContent = cName;
+  document.getElementById("sc-student-name").textContent = state.studentName;
+  document.getElementById("dc-student-name").textContent = state.studentName;
+  
+  // Refresh toàn bộ view hiện tại
+  refreshActiveViewData();
+}
+
+document.getElementById("switch-class-btn").addEventListener("click", () => {
+  classSelectorOverlay.style.display = "flex";
+  renderClassSelectionList();
+});
+
+/* =========================================================
+   TABS & REFRESH DATA
    ========================================================= */
 const tabButtons = document.querySelectorAll("nav.tabs button");
 const views = document.querySelectorAll("section.view");
@@ -998,22 +1247,36 @@ tabButtons.forEach(btn=>{
     views.forEach(v=>v.classList.remove("active"));
     btn.classList.add("active");
     document.getElementById("view-"+btn.dataset.view).classList.add("active");
-    if(btn.dataset.view === "progress") renderProgress();
-    if(btn.dataset.view === "manage") renderManage();
-    if(btn.dataset.view === "timed") renderTimedIdle();
-    if(btn.dataset.view === "sentence") renderSentenceView();
-    if(btn.dataset.view === "dictation") {
-      document.getElementById("dc-student-name").textContent = state.studentName || "Học viên";
-      loadVideoIntoDisplay(state.globalVideoUrl);
-    }
+    refreshActiveViewData();
   });
 });
+
+function refreshActiveViewData(){
+  fillTopicSelect(fcTopicSel);
+  fillTopicSelect(qzTopicSel);
+  fillTopicSelect(tmTopicSel);
+  fillTopicSelect(scTopicSel);
+  fillTopicSelect(mgTopicSel);
+
+  const activeViewId = document.querySelector("section.view.active")?.id;
+  if(activeViewId === "view-flashcard") buildFcDeck();
+  if(activeViewId === "view-timed") renderTimedIdle();
+  if(activeViewId === "view-progress") renderProgress();
+  if(activeViewId === "view-manage") renderManage();
+  if(activeViewId === "view-sentence") renderSentenceStudentList();
+  if(activeViewId === "view-dictation") {
+    document.getElementById("dc-student-name").textContent = state.studentName || "Học viên";
+    const cData = getCurrentClassData();
+    loadVideoAndNoteIntoDisplay(cData.globalVideoUrl, cData.teacherNote);
+  }
+}
 
 function topicList(){
   const set = new Set(allWords().map(w=>w.topic));
   return Array.from(set);
 }
 function fillTopicSelect(sel, includeAll=true){
+  if(!sel) return;
   sel.innerHTML = "";
   if(includeAll){
     const o = document.createElement("option");
@@ -1032,7 +1295,6 @@ function fillTopicSelect(sel, includeAll=true){
    ========================================================= */
 const fcTopicSel = document.getElementById("fc-topic");
 const fcLevelSel = document.getElementById("fc-level");
-fillTopicSelect(fcTopicSel);
 
 let fcDeck = [];
 let fcIndex = 0;
@@ -1123,13 +1385,10 @@ function speak(text){
   window.speechSynthesis.speak(u);
 }
 
-buildFcDeck();
-
 /* =========================================================
    QUIZ VIEW
    ========================================================= */
 const qzTopicSel = document.getElementById("qz-topic");
-fillTopicSelect(qzTopicSel);
 const qzArea = document.getElementById("qz-area");
 
 let qzQueue = [], qzIdx = 0, qzScore = 0;
@@ -1215,14 +1474,13 @@ function renderQuizResult(){
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoyoRnW6yv3XFiHwhD83ncbVfcqSwzFs5Z_dvjsVedG4RCt1FHWhRO7giKN1LUi68FbQ/exec";
 
 const tmTopicSel = document.getElementById("tm-topic");
-fillTopicSelect(tmTopicSel);
 const tmArea = document.getElementById("tm-area");
 
 let tmQueue = [], tmIdx = 0, tmTimerId = null, tmStart = 0, tmFailMsg = "";
 
 tmTopicSel.addEventListener("change", renderTimedIdle);
 
-function tmKey(){ return tmTopicSel.value; }
+function tmKey(){ return state.currentClassName + "_" + tmTopicSel.value; }
 
 function renderTimedIdle(){
   clearInterval(tmTimerId);
@@ -1354,7 +1612,7 @@ function renderTimedPass(){
     mode: "no-cors",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      studentName: state.studentName || "Học viên ẩn danh",
+      studentName: `${state.studentName} [Lớp: ${state.currentClassName}]`,
       word: "[Thử Thách Thời Gian - HOÀN THÀNH]",
       sentence: `Đã hoàn thành xuất sắc List: "${listName}" sau ${tmAttempts} lượt thử.`
     })
@@ -1414,14 +1672,9 @@ document.getElementById("pg-reset").addEventListener("click", ()=>{
    ========================================================= */
 const mgSearch = document.getElementById("mg-search");
 const mgTopicSel = document.getElementById("mg-topic");
-fillTopicSelect(mgTopicSel);
 
 function renderManage(){
   fillTopicSelect(mgTopicSel);
-  fillTopicSelect(fcTopicSel);
-  fillTopicSelect(qzTopicSel);
-  fillTopicSelect(tmTopicSel);
-
   const q = mgSearch.value.trim().toLowerCase();
   const topic = mgTopicSel.value;
   const words = allWords().filter(w=>{
@@ -1448,11 +1701,11 @@ function renderManage(){
     list.appendChild(row);
   });
 }
-mgSearch.addEventListener("input", renderManage);
-mgTopicSel.addEventListener("change", renderManage);
+if(mgSearch) mgSearch.addEventListener("input", renderManage);
+if(mgTopicSel) mgTopicSel.addEventListener("change", renderManage);
 
 /* =========================================================
-   TEACHER LISTS & CUSTOMIZATION MANAGEMENT VIEW
+   TEACHER CLASSES & MANAGEMENT VIEW
    ========================================================= */
 const teacherAuthBox = document.getElementById("teacher-auth-box");
 const teacherDashboard = document.getElementById("teacher-dashboard");
@@ -1509,10 +1762,9 @@ document.getElementById("cfg-save-theme-btn").addEventListener("click", () => {
   }
 });
 
-// Khôi phục mặc định
 document.getElementById("cfg-reset-theme-btn").addEventListener("click", () => {
   if(confirm("Bạn có chắc chắn muốn khôi phục giao diện mặc định không?")){
-    state.customTitle = "🎋 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋";
+    state.customTitle = "🎋 雅趣学堂 · WEB TỪ VỰNG ĐA LỚP HỌC 🎋";
     state.colorPaper = "#F0F7F4";
     state.colorInk = "#2C4A3E";
     state.colorJade = "#388E3C";
@@ -1538,30 +1790,129 @@ document.getElementById("tl-save-timer-btn").addEventListener("click", () => {
   alert(`Đã lưu thời gian thử thách thành công (${sec} giây)! ✨`);
 });
 
-function renderTeacherManage(){
-  const topicSel = document.getElementById("tl-topic-select");
-  topicSel.innerHTML = "";
-  topicList().forEach(t=>{
-    const o = document.createElement("option");
-    o.value = t; o.textContent = t;
-    topicSel.appendChild(o);
-  });
-
-  const deleteTopicSel = document.getElementById("tl-delete-topic-select");
-  deleteTopicSel.innerHTML = "";
-  topicList().forEach(t=>{
-    const o = document.createElement("option");
-    o.value = t; o.textContent = t;
-    deleteTopicSel.appendChild(o);
-  });
-
-  const wordListWrap = document.getElementById("tl-word-list");
-  wordListWrap.innerHTML = "";
-  const words = allWords();
-  if(words.length === 0){
-    wordListWrap.innerHTML = '<div class="empty-note">Chưa có từ vựng nào.</div>';
+// Tạo lớp học mới
+document.getElementById("create-class-btn").addEventListener("click", () => {
+  const cName = document.getElementById("new-class-name").value.trim();
+  const cPass = document.getElementById("new-class-pass").value.trim();
+  if(!cName || !cPass){
+    alert("Vui lòng nhập đầy đủ tên lớp và mật khẩu bảo vệ!");
     return;
   }
+  if(state.classes[cName]){
+    alert("Lớp học này đã tồn tại trên hệ thống!");
+    return;
+  }
+  state.classes[cName] = {
+    password: cPass,
+    globalVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    teacherNote: "Chào mừng các em đến với lớp học mới! Chúc các em học tập vui vẻ ~ 🐼",
+    customWords: [],
+    deletedDefaultIds: []
+  };
+  saveState();
+  document.getElementById("new-class-name").value = "";
+  document.getElementById("new-class-pass").value = "";
+  renderTeacherManage();
+  alert(`Đã tạo thành công lớp "${cName}"! ✨`);
+});
+
+function renderTeacherManage(){
+  // Render danh sách quản lý lớp
+  const classListManage = document.getElementById("teacher-class-list-manage");
+  classListManage.innerHTML = "";
+  Object.keys(state.classes).forEach(cName => {
+    const cData = state.classes[cName];
+    const row = document.createElement("div");
+    row.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:var(--paper); padding:10px 14px; border-radius:12px; border:2px solid var(--paper-darker);";
+    row.innerHTML = `
+      <div><strong>🏫 ${cName}</strong> (Mật khẩu: <code style="color:var(--seal-dark);">${cData.password}</code>)</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-outline select-class-manage-btn" data-name="${cName}" style="font-size:11px; padding:4px 10px;">Quản lý từ vựng lớp này</button>
+        ${Object.keys(state.classes).length > 1 ? `<button class="btn btn-bad delete-class-btn" data-name="${cName}" style="font-size:11px; padding:4px 10px;">Xóa lớp</button>` : ""}
+      </div>
+    `;
+    classListManage.appendChild(row);
+  });
+
+  classListManage.querySelectorAll(".select-class-manage-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.currentClassName = btn.dataset.name;
+      saveState();
+      renderTeacherManage();
+      alert(`Đã chuyển vùng quản lý sang lớp: ${state.currentClassName}`);
+    });
+  });
+
+  classListManage.querySelectorAll(".delete-class-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.name;
+      if(confirm(`Bạn có chắc chắn muốn xóa vĩnh viễn lớp "${target}" không?`)){
+        delete state.classes[target];
+        const remaining = Object.keys(state.classes);
+        state.currentClassName = remaining[0];
+        saveState();
+        renderTeacherManage();
+      }
+    });
+  });
+
+  // Render danh sách từ vựng của lớp hiện tại
+  const topicSel = document.getElementById("tl-topic-select");
+  if(topicSel){
+    topicSel.innerHTML = "";
+    topicList().forEach(t=>{
+      const o = document.createElement("option");
+      o.value = t; o.textContent = t;
+      topicSel.appendChild(o);
+    });
+  }
+
+  // Render select "Đổi tên List" theo lớp hiện tại
+  const renameTopicSel = document.getElementById("rename-topic-select");
+  if(renameTopicSel){
+    const prevRename = renameTopicSel.value;
+    renameTopicSel.innerHTML = "";
+    topicList().forEach(t=>{
+      const o = document.createElement("option");
+      o.value = t; o.textContent = t;
+      renameTopicSel.appendChild(o);
+    });
+    if(prevRename && topicList().includes(prevRename)){
+      renameTopicSel.value = prevRename;
+    }
+  }
+
+  renderTeacherWordList();
+
+  // Cập nhật lại khu vực "Sao chép List từ vựng giữa các lớp"
+  fillCopySourceClassSelect();
+}
+
+// Render riêng danh sách từ vựng (có hỗ trợ tìm kiếm) để không phải render lại cả bảng khi gõ tìm kiếm
+function renderTeacherWordList(){
+  const wordListWrap = document.getElementById("tl-word-list");
+  if(!wordListWrap) return;
+
+  const searchInput = document.getElementById("tl-search-word");
+  const keyword = (searchInput?.value || "").trim().toLowerCase();
+
+  wordListWrap.innerHTML = "";
+  let words = allWords();
+  if(keyword){
+    words = words.filter(w =>
+      w.hanzi.toLowerCase().includes(keyword) ||
+      w.pinyin.toLowerCase().includes(keyword) ||
+      w.meaning.toLowerCase().includes(keyword)
+    );
+  }
+
+  if(words.length === 0){
+    wordListWrap.innerHTML = keyword
+      ? '<div class="empty-note">Không tìm thấy từ nào khớp với từ khóa tìm kiếm.</div>'
+      : '<div class="empty-note">Chưa có từ vựng nào trong lớp này.</div>';
+    return;
+  }
+
   words.forEach(w=>{
     const row = document.createElement("div");
     row.className = "word-row";
@@ -1570,6 +1921,7 @@ function renderTeacherManage(){
       <div class="hanzi">${w.hanzi}</div>
       <div class="pinyin">${w.pinyin}</div>
       <div class="meaning">${w.meaning} <span style="color:var(--ink-soft); font-size:12px; font-weight:normal;">· [${w.topic}]</span></div>
+      <button class="del-btn teacher-edit-word-btn" title="Sửa từ này" data-id="${w.id}" style="color:var(--jade-dark);">✏️</button>
       <button class="del-btn teacher-del-word-btn" title="Xoá từ này" data-id="${w.id}">🗑</button>
     `;
     wordListWrap.appendChild(row);
@@ -1578,17 +1930,217 @@ function renderTeacherManage(){
   wordListWrap.querySelectorAll(".teacher-del-word-btn").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       const id = btn.dataset.id;
-      if(id.startsWith("w")){
-        state.deletedDefaultIds.push(id);
+      const cData = getCurrentClassData();
+      if(id.startsWith("d")){
+        cData.deletedDefaultIds.push(id);
       } else {
-        state.customWords = state.customWords.filter(c=>c.id!==id);
+        cData.customWords = cData.customWords.filter(c=>c.id!==id);
       }
+      if(editingWordId === id) cancelWordEdit();
       saveState();
       renderTeacherManage();
-      buildFcDeck();
+    });
+  });
+
+  wordListWrap.querySelectorAll(".teacher-edit-word-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      startWordEdit(btn.dataset.id);
     });
   });
 }
+
+if(document.getElementById("tl-search-word")){
+  document.getElementById("tl-search-word").addEventListener("input", ()=>{
+    renderTeacherWordList();
+  });
+}
+
+/* =========================================================
+   SAO CHÉP LIST TỪ VỰNG GIỮA CÁC LỚP
+   ========================================================= */
+const copySourceClassSel = document.getElementById("copy-source-class");
+const copySourceTopicSel = document.getElementById("copy-source-topic");
+const copyTargetClassesWrap = document.getElementById("copy-target-classes");
+const copyListBtn = document.getElementById("copy-list-btn");
+
+function fillCopySourceClassSelect(){
+  if(!copySourceClassSel) return;
+  const prevSelected = copySourceClassSel.value;
+  copySourceClassSel.innerHTML = "";
+  Object.keys(state.classes).forEach(cName=>{
+    const o = document.createElement("option");
+    o.value = cName; o.textContent = cName;
+    copySourceClassSel.appendChild(o);
+  });
+  if(prevSelected && state.classes[prevSelected]){
+    copySourceClassSel.value = prevSelected;
+  } else if(state.currentClassName && state.classes[state.currentClassName]){
+    copySourceClassSel.value = state.currentClassName;
+  }
+  fillCopySourceTopicSelect();
+  fillCopyTargetClassesList();
+}
+
+function fillCopySourceTopicSelect(){
+  if(!copySourceTopicSel) return;
+  const prevSelected = copySourceTopicSel.value;
+  copySourceTopicSel.innerHTML = "";
+  const oAll = document.createElement("option");
+  oAll.value = "all"; oAll.textContent = "🗂 Toàn bộ từ vựng của lớp";
+  copySourceTopicSel.appendChild(oAll);
+
+  const words = getWordsOfClass(copySourceClassSel.value);
+  const topics = Array.from(new Set(words.map(w=>w.topic)));
+  topics.forEach(t=>{
+    const o = document.createElement("option");
+    o.value = t; o.textContent = t;
+    copySourceTopicSel.appendChild(o);
+  });
+  if(prevSelected && (prevSelected === "all" || topics.includes(prevSelected))){
+    copySourceTopicSel.value = prevSelected;
+  }
+}
+
+function fillCopyTargetClassesList(){
+  if(!copyTargetClassesWrap) return;
+  const srcClass = copySourceClassSel.value;
+  const otherClasses = Object.keys(state.classes).filter(cName => cName !== srcClass);
+
+  copyTargetClassesWrap.innerHTML = "";
+  if(otherClasses.length === 0){
+    copyTargetClassesWrap.innerHTML = '<div class="empty-note" style="font-size:12px; margin:0;">Cần có ít nhất 2 lớp học để sử dụng tính năng sao chép.</div>';
+    return;
+  }
+  otherClasses.forEach(cName=>{
+    const label = document.createElement("label");
+    label.style.cssText = "display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;";
+    label.innerHTML = `<input type="checkbox" class="copy-target-checkbox" value="${cName}"> 🏫 ${cName}`;
+    copyTargetClassesWrap.appendChild(label);
+  });
+}
+
+if(copySourceClassSel){
+  copySourceClassSel.addEventListener("change", ()=>{
+    fillCopySourceTopicSelect();
+    fillCopyTargetClassesList();
+  });
+}
+
+if(copyListBtn){
+  copyListBtn.addEventListener("click", ()=>{
+    const srcClass = copySourceClassSel.value;
+    const srcTopic = copySourceTopicSel.value;
+
+    if(!srcClass){
+      alert("Vui lòng chọn lớp nguồn để copy!");
+      return;
+    }
+
+    const checkedBoxes = copyTargetClassesWrap.querySelectorAll(".copy-target-checkbox:checked");
+    if(checkedBoxes.length === 0){
+      alert("Vui lòng chọn ít nhất một lớp đích để sao chép sang!");
+      return;
+    }
+
+    const srcWords = getWordsOfClass(srcClass).filter(w => srcTopic === "all" || w.topic === srcTopic);
+    if(srcWords.length === 0){
+      alert("List này không có từ vựng nào để sao chép!");
+      return;
+    }
+
+    let totalCopied = 0;
+    let totalSkipped = 0;
+    const targetNames = [];
+
+    checkedBoxes.forEach((cb, boxIndex)=>{
+      const targetName = cb.value;
+      const targetData = state.classes[targetName];
+      if(!targetData) return;
+      targetNames.push(targetName);
+
+      if(!targetData.customWords) targetData.customWords = [];
+      const existingHanzi = new Set(getWordsOfClass(targetName).map(w=>w.hanzi));
+
+      srcWords.forEach((w, wordIndex)=>{
+        if(existingHanzi.has(w.hanzi)){
+          totalSkipped++;
+          return;
+        }
+        const newId = "custom_" + Date.now() + "_" + boxIndex + "_" + wordIndex + "_" + Math.random().toString(36).slice(2,6);
+        targetData.customWords.push({
+          id: newId,
+          hanzi: w.hanzi,
+          pinyin: w.pinyin,
+          meaning: w.meaning,
+          emoji: w.emoji,
+          topic: w.topic,
+          level: w.level || "HSK1",
+          example: w.example || ""
+        });
+        existingHanzi.add(w.hanzi);
+        totalCopied++;
+      });
+    });
+
+    saveState();
+    renderTeacherManage();
+
+    const listLabel = srcTopic === "all" ? "toàn bộ từ vựng" : `List "${srcTopic}"`;
+    alert(`Đã sao chép ${listLabel} của lớp "${srcClass}" thành công! ✨\n\n✅ Từ đã copy: ${totalCopied}\n⏭ Từ bị bỏ qua (đã tồn tại ở lớp đích): ${totalSkipped}\n🏫 Sang các lớp: ${targetNames.join(", ")}`);
+  });
+}
+
+/* =========================================================
+   SỬA TỪ VỰNG (dùng chung form Thêm từ ở trên)
+   ========================================================= */
+let editingWordId = null;
+
+function startWordEdit(id){
+  const w = allWords().find(x => x.id === id);
+  if(!w) return;
+
+  editingWordId = id;
+
+  const topicSel = document.getElementById("tl-topic-select");
+  if(topicSel){
+    if(![...topicSel.options].some(o => o.value === w.topic)){
+      const o = document.createElement("option");
+      o.value = w.topic; o.textContent = w.topic;
+      topicSel.appendChild(o);
+    }
+    topicSel.value = w.topic;
+  }
+  document.getElementById("tl-new-topic").value = "";
+  document.getElementById("tl-hanzi").value = w.hanzi;
+  document.getElementById("tl-pinyin").value = w.pinyin;
+  document.getElementById("tl-meaning").value = w.meaning;
+  document.getElementById("tl-emoji").value = w.emoji || "";
+  document.getElementById("tl-example").value = w.example || "";
+
+  document.getElementById("tl-form-title").textContent = `✏️ Đang sửa từ "${w.hanzi}" (có thể đổi List để di chuyển từ sang List khác)`;
+  document.getElementById("tl-add-btn").textContent = "💾 Cập nhật từ";
+  document.getElementById("tl-cancel-edit-btn").style.display = "inline-block";
+
+  const formEl = document.querySelector(".add-form");
+  if(formEl && typeof formEl.scrollIntoView === "function"){
+    formEl.scrollIntoView({behavior:"smooth", block:"center"});
+  }
+}
+
+function cancelWordEdit(){
+  editingWordId = null;
+  document.getElementById("tl-form-title").textContent = "✨ Thêm từ mới vào Danh sách (List) của lớp hiện tại";
+  document.getElementById("tl-add-btn").textContent = "+ Thêm từ vào List";
+  document.getElementById("tl-cancel-edit-btn").style.display = "none";
+  document.getElementById("tl-new-topic").value = "";
+  document.getElementById("tl-hanzi").value = "";
+  document.getElementById("tl-pinyin").value = "";
+  document.getElementById("tl-meaning").value = "";
+  document.getElementById("tl-emoji").value = "";
+  document.getElementById("tl-example").value = "";
+}
+
+document.getElementById("tl-cancel-edit-btn").addEventListener("click", cancelWordEdit);
 
 document.getElementById("tl-add-btn").addEventListener("click", ()=>{
   const newTopicInput = document.getElementById("tl-new-topic").value.trim();
@@ -1606,8 +2158,37 @@ document.getElementById("tl-add-btn").addEventListener("click", ()=>{
     return;
   }
 
+  const cData = getCurrentClassData();
+
+  if(editingWordId){
+    // Chế độ CẬP NHẬT một từ đã có sẵn (bao gồm cả từ mặc định)
+    if(editingWordId.startsWith("d")){
+      // Từ mặc định: đánh dấu đã xóa bản mặc định, tạo bản sao chép có thể chỉnh sửa
+      if(!cData.deletedDefaultIds.includes(editingWordId)){
+        cData.deletedDefaultIds.push(editingWordId);
+      }
+      const newId = "custom_" + Date.now();
+      cData.customWords.push({id:newId, hanzi, pinyin, meaning, emoji, topic, level:"HSK1", example});
+    } else {
+      const target = cData.customWords.find(c => c.id === editingWordId);
+      if(target){
+        target.hanzi = hanzi;
+        target.pinyin = pinyin;
+        target.meaning = meaning;
+        target.emoji = emoji;
+        target.topic = topic;
+        target.example = example;
+      }
+    }
+    saveState();
+    cancelWordEdit();
+    renderTeacherManage();
+    alert("Đã cập nhật từ vựng thành công! ✨");
+    return;
+  }
+
   const id = "custom_" + Date.now();
-  state.customWords.push({id, hanzi, pinyin, meaning, emoji, topic, level:"HSK1", example});
+  cData.customWords.push({id, hanzi, pinyin, meaning, emoji, topic, level:"HSK1", example});
   saveState();
 
   document.getElementById("tl-new-topic").value = "";
@@ -1618,33 +2199,246 @@ document.getElementById("tl-add-btn").addEventListener("click", ()=>{
   document.getElementById("tl-example").value = "";
 
   renderTeacherManage();
-  buildFcDeck();
-  alert("Đã thêm từ mới vào List thành công! ✨");
+  alert("Đã thêm từ mới vào lớp thành công! ✨");
 });
 
-document.getElementById("tl-delete-topic-btn").addEventListener("click", ()=>{
-  const topicToDelete = document.getElementById("tl-delete-topic-select").value;
-  if(!topicToDelete) return;
-  if(confirm(`Bạn có chắc chắn muốn xóa toàn bộ List "${topicToDelete}" và các từ trong đó không?`)){
-    state.customWords = state.customWords.filter(w => w.topic !== topicToDelete);
-    DEFAULT_WORDS.forEach(w => {
-      if(w.topic === topicToDelete && !state.deletedDefaultIds.includes(w.id)){
-        state.deletedDefaultIds.push(w.id);
+/* =========================================================
+   ĐỔI TÊN LIST / CHỦ ĐỀ (LỚP HIỆN TẠI)
+   ========================================================= */
+const renameTopicBtn = document.getElementById("rename-topic-btn");
+if(renameTopicBtn){
+  renameTopicBtn.addEventListener("click", ()=>{
+    const oldTopic = document.getElementById("rename-topic-select").value;
+    const newTopic = document.getElementById("rename-topic-new").value.trim();
+
+    if(!oldTopic){
+      alert("Không có List nào để đổi tên!");
+      return;
+    }
+    if(!newTopic){
+      alert("Vui lòng nhập tên List mới!");
+      return;
+    }
+    if(newTopic === oldTopic){
+      alert("Tên List mới trùng với tên hiện tại, không có gì thay đổi.");
+      return;
+    }
+
+    const cData = getCurrentClassData();
+
+    // Đổi tên topic cho các từ tự thêm
+    (cData.customWords || []).forEach(w=>{
+      if(w.topic === oldTopic) w.topic = newTopic;
+    });
+
+    // Với từ mặc định thuộc List này: "vật chất hóa" thành từ tự thêm với List mới
+    DEFAULT_WORDS.forEach(dw=>{
+      if(dw.topic === oldTopic && !cData.deletedDefaultIds.includes(dw.id)){
+        cData.deletedDefaultIds.push(dw.id);
+        cData.customWords.push({
+          id: "custom_" + Date.now() + "_" + Math.random().toString(36).slice(2,6),
+          hanzi: dw.hanzi, pinyin: dw.pinyin, meaning: dw.meaning,
+          emoji: dw.emoji, topic: newTopic, level: dw.level || "HSK1", example: dw.example || ""
+        });
       }
     });
+
     saveState();
+    document.getElementById("rename-topic-new").value = "";
     renderTeacherManage();
-    buildFcDeck();
-    alert(`Đã xóa thành công List "${topicToDelete}"!`);
+    alert(`Đã đổi tên List "${oldTopic}" thành "${newTopic}" thành công! ✨`);
+  });
+}
+
+/* =========================================================
+   XUẤT / NHẬP TỪ VỰNG BẰNG CSV
+   ========================================================= */
+function csvEscapeField(val){
+  const s = String(val ?? "");
+  if(/[",\n]/.test(s)){
+    return '"' + s.replace(/"/g, '""') + '"';
   }
-});
+  return s;
+}
+
+function wordsToCSV(words){
+  const header = ["Han_tu","Pinyin","Nghia","Emoji","List","Cau_vi_du"];
+  const lines = [header.join(",")];
+  words.forEach(w=>{
+    lines.push([w.hanzi, w.pinyin, w.meaning, w.emoji || "", w.topic, w.example || ""]
+      .map(csvEscapeField).join(","));
+  });
+  return "\uFEFF" + lines.join("\n"); // thêm BOM để Excel đọc đúng tiếng Việt/Hán tự
+}
+
+// Parser CSV đơn giản, hỗ trợ dấu ngoặc kép bao quanh field có dấu phẩy/xuống dòng
+function parseCSV(text){
+  const rows = [];
+  let row = [], field = "", inQuotes = false;
+  for(let i = 0; i < text.length; i++){
+    const ch = text[i];
+    if(inQuotes){
+      if(ch === '"'){
+        if(text[i+1] === '"'){ field += '"'; i++; }
+        else { inQuotes = false; }
+      } else {
+        field += ch;
+      }
+    } else {
+      if(ch === '"'){ inQuotes = true; }
+      else if(ch === ','){ row.push(field); field = ""; }
+      else if(ch === '\n'){ row.push(field); rows.push(row); row = []; field = ""; }
+      else if(ch === '\r'){ /* bỏ qua */ }
+      else { field += ch; }
+    }
+  }
+  if(field.length > 0 || row.length > 0){ row.push(field); rows.push(row); }
+  return rows.filter(r => r.some(f => f.trim() !== ""));
+}
+
+const csvExportBtn = document.getElementById("csv-export-btn");
+if(csvExportBtn){
+  csvExportBtn.addEventListener("click", ()=>{
+    const words = allWords();
+    if(words.length === 0){
+      alert("Lớp hiện tại chưa có từ vựng nào để xuất!");
+      return;
+    }
+    const csv = wordsToCSV(words);
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `tu-vung-${state.currentClassName}.csv`.replace(/[^\w\-.]+/g, "_");
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+}
+
+const csvImportTriggerBtn = document.getElementById("csv-import-trigger-btn");
+const csvImportFile = document.getElementById("csv-import-file");
+if(csvImportTriggerBtn && csvImportFile){
+  csvImportTriggerBtn.addEventListener("click", ()=> csvImportFile.click());
+
+  csvImportFile.addEventListener("change", ()=>{
+    const file = csvImportFile.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      try{
+        const rows = parseCSV(String(e.target.result));
+        if(rows.length === 0){
+          alert("File CSV trống hoặc không đúng định dạng!");
+          return;
+        }
+
+        // Bỏ qua dòng tiêu đề nếu dòng đầu tiên không giống dữ liệu Hán tự (kiểm tra đơn giản)
+        let dataRows = rows;
+        const firstCellLower = (rows[0][0] || "").toLowerCase();
+        if(firstCellLower.includes("han") || firstCellLower.includes("hán") || firstCellLower.includes("hanzi")){
+          dataRows = rows.slice(1);
+        }
+
+        const cData = getCurrentClassData();
+        const existingHanzi = new Set(allWords().map(w=>w.hanzi));
+        let imported = 0, skipped = 0, invalid = 0;
+
+        dataRows.forEach((r, idx)=>{
+          const hanzi = (r[0]||"").trim();
+          const pinyin = (r[1]||"").trim();
+          const meaning = (r[2]||"").trim();
+          const emoji = (r[3]||"").trim();
+          const topic = (r[4]||"").trim() || "Nhập từ CSV";
+          const example = (r[5]||"").trim();
+
+          if(!hanzi || !pinyin || !meaning){
+            invalid++;
+            return;
+          }
+          if(existingHanzi.has(hanzi)){
+            skipped++;
+            return;
+          }
+          const id = "custom_" + Date.now() + "_" + idx + "_" + Math.random().toString(36).slice(2,6);
+          cData.customWords.push({id, hanzi, pinyin, meaning, emoji, topic, level:"HSK1", example});
+          existingHanzi.add(hanzi);
+          imported++;
+        });
+
+        saveState();
+        renderTeacherManage();
+        alert(`Nhập CSV hoàn tất! ✨\n\n✅ Đã nhập: ${imported} từ\n⏭ Bỏ qua (trùng Hán tự): ${skipped} từ\n⚠️ Dòng thiếu dữ liệu bắt buộc: ${invalid} dòng`);
+      }catch(err){
+        alert("Không đọc được file CSV. Vui lòng kiểm tra lại định dạng file!");
+      }finally{
+        csvImportFile.value = "";
+      }
+    };
+    reader.readAsText(file, "UTF-8");
+  });
+}
+
+/* =========================================================
+   SAO LƯU & KHÔI PHỤC TOÀN BỘ DỮ LIỆU (JSON)
+   ========================================================= */
+const backupExportBtn = document.getElementById("backup-export-btn");
+if(backupExportBtn){
+  backupExportBtn.addEventListener("click", ()=>{
+    const json = JSON.stringify(state, null, 2);
+    const blob = new Blob([json], {type:"application/json;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    const dateStr = new Date().toISOString().slice(0,10);
+    a.download = `backup-tu-vung-da-lop-${dateStr}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+}
+
+const backupImportTriggerBtn = document.getElementById("backup-import-trigger-btn");
+const backupImportFile = document.getElementById("backup-import-file");
+if(backupImportTriggerBtn && backupImportFile){
+  backupImportTriggerBtn.addEventListener("click", ()=> backupImportFile.click());
+
+  backupImportFile.addEventListener("change", ()=>{
+    const file = backupImportFile.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      try{
+        const restored = JSON.parse(String(e.target.result));
+        if(!restored || typeof restored !== "object" || !restored.classes){
+          alert("File JSON không hợp lệ hoặc không đúng định dạng sao lưu của hệ thống!");
+          return;
+        }
+        if(!confirm("⚠️ Khôi phục sẽ GHI ĐÈ toàn bộ dữ liệu hiện tại (danh sách lớp, từ vựng, tiến độ học...) bằng dữ liệu trong file sao lưu. Bạn có chắc chắn muốn tiếp tục?")){
+          return;
+        }
+        state = restored;
+        saveState();
+        alert("Khôi phục dữ liệu thành công! Trang sẽ tải lại ngay bây giờ. ✨");
+        location.reload();
+      }catch(err){
+        alert("Không đọc được file JSON. Vui lòng kiểm tra lại file sao lưu!");
+      }finally{
+        backupImportFile.value = "";
+      }
+    };
+    reader.readAsText(file, "UTF-8");
+  });
+}
 
 /* =========================================================
    SENTENCE PRACTICE
    ========================================================= */
 const scTopicSel = document.getElementById("sc-topic");
-fillTopicSelect(scTopicSel);
-scTopicSel.addEventListener("change", renderSentenceStudentList);
 
 function renderSentenceView(){
   document.getElementById("sc-student-name").textContent = state.studentName || "Học viên";
@@ -1711,7 +2505,7 @@ document.getElementById("sc-submit-all-btn").addEventListener("click", async () 
   }
 
   const listName = scTopicSel.options[scTopicSel.selectedIndex]?.text || scTopicSel.value;
-  const fullContent = `[Đặt câu nguyên List: "${listName}"]\n` + resultsSummary.join("\n");
+  const fullContent = `[Lớp: ${state.currentClassName} | Đặt câu List: "${listName}"]\n` + resultsSummary.join("\n");
 
   const submitBtn = document.getElementById("sc-submit-all-btn");
   submitBtn.disabled = true;
@@ -1723,7 +2517,7 @@ document.getElementById("sc-submit-all-btn").addEventListener("click", async () 
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        studentName: state.studentName || "Học viên ẩn danh",
+        studentName: `${state.studentName} [Lớp: ${state.currentClassName}]`,
         word: `List: ${listName}`,
         sentence: fullContent
       })
@@ -1740,32 +2534,42 @@ document.getElementById("sc-submit-all-btn").addEventListener("click", async () 
 });
 
 /* =========================================================
-   DICTATION / VIDEO FEATURE
+   DICTATION / VIDEO FEATURE & CUTE NOTE
    ========================================================= */
 const openTeacherPanelBtn = document.getElementById("open-teacher-panel-btn");
 const teacherPanel = document.getElementById("teacher-panel");
 const teacherVideoUrl = document.getElementById("teacher-video-url");
+const teacherNoteInput = document.getElementById("teacher-note-input");
 const saveTeacherVideoBtn = document.getElementById("save-teacher-video-btn");
 const videoDisplayArea = document.getElementById("video-display-area");
 const submitDictationBtn = document.getElementById("submit-dictation-btn");
 const dictationText = document.getElementById("dictation-text");
+const studentTeacherNoteText = document.getElementById("student-teacher-note-text");
 
 openTeacherPanelBtn.addEventListener("click", () => {
   const pass = prompt("Nhập mật khẩu giáo viên:");
   if(pass === "123455"){
     teacherPanel.classList.toggle("active");
     if(teacherPanel.classList.contains("active")){
-      teacherVideoUrl.value = state.globalVideoUrl || "";
+      const cData = getCurrentClassData();
+      teacherVideoUrl.value = cData.globalVideoUrl || "";
+      teacherNoteInput.value = cData.teacherNote || "";
       openTeacherPanelBtn.textContent = "🔓 Đang mở khu vực Giáo viên";
     } else {
-      openTeacherPanelBtn.textContent = "🔒 Khu vực Giáo viên (Đổi Video)";
+      openTeacherPanelBtn.textContent = "🔒 Khu vực Giáo viên (Đổi Video & Note)";
     }
   } else if(pass !== null) {
     alert("Mật khẩu không chính xác!");
   }
 });
 
-function loadVideoIntoDisplay(rawUrl){
+function loadVideoAndNoteIntoDisplay(rawUrl, noteText){
+  if(noteText){
+    studentTeacherNoteText.textContent = noteText;
+  } else {
+    studentTeacherNoteText.textContent = "Thầy cô chưa có ghi chú nào cho bài tập này. Chúc các em học tốt! 🐼";
+  }
+
   if(!rawUrl) {
     videoDisplayArea.innerHTML = '<span>Chưa có video bài học nào từ giáo viên. 📺</span>';
     return;
@@ -1796,17 +2600,20 @@ function loadVideoIntoDisplay(rawUrl){
 
 saveTeacherVideoBtn.addEventListener("click", () => {
   const newUrl = teacherVideoUrl.value.trim();
+  const newNote = teacherNoteInput.value.trim();
   if(!newUrl){
     alert("Vui lòng nhập link video hợp lệ!");
     return;
   }
 
-  state.globalVideoUrl = newUrl;
+  const cData = getCurrentClassData();
+  cData.globalVideoUrl = newUrl;
+  cData.teacherNote = newNote;
   saveState();
-  loadVideoIntoDisplay(newUrl);
-  alert("Cập nhật video bài học thành công! Tất cả học sinh truy cập vào sẽ tự động thấy video mới này ✨");
+  loadVideoAndNoteIntoDisplay(newUrl, newNote);
+  alert(`Cập nhật video và ghi chú cho lớp "${state.currentClassName}" thành công! ✨`);
   teacherPanel.classList.remove("active");
-  openTeacherPanelBtn.textContent = "🔒 Khu vực Giáo viên (Đổi Video)";
+  openTeacherPanelBtn.textContent = "🔒 Khu vực Giáo viên (Đổi Video & Note)";
 });
 
 submitDictationBtn.addEventListener("click", async () => {
@@ -1825,7 +2632,7 @@ submitDictationBtn.addEventListener("click", async () => {
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        studentName: state.studentName || "Học viên ẩn danh",
+        studentName: `${state.studentName} [Lớp: ${state.currentClassName}]`,
         word: "[Chép Chính Tả Video]",
         sentence: content
       })
@@ -1841,9 +2648,7 @@ submitDictationBtn.addEventListener("click", async () => {
   }
 });
 
-initWelcome();
-renderProgress();
-loadVideoIntoDisplay(state.globalVideoUrl);
+initClassSelector();
 </script>
 </body>
 </html>
