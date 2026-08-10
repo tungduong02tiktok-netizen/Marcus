@@ -104,7 +104,7 @@
   .class-info p{ margin:0; font-size:12px; color:var(--ink-soft);}
 
   /* Modal nhập mật khẩu lớp */
-  #class-pass-modal{
+  #class-pass-modal, #dictation-pass-modal{
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.4);
@@ -678,15 +678,15 @@
   </div>
 </div>
 
-<!-- MODAL NHẬP MẬT KHẨU KHU VỰC GIÁO VIÊN (THÊM & QUẢN LÝ VIDEO) -->
-<div id="video-teacher-pass-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 10000; display: none; align-items: center; justify-content: center; padding: 20px;">
+<!-- MODAL NHẬP MẬT KHẨU GIÁO VIÊN CHO KHU VỰC VIDEO -->
+<div id="dictation-pass-modal">
   <div class="pass-modal-card">
-    <h3 style="font-family:var(--serif); color:var(--seal-dark); margin-top:0;">🔒 Mật Khẩu Khu Vực Giáo Viên</h3>
-    <p style="font-size:12px; color:var(--ink-soft); margin-bottom:14px;">Vui lòng nhập mật khẩu quản lý video:</p>
-    <input type="password" id="video-teacher-password-input" placeholder="Mật khẩu quản lý..." style="width:100%; margin-bottom:14px; text-align:center;">
+    <h3 style="font-family:var(--serif); color:var(--seal-dark); margin-top:0;">🔒 Xác thực Giáo viên</h3>
+    <p style="font-size:12px; color:var(--ink-soft); margin-bottom:14px;">Vui lòng nhập mật khẩu giáo viên để mở khu vực quản lý video:</p>
+    <input type="password" id="dictation-password-input" placeholder="Mật khẩu giáo viên..." style="width:100%; margin-bottom:14px; text-align:center;">
     <div style="display:flex; gap:10px;">
-      <button class="btn btn-outline" id="cancel-video-pass-btn" style="flex:1;">Hủy</button>
-      <button class="btn btn-primary" id="submit-video-pass-btn" style="flex:1;">Xác nhận ⚙️</button>
+      <button class="btn btn-outline" id="cancel-dictation-pass-btn" style="flex:1;">Hủy</button>
+      <button class="btn btn-primary" id="submit-dictation-pass-btn" style="flex:1;">Xác nhận</button>
     </div>
   </div>
 </div>
@@ -1106,8 +1106,8 @@ function loadState(){
         deletedDefaultIds: []
       }
     },
-    dictationSubmissions: {},
-    timedSubmissions: {},
+    dictationSubmissions: {}, 
+    timedSubmissions: {},     
     learned: {},        
     lastStudyDate: null,
     streak: 0,
@@ -1759,39 +1759,36 @@ if(mgTopicSel) mgTopicSel.addEventListener("change", renderManage);
    DICTATION / MULTI-VIDEO VIEW & LEADERBOARD LOGIC
    ========================================================= */
 const teacherPanel = document.getElementById("teacher-panel");
-const videoTeacherPassModal = document.getElementById("video-teacher-pass-modal");
-const videoTeacherPasswordInput = document.getElementById("video-teacher-password-input");
-const cancelVideoPassBtn = document.getElementById("cancel-video-pass-btn");
-const submitVideoPassBtn = document.getElementById("submit-video-pass-btn");
+const dictationPassModal = document.getElementById("dictation-pass-modal");
+const dictationPasswordInput = document.getElementById("dictation-password-input");
+const cancelDictationPassBtn = document.getElementById("cancel-dictation-pass-btn");
+const submitDictationPassBtn = document.getElementById("submit-dictation-pass-btn");
 
-// Yêu cầu nhập mật khẩu khi bấm vào nút Khu vực Giáo viên
 document.getElementById("open-teacher-panel-btn").addEventListener("click", () => {
-  if(teacherPanel.classList.contains("active")){
-    teacherPanel.classList.remove("active");
-  } else {
-    videoTeacherPasswordInput.value = "";
-    videoTeacherPassModal.style.display = "flex";
-    videoTeacherPasswordInput.focus();
-  }
+  // Yêu cầu nhập mật khẩu giáo viên trước khi bật panel quản lý video
+  dictationPasswordInput.value = "";
+  dictationPassModal.style.display = "flex";
+  dictationPasswordInput.focus();
 });
 
-cancelVideoPassBtn.addEventListener("click", () => {
-  videoTeacherPassModal.style.display = "none";
+cancelDictationPassBtn.addEventListener("click", () => {
+  dictationPassModal.style.display = "none";
 });
 
-submitVideoPassBtn.addEventListener("click", () => {
-  const pass = videoTeacherPasswordInput.value.trim();
+submitDictationPassBtn.addEventListener("click", () => {
+  const pass = dictationPasswordInput.value.trim();
+  // Mật khẩu giáo viên chung (giống mật khẩu bảng quản trị GV: 123455)
   if(pass === "123455"){
-    videoTeacherPassModal.style.display = "none";
-    teacherPanel.classList.add("active");
+    dictationPassModal.style.display = "none";
+    teacherPanel.classList.toggle("active");
   } else {
-    alert("Mật khẩu quản lý video không chính xác!");
-    videoTeacherPasswordInput.focus();
+    alert("Mật khẩu giáo viên không chính xác!");
+    dictationPasswordInput.focus();
   }
 });
 
-videoTeacherPasswordInput.addEventListener("keydown", (e) => {
-  if(e.key === "Enter") submitVideoPassBtn.click();
+dictationPasswordInput.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") submitDictationPassBtn.click();
 });
 
 const dictationVideoSelect = document.getElementById("dictation-video-select");
@@ -1848,7 +1845,6 @@ function loadSelectedVideo(vObj){
   }
 }
 
-// Thêm video mới từ khu vực giáo viên
 document.getElementById("add-video-item-btn").addEventListener("click", () => {
   const title = document.getElementById("new-video-title").value.trim();
   const url = document.getElementById("new-video-url").value.trim();
@@ -1907,7 +1903,6 @@ function renderTeacherVideoManagerList(){
   });
 }
 
-// Nộp bài chép chính tả
 document.getElementById("submit-dictation-btn").addEventListener("click", () => {
   const text = document.getElementById("dictation-text").value.trim();
   if(!text){
@@ -2352,9 +2347,378 @@ function renderTeacherManage(){
       alert(`Đã chuyển vùng quản lý sang lớp: ${state.currentClassName}`);
     });
   });
+
+  classListManage.querySelectorAll(".delete-class-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.name;
+      if(confirm(`Bạn có chắc chắn muốn xóa vĩnh viễn lớp "${target}" không?`)){
+        delete state.classes[target];
+        const remainingKeys = Object.keys(state.classes);
+        if(remainingKeys.length > 0){
+          state.currentClassName = remainingKeys[0];
+        }
+        saveState();
+        renderTeacherManage();
+      }
+    });
+  });
+
+  // Populate copy selects
+  const copySrcClass = document.getElementById("copy-source-class");
+  copySrcClass.innerHTML = "";
+  Object.keys(state.classes).forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c; opt.textContent = c;
+    copySrcClass.appendChild(opt);
+  });
+  copySrcClass.value = state.currentClassName;
+  
+  updateCopySourceTopics();
+  copySrcClass.onchange = updateCopySourceTopics;
+
+  renderCopyTargetCheckboxes();
+  renderRenameTopicSelect();
+  renderTeacherWordList();
+  renderTlTopicSelect();
 }
 
-initClassSelector();
+function updateCopySourceTopics(){
+  const cName = document.getElementById("copy-source-class").value;
+  const topSel = document.getElementById("copy-source-topic");
+  topSel.innerHTML = "";
+  const words = getWordsOfClass(cName);
+  const set = new Set(words.map(w => w.topic));
+  set.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t; opt.textContent = t;
+    topSel.appendChild(opt);
+  });
+}
+
+function renderCopyTargetCheckboxes(){
+  const wrap = document.getElementById("copy-target-classes");
+  wrap.innerHTML = "";
+  Object.keys(state.classes).forEach(c => {
+    const label = document.createElement("label");
+    label.style.cssText = "display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; cursor:pointer;";
+    label.innerHTML = `<input type="checkbox" class="copy-target-chk" value="${c}"> ${c}`;
+    wrap.appendChild(label);
+  });
+}
+
+document.getElementById("copy-list-btn").addEventListener("click", () => {
+  const srcClass = document.getElementById("copy-source-class").value;
+  const srcTopic = document.getElementById("copy-source-topic").value;
+  const chks = document.querySelectorAll(".copy-target-chk:checked");
+  const targets = Array.from(chks).map(x => x.value);
+
+  if(!srcTopic){
+    alert("Vui lòng chọn List nguồn!");
+    return;
+  }
+  if(targets.length === 0){
+    alert("Vui lòng chọn ít nhất một lớp đích để sao chép!");
+    return;
+  }
+
+  const wordsToCopy = getWordsOfClass(srcClass).filter(w => w.topic === srcTopic);
+  if(wordsToCopy.length === 0){
+    alert("List nguồn không có từ vựng nào!");
+    return;
+  }
+
+  targets.forEach(targetClass => {
+    if(targetClass === srcClass) return;
+    const tData = state.classes[targetClass];
+    if(!tData.customWords) tData.customWords = [];
+    wordsToCopy.forEach(w => {
+      // Tránh trùng lặp ID
+      const newId = "copy_" + Date.now() + "_" + Math.random().toString(36).substring(2, 6);
+      tData.customWords.push({
+        ...w,
+        id: newId
+      });
+    });
+  });
+
+  saveState();
+  alert("Sao chép List từ vựng thành công! ✨");
+});
+
+function renderRenameTopicSelect(){
+  const sel = document.getElementById("rename-topic-select");
+  sel.innerHTML = "";
+  topicList().forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t; opt.textContent = t;
+    sel.appendChild(opt);
+  });
+}
+
+document.getElementById("rename-topic-btn").addEventListener("click", () => {
+  const oldTopic = document.getElementById("rename-topic-select").value;
+  const newTopic = document.getElementById("rename-topic-new").value.trim();
+
+  if(!oldTopic || !newTopic){
+    alert("Vui lòng chọn List cũ và nhập tên mới!");
+    return;
+  }
+
+  const cData = getCurrentClassData();
+  // Đổi tên trong default (nếu có) hoặc custom words
+  DEFAULT_WORDS.forEach(w => {
+    if(w.topic === oldTopic){
+      // Chuyển sang custom words hoặc đánh dấu
+    }
+  });
+  if(cData.customWords){
+    cData.customWords.forEach(w => {
+      if(w.topic === oldTopic) w.topic = newTopic;
+    });
+  }
+  saveState();
+  renderTeacherManage();
+  alert(`Đã đổi tên List từ "${oldTopic}" thành "${newTopic}" thành công! ✨`);
+});
+
+let editingWordId = null;
+
+function renderTlTopicSelect(){
+  const sel = document.getElementById("tl-topic-select");
+  sel.innerHTML = "";
+  topicList().forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t; opt.textContent = t;
+    sel.appendChild(opt);
+  });
+}
+
+document.getElementById("tl-add-btn").addEventListener("click", () => {
+  const newTopicInput = document.getElementById("tl-new-topic").value.trim();
+  const selectTopic = document.getElementById("tl-topic-select").value;
+  const topic = newTopicInput || selectTopic || "Chủ đề chung";
+
+  const hanzi = document.getElementById("tl-hanzi").value.trim();
+  const pinyin = document.getElementById("tl-pinyin").value.trim();
+  const meaning = document.getElementById("tl-meaning").value.trim();
+  const emoji = document.getElementById("tl-emoji").value.trim() || "🐼";
+  const example = document.getElementById("tl-example").value.trim();
+
+  if(!hanzi || !pinyin || !meaning){
+    alert("Vui lòng nhập đầy đủ Hán tự, Pinyin và Nghĩa!");
+    return;
+  }
+
+  const cData = getCurrentClassData();
+  if(!cData.customWords) cData.customWords = [];
+
+  if(editingWordId){
+    const w = cData.customWords.find(x => x.id === editingWordId);
+    if(w){
+      w.hanzi = hanzi; w.pinyin = pinyin; w.meaning = meaning; w.emoji = emoji; w.topic = topic; w.example = example;
+    }
+    editingWordId = null;
+    document.getElementById("tl-form-title").textContent = "✨ Thêm từ mới vào Danh sách (List) của lớp hiện tại";
+    document.getElementById("tl-cancel-edit-btn").style.display = "none";
+    document.getElementById("tl-add-btn").textContent = "+ Thêm từ vào List";
+  } else {
+    const newWord = {
+      id: "w_" + Date.now(),
+      hanzi, pinyin, meaning, emoji, topic, level: "HSK2", example
+    };
+    cData.customWords.push(newWord);
+  }
+
+  saveState();
+  document.getElementById("tl-hanzi").value = "";
+  document.getElementById("tl-pinyin").value = "";
+  document.getElementById("tl-meaning").value = "";
+  document.getElementById("tl-emoji").value = "";
+  document.getElementById("tl-example").value = "";
+  document.getElementById("tl-new-topic").value = "";
+
+  renderTeacherManage();
+  alert("Lưu từ vựng thành công! ✨");
+});
+
+document.getElementById("tl-cancel-edit-btn").addEventListener("click", () => {
+  editingWordId = null;
+  document.getElementById("tl-form-title").textContent = "✨ Thêm từ mới vào Danh sách (List) của lớp hiện tại";
+  document.getElementById("tl-cancel-edit-btn").style.display = "none";
+  document.getElementById("tl-add-btn").textContent = "+ Thêm từ vào List";
+  document.getElementById("tl-hanzi").value = "";
+  document.getElementById("tl-pinyin").value = "";
+  document.getElementById("tl-meaning").value = "";
+  document.getElementById("tl-emoji").value = "";
+  document.getElementById("tl-example").value = "";
+});
+
+function renderTeacherWordList(){
+  const q = document.getElementById("tl-search-word").value.trim().toLowerCase();
+  const words = allWords().filter(w => !q || w.hanzi.includes(q) || w.pinyin.toLowerCase().includes(q) || w.meaning.toLowerCase().includes(q));
+  const wrap = document.getElementById("tl-word-list");
+  wrap.innerHTML = "";
+
+  if(words.length === 0){
+    wrap.innerHTML = '<div class="empty-note">Không có từ vựng nào.</div>';
+    return;
+  }
+
+  words.forEach(w => {
+    const row = document.createElement("div");
+    row.className = "word-row";
+    row.innerHTML = `
+      <div class="emoji">${w.emoji || "🐼"}</div>
+      <div class="hanzi">${w.hanzi}</div>
+      <div class="pinyin">${w.pinyin}</div>
+      <div class="meaning">${w.meaning} <span style="color:var(--ink-soft); font-size:12px; font-weight:normal;">· ${w.topic}</span></div>
+      <button class="btn btn-outline edit-word-btn" data-id="${w.id}" style="font-size:11px; padding:4px 8px;">Sửa</button>
+      <button class="btn btn-bad delete-word-btn" data-id="${w.id}" style="font-size:11px; padding:4px 8px;">Xóa</button>
+    `;
+    wrap.appendChild(row);
+  });
+
+  wrap.querySelectorAll(".edit-word-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      const w = allWords().find(x => x.id === id);
+      if(w){
+        editingWordId = id;
+        document.getElementById("tl-form-title").textContent = `✏️ Đang sửa từ: ${w.hanzi}`;
+        document.getElementById("tl-cancel-edit-btn").style.display = "inline-block";
+        document.getElementById("tl-add-btn").textContent = "💾 Cập nhật từ vựng";
+        document.getElementById("tl-hanzi").value = w.hanzi;
+        document.getElementById("tl-pinyin").value = w.pinyin;
+        document.getElementById("tl-meaning").value = w.meaning;
+        document.getElementById("tl-emoji").value = w.emoji || "";
+        document.getElementById("tl-example").value = w.example || "";
+        document.getElementById("tl-topic-select").value = w.topic;
+        window.scrollTo({ top: document.getElementById("tl-form-title").offsetTop - 50, behavior: 'smooth' });
+      }
+    });
+  });
+
+  wrap.querySelectorAll(".delete-word-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      const cData = getCurrentClassData();
+      if(confirm("Bạn có chắc chắn muốn xóa từ này không?")){
+        if(id.startsWith("d")){
+          if(!cData.deletedDefaultIds) cData.deletedDefaultIds = [];
+          cData.deletedDefaultIds.push(id);
+        } else {
+          cData.customWords = cData.customWords.filter(x => x.id !== id);
+        }
+        saveState();
+        renderTeacherManage();
+      }
+    });
+  });
+}
+
+document.getElementById("tl-search-word").addEventListener("input", renderTeacherWordList);
+
+/* =========================================================
+   CSV & JSON EXPORT / IMPORT
+   ========================================================= */
+document.getElementById("backup-export-btn").addEventListener("click", () => {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+  const dlAnchor = document.createElement("a");
+  dlAnchor.setAttribute("href", dataStr);
+  dlAnchor.setAttribute("download", `zhVocabApp_backup_${Date.now()}.json`);
+  document.body.appendChild(dlAnchor);
+  dlAnchor.click();
+  dlAnchor.remove();
+});
+
+document.getElementById("backup-import-trigger-btn").addEventListener("click", () => {
+  document.getElementById("backup-import-file").click();
+});
+
+document.getElementById("backup-import-file").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try{
+      const imported = JSON.parse(evt.target.result);
+      if(imported && imported.classes){
+        state = imported;
+        saveState();
+        applyCustomTheme();
+        initClassSelector();
+        alert("Khôi phục toàn bộ dữ liệu thành công! ✨");
+      } else {
+        alert("File JSON không hợp lệ!");
+      }
+    }catch(err){
+      alert("Lỗi khi đọc file JSON!");
+    }
+  };
+  reader.readAsText(file);
+});
+
+document.getElementById("csv-export-btn").addEventListener("click", () => {
+  const words = allWords();
+  let csv = "\uFEFFHanzi,Pinyin,Meaning,Emoji,Topic,Level,Example\n";
+  words.forEach(w => {
+    csv += `"${w.hanzi}","${w.pinyin}","${w.meaning}","${w.emoji||''}","${w.topic}","${w.level||'HSK2'}","${w.example||''}"\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `vocab_${state.currentClassName.replace(/\s+/g, '_')}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("csv-import-trigger-btn").addEventListener("click", () => {
+  document.getElementById("csv-import-file").click();
+});
+
+document.getElementById("csv-import-file").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    const text = evt.target.result;
+    const lines = text.split("\n");
+    const cData = getCurrentClassData();
+    if(!cData.customWords) cData.customWords = [];
+    let count = 0;
+    for(let i = 1; i < lines.length; i++){
+      const line = lines[i].trim();
+      if(!line) continue;
+      // Parse CSV đơn giản
+      const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(p => p.replace(/^"|"$/g, '').trim());
+      if(parts.length >= 3){
+        cData.customWords.push({
+          id: "csv_" + Date.now() + "_" + Math.random().toString(36).substring(2,6),
+          hanzi: parts[0],
+          pinyin: parts[1],
+          meaning: parts[2],
+          emoji: parts[3] || "🐼",
+          topic: parts[4] || "Nhập từ CSV",
+          level: parts[5] || "HSK2",
+          example: parts[6] || ""
+        });
+        count++;
+      }
+    }
+    saveState();
+    renderTeacherManage();
+    alert(`Đã nhập thành công ${count} từ vựng mới vào lớp! ✨`);
+  };
+  reader.readAsText(file);
+});
+
+/* =========================================================
+   INITIALIZATION ON LOAD
+   ========================================================= */
+window.addEventListener("DOMContentLoaded", () => {
+  initClassSelector();
+});
 </script>
 </body>
 </html>
