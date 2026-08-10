@@ -1957,7 +1957,7 @@ function renderQuizResult(){
 const tmTopicSel = document.getElementById("tm-topic");
 const tmArea = document.getElementById("tm-area");
 
-let tmQueue = [], tmIdx = 0, tmTimerId = null, tmStart = 0, tmFailMsg = "";
+let tmQueue = [], tmIdx = 0, tmTimerId = null, tmStart = 0, tmRemaining = 0, tmFailMsg = "";
 
 tmTopicSel.addEventListener("change", renderTimedIdle);
 
@@ -2042,6 +2042,7 @@ function renderTimedQuestion(){
     b.addEventListener("click", ()=>{
       if(answered) return;
       answered = true;
+      tmRemaining = Math.max(0, limitMs - (Date.now() - tmStart));
       clearInterval(tmTimerId);
       sendAnswerToGoogleSheet({
         activity:"timed",
@@ -2074,11 +2075,13 @@ function renderTimedQuestion(){
   });
 
   tmStart = Date.now();
+  tmRemaining = limitMs;
   const bar = document.getElementById("tm-bar");
   const num = document.getElementById("tm-num");
   tmTimerId = setInterval(()=>{
     const elapsed = Date.now() - tmStart;
     const remaining = Math.max(0, limitMs - elapsed);
+    tmRemaining = remaining;
     const pct = (remaining/limitMs)*100;
     bar.style.width = pct + "%";
     num.textContent = (remaining/1000).toFixed(1) + "s";
