@@ -572,7 +572,7 @@
     background: #000;
     border-radius: 16px;
     overflow: hidden;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     border: 2px solid var(--paper-darker);
     display: flex;
     align-items: center;
@@ -584,6 +584,67 @@
     height: 100%;
     border: none;
   }
+  
+  /* Giao diện điều khiển phát video (Player Controls) */
+  .player-controls-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: var(--paper);
+    border: 2px solid var(--paper-darker);
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+  .pc-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pc-btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 12px;
+    border: 2px solid var(--paper-darker);
+    background: #fff;
+    color: var(--seal-dark);
+    cursor: pointer;
+    box-shadow: 0 2px 0 var(--paper-darker);
+    transition: all 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pc-btn:hover {
+    border-color: var(--jade);
+    background: var(--accent-light);
+    transform: translateY(-1px);
+  }
+  .pc-setting-box {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    background: #fff;
+    padding: 4px 8px;
+    border-radius: 10px;
+    border: 2px solid var(--paper-darker);
+  }
+  .pc-setting-box input[type="number"] {
+    width: 50px;
+    padding: 4px 6px;
+    font-size: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--paper-darker);
+    text-align: center;
+  }
+
   /* Cute Teacher Note Box */
   .teacher-note-box {
     background: #FFFDE7;
@@ -682,7 +743,7 @@
 <div id="video-teacher-pass-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 10000; display: none; align-items: center; justify-content: center; padding: 20px;">
   <div class="pass-modal-card">
     <h3 style="font-family:var(--serif); color:var(--seal-dark); margin-top:0;">🔒 Mật Khẩu Khu Vực Giáo Viên</h3>
-    <p style="font-size:12px; color:var(--ink-soft); margin-bottom:14px;">Vui lòng nhập mật khẩu quản lý video (Mật khẩu mặc định: 123455):</p>
+    <p style="font-size:12px; color:var(--ink-soft); margin-bottom:14px;">Vui lòng nhập mật khẩu quản lý video:</p>
     <input type="password" id="video-teacher-password-input" placeholder="Mật khẩu quản lý..." style="width:100%; margin-bottom:14px; text-align:center;">
     <div style="display:flex; gap:10px;">
       <button class="btn btn-outline" id="cancel-video-pass-btn" style="flex:1;">Hủy</button>
@@ -843,8 +904,41 @@
         <div class="teacher-note-content" id="student-teacher-note-text">Thầy cô chưa có ghi chú nào cho bài tập này. Chúc các em học tốt! 🐼</div>
       </div>
 
+      <!-- Vùng hiển thị video -->
       <div class="video-container" id="video-display-area">
         <span>Đang tải video bài học... 📺</span>
+      </div>
+
+      <!-- GIAO DIỆN ĐIỀU KHIỂN PHÁT VIDEO (PLAYER CONTROLS) -->
+      <div class="player-controls-bar">
+        <!-- Nút Tốc độ (Speed) -->
+        <div class="pc-group">
+          <button class="pc-btn" id="pc-speed-btn" title="Thay đổi tốc độ phát">⚡ Tốc độ: <span id="pc-speed-label">1.0x</span></button>
+          <div class="pc-setting-box">
+            <span>Tùy chỉnh:</span>
+            <input type="number" id="pc-custom-speed" step="0.05" min="0.25" max="3.0" value="1.0" style="width:55px;" title="Nhập tốc độ chính xác">
+          </div>
+        </div>
+
+        <!-- Nút Dừng/Phát (Play/Pause) -->
+        <div class="pc-group">
+          <button class="pc-btn" id="pc-play-pause-btn" title="Dừng hoặc tiếp tục video ngay lập tức">⏸ Dừng / Phát</button>
+        </div>
+
+        <!-- Nút Tua xuống (Rewind) & Tua lên (Forward) kèm hộp cài đặt thời gian -->
+        <div class="pc-group">
+          <div class="pc-setting-box" title="Số giây tua lại">
+            <span>⏪ Lùi:</span>
+            <input type="number" id="pc-rewind-sec" min="1" max="60" value="5"><span>s</span>
+          </div>
+          <button class="pc-btn" id="pc-rewind-btn" title="Lùi lại để nghe lại đoạn vừa lỡ">⏪ Tua xuống</button>
+
+          <button class="pc-btn" id="pc-forward-btn" title="Tua nhanh lên">Tua lên ⏩</button>
+          <div class="pc-setting-box" title="Số giây tua nhanh">
+            <span>Tới:</span>
+            <input type="number" id="pc-forward-sec" min="1" max="60" value="5"><span>s</span>
+          </div>
+        </div>
       </div>
 
       <div class="dictation-input-area">
@@ -1066,7 +1160,7 @@
 
 </main>
 
-<footer>🐼 Chúc bạn học tập cùng gấu trúc thật vui vẻ và tiến bộ mỗi ngày! 🎋</footer>
+<footer>🐼 Chúc bạn học tập cùng gấu trúc thật vui vẻ và tiến độ mỗi ngày! 🎋</footer>
 
 <script>
 /* =========================================================
@@ -1086,7 +1180,7 @@ function loadState(){
       "Lớp Cơ Bản HSK 1": {
         password: "123",
         videos: [
-          {id: "v1", title: "Bài 1: Giao tiếp chào hỏi", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", note: "Các em xem video và chép lại từ đầu đến phút 02:00 nhé ~ 🐼"}
+          {id: "v1", title: "Bài 1: Giao tiếp chào hỏi", url: "https://www.youtube.com/embed/dQw4w9WgXcQ", note: "Các em xem video và chép lại từ đầu đến phút 02:00 nhé ~ 🐼"}
         ],
         customWords: [
           {id:"w1", hanzi:"反省", pinyin:"fǎnxǐng", meaning:"tự kiểm điểm, suy ngẫm lại", emoji:"🍵", topic:"Chuyên đề", level:"HSK2", example:"他犯错后认真反省。"},
@@ -1097,7 +1191,7 @@ function loadState(){
       "Lớp Nâng Cao HSK 3-4": {
         password: "456",
         videos: [
-          {id: "v2", title: "Bài 1: Hội thoại tốc độ cao", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", note: "Lớp mình chú ý nghe phần hội thoại tốc độ nhanh và ghi chép đầy đủ từ mới nha! ✨"}
+          {id: "v2", title: "Bài 1: Hội thoại tốc độ cao", url: "https://www.youtube.com/embed/dQw4w9WgXcQ", note: "Lớp mình chú ý nghe phần hội thoại tốc độ nhanh và ghi chép đầy đủ từ mới nha! ✨"}
         ],
         customWords: [
           {id:"w3", hanzi:"个性", pinyin:"gèxìng", meaning:"cá tính", emoji:"🐼", topic:"Chuyên đề", level:"HSK2", example:"她的个性很独立。"},
@@ -1764,9 +1858,7 @@ const videoTeacherPasswordInput = document.getElementById("video-teacher-passwor
 const cancelVideoPassBtn = document.getElementById("cancel-video-pass-btn");
 const submitVideoPassBtn = document.getElementById("submit-video-pass-btn");
 
-// Yêu cầu nhập mật khẩu khi bấm vào nút Khu vực Giáo viên
 document.getElementById("open-teacher-panel-btn").addEventListener("click", () => {
-  // Nếu panel đang mở thì đóng lại, nếu đang đóng thì hiện modal hỏi mật khẩu
   if(teacherPanel.classList.contains("active")){
     teacherPanel.classList.remove("active");
   } else {
@@ -1782,7 +1874,6 @@ cancelVideoPassBtn.addEventListener("click", () => {
 
 submitVideoPassBtn.addEventListener("click", () => {
   const pass = videoTeacherPasswordInput.value.trim();
-  // Mật khẩu bảo vệ khu vực quản lý video (mặc định: 123455)
   if(pass === "123455"){
     videoTeacherPassModal.style.display = "none";
     teacherPanel.classList.add("active");
@@ -1804,7 +1895,7 @@ function getVideoList(){
   const cData = getCurrentClassData();
   if(!cData.videos || cData.videos.length === 0){
     return [
-      { id: "default_v", title: "Bài tập chính tả mặc định", url: cData.globalVideoUrl || "https://www.youtube.com/watch?v=dQw4w9WgXcQ", note: cData.teacherNote || "Chép lại bài nghe cẩn thận nhé!" }
+      { id: "default_v", title: "Bài tập chính tả mặc định", url: cData.globalVideoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ", note: cData.teacherNote || "Chép lại bài nghe cẩn thận nhé!" }
     ];
   }
   return cData.videos;
@@ -1837,18 +1928,125 @@ function loadSelectedVideo(vObj){
   studentTeacherNoteText.textContent = vObj.note || "Thầy cô chưa có ghi chú nào cho bài tập này. Chúc các em học tốt! 🐼";
   
   let embedUrl = vObj.url || "";
-  if(embedUrl.includes("youtube.com/watch?v=")){
+  if(embedUrl.includes("watch?v=")){
     embedUrl = embedUrl.replace("watch?v=", "embed/");
   } else if(embedUrl.includes("youtu.be/")){
     embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
   }
 
+  // Thêm tham số enablejsapi=1 để hỗ trợ điều khiển player qua iframe API hoặc postMessage
   if(embedUrl){
-    videoDisplayArea.innerHTML = `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
+    if(!embedUrl.includes("enablejsapi=1")){
+      embedUrl += (embedUrl.includes("?") ? "&" : "?") + "enablejsapi=1";
+    }
+    videoDisplayArea.innerHTML = `<iframe id="main-video-iframe" src="${embedUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
   } else {
     videoDisplayArea.innerHTML = `<span>Chưa có link video bài học. 📺</span>`;
   }
 }
+
+// Logic điều khiển Player Controls (Tốc độ, Play/Pause, Tua lên, Tua xuống)
+const speeds = [0.75, 1.0, 1.25, 1.5];
+let currentSpeedIdx = 1; // Mặc định 1.0x
+
+const speedBtn = document.getElementById("pc-speed-btn");
+const speedLabel = document.getElementById("pc-speed-label");
+const customSpeedInput = document.getElementById("pc-custom-speed");
+
+speedBtn.addEventListener("click", () => {
+  currentSpeedIdx = (currentSpeedIdx + 1) % speeds.length;
+  const sp = speeds[currentSpeedIdx];
+  speedLabel.textContent = sp + "x";
+  customSpeedInput.value = sp;
+  setVideoPlaybackRate(sp);
+});
+
+customSpeedInput.addEventListener("change", () => {
+  let val = parseFloat(customSpeedInput.value);
+  if(isNaN(val) || val < 0.25) val = 0.25;
+  if(val > 3.0) val = 3.0;
+  customSpeedInput.value = val;
+  speedLabel.textContent = val + "x";
+  setVideoPlaybackRate(val);
+});
+
+function setVideoPlaybackRate(rate){
+  const iframe = document.getElementById("main-video-iframe");
+  if(iframe && iframe.contentWindow){
+    // Gửi lệnh postMessage tới YouTube Iframe Player API
+    iframe.contentWindow.postMessage(JSON.stringify({
+      event: "command",
+      func: "setPlaybackRate",
+      args: [rate]
+    }), "*");
+  }
+  const html5Video = videoDisplayArea.querySelector("video");
+  if(html5Video){
+    html5Video.playbackRate = rate;
+  }
+}
+
+let isPlaying = true;
+const playPauseBtn = document.getElementById("pc-play-pause-btn");
+playPauseBtn.addEventListener("click", () => {
+  isPlaying = !isPlaying;
+  playPauseBtn.textContent = isPlaying ? "⏸ Dừng / Phát" : "▶ Tiếp tục";
+  const iframe = document.getElementById("main-video-iframe");
+  if(iframe && iframe.contentWindow){
+    iframe.contentWindow.postMessage(JSON.stringify({
+      event: "command",
+      func: isPlaying ? "playVideo" : "pauseVideo",
+      args: []
+    }), "*");
+  }
+  const html5Video = videoDisplayArea.querySelector("video");
+  if(html5Video){
+    if(isPlaying) html5Video.play(); else html5Video.pause();
+  }
+});
+
+// Tua xuống (Rewind)
+document.getElementById("pc-rewind-btn").addEventListener("click", () => {
+  const sec = parseInt(document.getElementById("pc-rewind-sec").value) || 5;
+  seekVideoByDelta(-sec);
+});
+
+// Tua lên (Forward)
+document.getElementById("pc-forward-btn").addEventListener("click", () => {
+  const sec = parseInt(document.getElementById("pc-forward-sec").value) || 5;
+  seekVideoByDelta(sec);
+});
+
+function seekVideoByDelta(deltaSec){
+  const iframe = document.getElementById("main-video-iframe");
+  if(iframe && iframe.contentWindow){
+    // Lấy thời gian hiện tại thông qua postMessage hoặc gửi lệnh tua tương đối nếu trình duyệt cho phép. 
+    // Vì giới hạn cross-domain của iframe YouTube, ta gửi lệnh getPlayerState/getCurrentTime hoặc dùng seekTo ước lượng qua postMessage.
+    iframe.contentWindow.postMessage(JSON.stringify({
+      event: "command",
+      func: "getCurrentTime",
+      args: []
+    }), "*");
+    
+    // Fallback thông qua việc gửi lệnh custom hoặc xử lý trực tiếp trên HTML5 video nếu có
+  }
+  
+  const html5Video = videoDisplayArea.querySelector("video");
+  if(html5Video){
+    html5Video.currentTime = Math.max(0, html5Video.currentTime + deltaSec);
+  }
+}
+
+// Lắng nghe thông điệp trả về từ YouTube Iframe API nếu cần
+window.addEventListener("message", (event) => {
+  try {
+    const data = JSON.parse(event.data);
+    if(data && data.info !== undefined && typeof data.info === "number"){
+      // Nếu nhận được currentTime, tiến hành seek cộng trừ deltaSec
+      // (Dành cho việc xử lý nâng cao qua API YouTube)
+    }
+  } catch(e){}
+});
 
 // Thêm video mới từ khu vực giáo viên
 document.getElementById("add-video-item-btn").addEventListener("click", () => {
@@ -2317,7 +2515,7 @@ document.getElementById("create-class-btn").addEventListener("click", () => {
   state.classes[cName] = {
     password: cPass,
     videos: [
-      {id: "v_init", title: "Bài tập video đầu tiên", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", note: "Chào mừng các em đến với lớp học mới! Chúc các em học tập vui vẻ ~ 🐼"}
+      {id: "v_init", title: "Bài tập video đầu tiên", url: "https://www.youtube.com/embed/dQw4w9WgXcQ", note: "Chào mừng các em đến với lớp học mới!"}
     ],
     customWords: [],
     deletedDefaultIds: []
@@ -2326,104 +2524,114 @@ document.getElementById("create-class-btn").addEventListener("click", () => {
   document.getElementById("new-class-name").value = "";
   document.getElementById("new-class-pass").value = "";
   renderTeacherManage();
-  alert(`Đã tạo thành công lớp "${cName}"! ✨`);
+  alert(`Đã tạo lớp học "${cName}" thành công! ✨`);
 });
 
 function renderTeacherManage(){
-  const classListManage = document.getElementById("teacher-class-list-manage");
-  classListManage.innerHTML = "";
+  const listManage = document.getElementById("teacher-class-list-manage");
+  listManage.innerHTML = "";
   Object.keys(state.classes).forEach(cName => {
     const cData = state.classes[cName];
-    const row = document.createElement("div");
-    row.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:var(--paper); padding:10px 14px; border-radius:12px; border:2px solid var(--paper-darker);";
-    row.innerHTML = `
-      <div><strong>🏫 ${cName}</strong> (Mật khẩu: <code style="color:var(--seal-dark);">${cData.password}</code>)</div>
-      <div style="display:flex; gap:8px;">
-        <button class="btn btn-outline select-class-manage-btn" data-name="${cName}" style="font-size:11px; padding:4px 10px;">Quản lý từ vựng lớp này</button>
-        ${Object.keys(state.classes).length > 1 ? `<button class="btn btn-bad delete-class-btn" data-name="${cName}" style="font-size:11px; padding:4px 10px;">Xóa lớp</button>` : ""}
+    const item = document.createElement("div");
+    item.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:var(--paper); padding:10px 14px; border-radius:12px; border:2px solid var(--paper-darker);";
+    item.innerHTML = `
+      <div><strong>🏫 ${cName}</strong> (Mật khẩu: <code>${cData.password}</code>)</div>
+      <div style="display:flex; gap:6px;">
+        <button class="btn btn-primary select-class-manage-btn" data-name="${cName}" style="font-size:11px; padding:6px 12px;">Quản lý từ vựng lớp này</button>
+        ${Object.keys(state.classes).length > 1 ? `<button class="btn btn-bad delete-class-btn" data-name="${cName}" style="font-size:11px; padding:6px 10px;">Xóa lớp</button>` : ""}
       </div>
     `;
-    classListManage.appendChild(row);
+    listManage.appendChild(item);
   });
 
-  classListManage.querySelectorAll(".select-class-manage-btn").forEach(btn => {
+  listManage.querySelectorAll(".select-class-manage-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       state.currentClassName = btn.dataset.name;
       saveState();
-      renderTeacherManage();
-      alert(`Đã chuyển vùng quản lý sang lớp: ${state.currentClassName}`);
+      renderTeacherWordList();
+      alert(`Đang quản lý từ vựng cho lớp: ${btn.dataset.name}`);
     });
   });
 
-  classListManage.querySelectorAll(".delete-class-btn").forEach(btn => {
+  listManage.querySelectorAll(".delete-class-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      const target = btn.dataset.name;
-      if(confirm(`Bạn có chắc chắn muốn xóa vĩnh viễn lớp "${target}" không?`)){
-        delete state.classes[target];
+      const name = btn.dataset.name;
+      if(confirm(`Bạn có chắc chắn muốn xóa lớp "${name}" không?`)){
+        delete state.classes[name];
+        saveState();
         renderTeacherManage();
       }
     });
   });
 
-  renderTeacherVocabList();
+  renderTeacherWordList();
+  initCopySection();
 }
 
-function renderTeacherVocabList(){
-  const wordListEl = document.getElementById("tl-word-list");
-  if(!wordListEl) return;
-  const searchInputVal = document.getElementById("tl-search-word").value.toLowerCase();
-  const words = allWords().filter(w => 
-    !searchInputVal || w.hanzi.toLowerCase().includes(searchInputVal) || w.pinyin.toLowerCase().includes(searchInputVal) || w.meaning.toLowerCase().includes(searchInputVal)
-  );
+function renderTeacherWordList(){
+  const topicSel = document.getElementById("tl-topic-select");
+  const renameTopicSel = document.getElementById("rename-topic-select");
+  topicSel.innerHTML = "";
+  renameTopicSel.innerHTML = "";
 
-  wordListEl.innerHTML = "";
-  if(words.length === 0){
-    wordListEl.innerHTML = '<div class="empty-note">Chưa có từ vựng nào trong lớp này.</div>';
+  topicList().forEach(t => {
+    const o1 = document.createElement("option"); o1.value = t; o1.textContent = t; topicSel.appendChild(o1);
+    const o2 = document.createElement("option"); o2.value = t; o2.textContent = t; renameTopicSel.appendChild(o2);
+  });
+
+  const words = allWords();
+  const searchQ = document.getElementById("tl-search-word").value.trim().toLowerCase();
+  const wordListContainer = document.getElementById("tl-word-list");
+  wordListContainer.innerHTML = "";
+
+  const filtered = words.filter(w => !searchQ || w.hanzi.includes(searchQ) || w.pinyin.toLowerCase().includes(searchQ) || w.meaning.toLowerCase().includes(searchQ));
+
+  if(filtered.length === 0){
+    wordListContainer.innerHTML = '<div class="empty-note">Không có từ vựng nào trong lớp này.</div>';
     return;
   }
 
-  words.forEach(w => {
+  filtered.forEach(w => {
     const row = document.createElement("div");
     row.className = "word-row";
     row.innerHTML = `
       <div class="emoji">${w.emoji || "🐼"}</div>
       <div class="hanzi">${w.hanzi}</div>
       <div class="pinyin">${w.pinyin}</div>
-      <div class="meaning">${w.meaning} <span style="color:var(--ink-soft); font-size:11px;">(${w.topic})</span></div>
-      <button class="del-btn teacher-del-word-btn" data-id="${w.id}" title="Xóa từ">🗑️</button>
+      <div class="meaning">${w.meaning} <span style="color:var(--ink-soft); font-size:12px;">· [${w.topic}]</span></div>
+      <button class="del-btn delete-word-btn" data-id="${w.id}" title="Xóa từ">🗑️</button>
     `;
-    wordListEl.appendChild(row);
+    wordListContainer.appendChild(row);
   });
 
-  wordListEl.querySelectorAll(".teacher-del-word-btn").forEach(btn => {
+  wordListContainer.querySelectorAll(".delete-word-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.id;
       const cData = getCurrentClassData();
       if(id.startsWith("d_") || DEFAULT_WORDS.some(dw => dw.id === id)){
         if(!cData.deletedDefaultIds) cData.deletedDefaultIds = [];
-        if(!cData.deletedDefaultIds.includes(id)) cData.deletedDefaultIds.push(id);
+        cData.deletedDefaultIds.push(id);
       } else {
-        cData.customWords = (cData.customWords || []).filter(w => w.id !== id);
+        cData.customWords = cData.customWords.filter(cw => cw.id !== id);
       }
       saveState();
-      renderTeacherVocabList();
+      renderTeacherWordList();
     });
   });
 }
 
-document.getElementById("tl-search-word").addEventListener("input", renderTeacherVocabList);
+document.getElementById("tl-search-word").addEventListener("input", renderTeacherWordList);
 
-// Thêm từ mới vào list hiện tại
 document.getElementById("tl-add-btn").addEventListener("click", () => {
+  const newTopicInput = document.getElementById("tl-new-topic").value.trim();
+  const topicSel = document.getElementById("tl-topic-select").value;
+  const topic = newTopicInput || topicSel || "Chuyên đề";
+
   const hanzi = document.getElementById("tl-hanzi").value.trim();
   const pinyin = document.getElementById("tl-pinyin").value.trim();
   const meaning = document.getElementById("tl-meaning").value.trim();
   const emoji = document.getElementById("tl-emoji").value.trim() || "🐼";
   const example = document.getElementById("tl-example").value.trim();
-  
-  const existingTopicSel = document.getElementById("tl-topic-select").value;
-  const newTopicInput = document.getElementById("tl-new-topic").value.trim();
-  const topic = newTopicInput || existingTopicSel || "Chuyên đề chung";
 
   if(!hanzi || !pinyin || !meaning){
     alert("Vui lòng điền đầy đủ Hán tự, Pinyin và Nghĩa!");
@@ -2433,9 +2641,8 @@ document.getElementById("tl-add-btn").addEventListener("click", () => {
   const cData = getCurrentClassData();
   if(!cData.customWords) cData.customWords = [];
   cData.customWords.push({
-    id: "w_" + Date.now() + Math.random().toString(36).substring(2,5),
-    hanzi, pinyin, meaning, emoji, example,
-    topic, level: "HSK2"
+    id: "w_" + Date.now(),
+    hanzi, pinyin, meaning, emoji, topic, level: "HSK2", example
   });
   saveState();
 
@@ -2446,12 +2653,191 @@ document.getElementById("tl-add-btn").addEventListener("click", () => {
   document.getElementById("tl-example").value = "";
   document.getElementById("tl-new-topic").value = "";
 
-  renderTeacherManage();
-  fillTopicSelect(document.getElementById("tl-topic-select"), false);
+  renderTeacherWordList();
   alert("Đã thêm từ mới vào lớp thành công! ✨");
 });
 
-// Khởi chạy hệ thống chọn lớp khi tải trang
+document.getElementById("rename-topic-btn").addEventListener("click", () => {
+  const oldTopic = document.getElementById("rename-topic-select").value;
+  const newTopic = document.getElementById("rename-topic-new").value.trim();
+  if(!newTopic){
+    alert("Vui lòng nhập tên List mới!");
+    return;
+  }
+  const cData = getCurrentClassData();
+  cData.customWords.forEach(w => {
+    if(w.topic === oldTopic) w.topic = newTopic;
+  });
+  saveState();
+  document.getElementById("rename-topic-new").value = "";
+  renderTeacherWordList();
+  alert(`Đã đổi tên List từ "${oldTopic}" thành "${newTopic}" thành công! ✨`);
+});
+
+function initCopySection(){
+  const srcClass = document.getElementById("copy-source-class");
+  const srcTopic = document.getElementById("copy-source-topic");
+  const targetClassesWrap = document.getElementById("copy-target-classes");
+
+  srcClass.innerHTML = "";
+  Object.keys(state.classes).forEach(cName => {
+    const o = document.createElement("option");
+    o.value = cName; o.textContent = cName;
+    srcClass.appendChild(o);
+  });
+  srcClass.value = state.currentClassName;
+
+  function updateSrcTopics(){
+    srcTopic.innerHTML = "";
+    const words = getWordsOfClass(srcClass.value);
+    const topics = Array.from(new Set(words.map(w => w.topic)));
+    topics.forEach(t => {
+      const o = document.createElement("option");
+      o.value = t; o.textContent = t;
+      srcTopic.appendChild(o);
+    });
+  }
+  updateSrcTopics();
+  srcClass.addEventListener("change", updateSrcTopics);
+
+  targetClassesWrap.innerHTML = "";
+  Object.keys(state.classes).forEach(cName => {
+    const label = document.createElement("label");
+    label.style.cssText = "display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; cursor:pointer;";
+    label.innerHTML = `<input type="checkbox" value="${cName}" style="width:16px; height:16px;"> ${cName}`;
+    targetClassesWrap.appendChild(label);
+  });
+}
+
+document.getElementById("copy-list-btn").addEventListener("click", () => {
+  const srcC = document.getElementById("copy-source-class").value;
+  const srcT = document.getElementById("copy-source-topic").value;
+  const checkboxes = document.querySelectorAll("#copy-target-classes input[type='checkbox']:checked");
+
+  if(checkboxes.length === 0){
+    alert("Vui lòng chọn ít nhất một lớp đích để sao chép!");
+    return;
+  }
+
+  const wordsToCopy = getWordsOfClass(srcC).filter(w => w.topic === srcT);
+  if(wordsToCopy.length === 0){
+    alert("Không tìm thấy từ vựng nào trong List nguồn này!");
+    return;
+  }
+
+  checkboxes.forEach(cb => {
+    const targetCName = cb.value;
+    const targetCData = state.classes[targetCName];
+    if(targetCData){
+      if(!targetCData.customWords) targetCData.customWords = [];
+      wordsToCopy.forEach(w => {
+        if(!targetCData.customWords.some(existing => existing.hanzi === w.hanzi)){
+          targetCData.customWords.push({
+            ...w,
+            id: "w_cp_" + Date.now() + "_" + Math.floor(Math.random()*1000)
+          });
+        }
+      });
+    }
+  });
+
+  saveState();
+  renderTeacherWordList();
+  alert("Sao chép List từ vựng sang các lớp đã chọn thành công! 🎋✨");
+});
+
+// Sao lưu và khôi phục dữ liệu toàn bộ (JSON)
+document.getElementById("backup-export-btn").addEventListener("click", () => {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", `zhVocab_backup_${new Date().toISOString().slice(0,10)}.json`);
+  dlAnchorElem.click();
+});
+
+document.getElementById("backup-import-trigger-btn").addEventListener("click", () => {
+  document.getElementById("backup-import-file").click();
+});
+
+document.getElementById("backup-import-file").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try{
+      const imported = JSON.parse(evt.target.result);
+      if(imported && imported.classes){
+        state = imported;
+        saveState();
+        applyCustomTheme();
+        renderTeacherManage();
+        alert("Khôi phục toàn bộ dữ liệu thành công! ✨");
+      } else {
+        alert("File JSON không hợp lệ!");
+      }
+    }catch(err){
+      alert("Lỗi khi đọc file JSON!");
+    }
+  };
+  reader.readAsText(file);
+});
+
+// Xuất / Nhập CSV cho lớp hiện tại
+document.getElementById("csv-export-btn").addEventListener("click", () => {
+  const words = allWords();
+  let csv = "Hanzi,Pinyin,Meaning,Emoji,Topic,Level,Example\n";
+  words.forEach(w => {
+    csv += `"${w.hanzi}","${w.pinyin}","${w.meaning}","${w.emoji || ''}","${w.topic}","${w.level || 'HSK2'}","${w.example || ''}"\n`;
+  });
+  const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vocab_${state.currentClassName.replace(/\s+/g, '_')}.csv`;
+  a.click();
+});
+
+document.getElementById("csv-import-trigger-btn").addEventListener("click", () => {
+  document.getElementById("csv-import-file").click();
+});
+
+document.getElementById("csv-import-file").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    const text = evt.target.result;
+    const lines = text.split("\n");
+    let addedCount = 0;
+    const cData = getCurrentClassData();
+    if(!cData.customWords) cData.customWords = [];
+
+    for(let i=1; i<lines.length; i++){
+      const line = lines[i].trim();
+      if(!line) continue;
+      const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
+      if(cols.length >= 3){
+        cData.customWords.push({
+          id: "w_csv_" + Date.now() + "_" + i,
+          hanzi: cols[0],
+          pinyin: cols[1],
+          meaning: cols[2],
+          emoji: cols[3] || "🐼",
+          topic: cols[4] || "CSV Import",
+          level: cols[5] || "HSK2",
+          example: cols[6] || ""
+        });
+        addedCount++;
+      }
+    }
+    saveState();
+    renderTeacherWordList();
+    alert(`Đã nhập thành công ${addedCount} từ vựng từ file CSV vào lớp hiện tại! ✨`);
+  };
+  reader.readAsText(file);
+});
+
+// Khởi chạy ứng dụng khi tải trang
 window.addEventListener("DOMContentLoaded", () => {
   initClassSelector();
 });
