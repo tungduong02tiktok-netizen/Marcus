@@ -584,6 +584,88 @@
     height: 100%;
     border: none;
   }
+  /* ---------- Chính tả video: bộ điều khiển phát video chính xác ---------- */
+  .video-player-shell{
+    width:100%;
+    background:#111;
+    border-radius:16px;
+    overflow:hidden;
+    border:2px solid var(--paper-darker);
+    margin-bottom:16px;
+  }
+  .video-stage{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .video-stage iframe,
+  .video-stage video{
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+    background:#000;
+  }
+  .video-controls{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    padding:10px;
+    background:#fff;
+    border-top:2px solid var(--paper-darker);
+  }
+  .video-control-btn{
+    border:2px solid var(--paper-darker);
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:12px;
+    padding:8px 12px;
+    font-family:var(--sans);
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 2px 0 var(--paper-darker);
+  }
+  .video-control-btn:hover{
+    border-color:var(--jade);
+    color:var(--jade);
+  }
+  .video-control-btn:active{
+    transform:translateY(1px);
+    box-shadow:none;
+  }
+  .video-seek-settings{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-left:auto;
+    font-size:12px;
+    color:var(--ink-soft);
+    font-weight:700;
+  }
+  .video-seek-settings input{
+    width:76px !important;
+    padding:8px 9px !important;
+    border-radius:10px !important;
+  }
+  .video-time{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    min-width:92px;
+    text-align:center;
+  }
+  .video-control-hint{
+    width:100%;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
   /* Cute Teacher Note Box */
   .teacher-note-box {
     background: #FFFDE7;
@@ -707,7 +789,6 @@
   <button data-view="flashcard" class="active">🎋 Thẻ ghi nhớ</button>
   <button data-view="quiz">🐼 Kiểm tra</button>
   <button data-view="timed">⚡ Thử thách thời gian</button>
-  <button data-view="sentence">✍️ Đặt câu</button>
   <button data-view="dictation">🎧 Chép chính tả video</button>
   <button data-view="leaderboard">🏆 Bảng Xếp Hạng</button>
   <button data-view="progress">📈 Tiến độ</button>
@@ -779,25 +860,6 @@
     <div id="tm-area"></div>
   </section>
 
-  <!-- ============ SENTENCE PRACTICE VIEW ============ -->
-  <section class="view" id="view-sentence">
-    <div class="student-bar">
-      <div class="who">Học viên: <strong id="sc-student-name">—</strong>
-        <button class="link-btn" id="sc-change-name">đổi tên</button>
-      </div>
-    </div>
-
-    <div id="sc-student-view">
-      <div class="filters">
-        <select id="sc-topic"></select>
-      </div>
-      <div id="sc-list"></div>
-      <div style="display:flex; justify-content:flex-end; margin-top:20px;">
-        <button class="btn btn-ok" id="sc-submit-all-btn">🚀 Gửi toàn bộ List cho Giáo viên 🎋</button>
-      </div>
-    </div>
-  </section>
-
   <!-- ============ DICTATION / VIDEO VIEW ============ -->
   <section class="view" id="view-dictation">
     <div class="student-bar">
@@ -843,8 +905,21 @@
         <div class="teacher-note-content" id="student-teacher-note-text">Thầy cô chưa có ghi chú nào cho bài tập này. Chúc các em học tốt! 🐼</div>
       </div>
 
-      <div class="video-container" id="video-display-area">
-        <span>Đang tải video bài học... 📺</span>
+      <div class="video-player-shell" id="video-player-shell">
+        <div class="video-stage" id="video-display-area">
+          <span>Đang tải video bài học... 📺</span>
+        </div>
+        <div class="video-controls" id="video-controls">
+          <button type="button" class="video-control-btn" id="video-play-pause-btn" title="Phát hoặc tạm dừng video">▶️ Phát</button>
+          <button type="button" class="video-control-btn" id="video-forward-btn" title="Tua lên theo số giây đã cài đặt">⏩ +<span id="video-forward-label">6</span>s</button>
+          <span class="video-time" id="video-time-label">00:00 / 00:00</span>
+          <div class="video-seek-settings">
+            <label for="video-forward-seconds">Tua lên:</label>
+            <input type="number" id="video-forward-seconds" min="1" max="60" value="6" step="1" aria-label="Số giây tua lên">
+            <span>giây</span>
+          </div>
+          <div class="video-control-hint">💡 Có thể đổi 6 → 7 → 10 giây tùy tốc độ của bạn. Nút Phát/Tạm dừng và Tua lên hoạt động trực tiếp trên video.</div>
+        </div>
       </div>
 
       <div class="dictation-input-area">
@@ -1302,7 +1377,6 @@ function refreshActiveViewData(){
   fillTopicSelect(fcTopicSel);
   fillTopicSelect(qzTopicSel);
   fillTopicSelect(tmTopicSel);
-  fillTopicSelect(scTopicSel);
   fillTopicSelect(mgTopicSel);
 
   const activeViewId = document.querySelector("section.view.active")?.id;
@@ -1310,7 +1384,6 @@ function refreshActiveViewData(){
   if(activeViewId === "view-timed") renderTimedIdle();
   if(activeViewId === "view-progress") renderProgress();
   if(activeViewId === "view-manage") renderManage();
-  if(activeViewId === "view-sentence") renderSentenceStudentList();
   if(activeViewId === "view-dictation") {
     document.getElementById("dc-student-name").textContent = state.studentName || "Học viên";
     initDictationView();
@@ -1828,21 +1901,186 @@ dictationVideoSelect.addEventListener("change", () => {
   if(v) loadSelectedVideo(v);
 });
 
-function loadSelectedVideo(vObj){
-  studentTeacherNoteText.textContent = vObj.note || "Thầy cô chưa có ghi chú nào cho bài tập này. Chúc các em học tốt! 🐼";
-  
-  let embedUrl = vObj.url || "";
-  if(embedUrl.includes("youtube.com/watch?v=")){
-    embedUrl = embedUrl.replace("watch?v=", "embed/");
-  } else if(embedUrl.includes("youtu.be/")){
-    embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
+let activeVideoElement = null;
+let activeYouTubePlayer = null;
+let activeVideoType = null;
+let ytApiReadyPromise = null;
+
+const videoPlayPauseBtn = document.getElementById("video-play-pause-btn");
+const videoForwardBtn = document.getElementById("video-forward-btn");
+const videoForwardSeconds = document.getElementById("video-forward-seconds");
+const videoForwardLabel = document.getElementById("video-forward-label");
+const videoTimeLabel = document.getElementById("video-time-label");
+
+function formatVideoTime(seconds){
+  if(!Number.isFinite(seconds) || seconds < 0) seconds = 0;
+  const total = Math.floor(seconds);
+  const m = Math.floor(total / 60).toString().padStart(2,"0");
+  const s = (total % 60).toString().padStart(2,"0");
+  return `${m}:${s}`;
+}
+
+function updateForwardLabel(){
+  let sec = parseInt(videoForwardSeconds.value, 10);
+  if(!Number.isFinite(sec)) sec = 6;
+  sec = Math.min(60, Math.max(1, sec));
+  videoForwardSeconds.value = sec;
+  videoForwardLabel.textContent = sec;
+}
+videoForwardSeconds.addEventListener("input", updateForwardLabel);
+updateForwardLabel();
+
+function resetVideoControls(){
+  activeVideoElement = null;
+  activeYouTubePlayer = null;
+  activeVideoType = null;
+  videoPlayPauseBtn.disabled = false;
+  videoForwardBtn.disabled = false;
+  videoPlayPauseBtn.textContent = "▶️ Phát";
+  videoTimeLabel.textContent = "00:00 / 00:00";
+}
+
+function updateHtmlVideoControls(){
+  if(!activeVideoElement) return;
+  const current = activeVideoElement.currentTime || 0;
+  const duration = Number.isFinite(activeVideoElement.duration) ? activeVideoElement.duration : 0;
+  videoTimeLabel.textContent = `${formatVideoTime(current)} / ${formatVideoTime(duration)}`;
+  videoPlayPauseBtn.textContent = activeVideoElement.paused ? "▶️ Phát" : "⏸️ Tạm dừng";
+}
+
+function seekHtmlVideo(seconds){
+  if(!activeVideoElement) return;
+  const duration = Number.isFinite(activeVideoElement.duration) ? activeVideoElement.duration : Infinity;
+  activeVideoElement.currentTime = Math.min(activeVideoElement.currentTime + seconds, duration);
+  updateHtmlVideoControls();
+}
+
+function loadYouTubeApi(){
+  if(window.YT && window.YT.Player) return Promise.resolve();
+  if(ytApiReadyPromise) return ytApiReadyPromise;
+
+  ytApiReadyPromise = new Promise(resolve => {
+    const previousReady = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      if(typeof previousReady === "function") previousReady();
+      resolve();
+    };
+    const script = document.createElement("script");
+    script.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(script);
+  });
+  return ytApiReadyPromise;
+}
+
+async function createYouTubePlayer(videoId){
+  const holder = document.getElementById("video-display-area");
+  const playerId = "youtube-dictation-player";
+  holder.innerHTML = `<div id="${playerId}" style="width:100%;height:100%;"></div>`;
+  await loadYouTubeApi();
+
+  activeVideoType = "youtube";
+  activeYouTubePlayer = new YT.Player(playerId, {
+    videoId,
+    playerVars: {
+      autoplay: 0,
+      controls: 1,
+      rel: 0,
+      modestbranding: 1,
+      playsinline: 1,
+      enablejsapi: 1
+    },
+    events: {
+      onReady: () => updateYouTubeControls(),
+      onStateChange: () => updateYouTubeControls()
+    }
+  });
+}
+
+function updateYouTubeControls(){
+  if(!activeYouTubePlayer || typeof activeYouTubePlayer.getCurrentTime !== "function") return;
+  const current = activeYouTubePlayer.getCurrentTime() || 0;
+  const duration = activeYouTubePlayer.getDuration() || 0;
+  const state = activeYouTubePlayer.getPlayerState();
+  videoTimeLabel.textContent = `${formatVideoTime(current)} / ${formatVideoTime(duration)}`;
+  videoPlayPauseBtn.textContent = state === YT.PlayerState.PLAYING ? "⏸️ Tạm dừng" : "▶️ Phát";
+}
+
+function seekYouTube(seconds){
+  if(!activeYouTubePlayer) return;
+  const current = activeYouTubePlayer.getCurrentTime() || 0;
+  const duration = activeYouTubePlayer.getDuration() || Infinity;
+  activeYouTubePlayer.seekTo(Math.min(current + seconds, duration), true);
+  setTimeout(updateYouTubeControls, 100);
+}
+
+videoPlayPauseBtn.addEventListener("click", () => {
+  if(activeVideoType === "html5" && activeVideoElement){
+    if(activeVideoElement.paused) activeVideoElement.play();
+    else activeVideoElement.pause();
+    updateHtmlVideoControls();
+    return;
   }
 
-  if(embedUrl){
-    videoDisplayArea.innerHTML = `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
-  } else {
-    videoDisplayArea.innerHTML = `<span>Chưa có link video bài học. 📺</span>`;
+  if(activeVideoType === "youtube" && activeYouTubePlayer){
+    const state = activeYouTubePlayer.getPlayerState();
+    if(state === YT.PlayerState.PLAYING) activeYouTubePlayer.pauseVideo();
+    else activeYouTubePlayer.playVideo();
+    setTimeout(updateYouTubeControls, 100);
   }
+});
+
+videoForwardBtn.addEventListener("click", () => {
+  updateForwardLabel();
+  const seconds = parseInt(videoForwardSeconds.value, 10);
+  if(activeVideoType === "html5") seekHtmlVideo(seconds);
+  else if(activeVideoType === "youtube") seekYouTube(seconds);
+});
+
+function loadSelectedVideo(vObj){
+  studentTeacherNoteText.textContent = vObj.note || "Thầy cô chưa có ghi chú nào cho bài tập này. Chúc các em học tốt! 🐼";
+  resetVideoControls();
+
+  const rawUrl = (vObj.url || "").trim();
+  if(!rawUrl){
+    videoDisplayArea.innerHTML = `<span>Chưa có link video bài học. 📺</span>`;
+    videoPlayPauseBtn.disabled = true;
+    videoForwardBtn.disabled = true;
+    return;
+  }
+
+  // MP4/WebM/Ogg: dùng HTML5 video để tua chính xác từng giây.
+  const isDirectVideo = /\.(mp4|webm|ogg)(\?.*)?$/i.test(rawUrl);
+  if(isDirectVideo){
+    activeVideoType = "html5";
+    videoDisplayArea.innerHTML = `
+      <video id="dictation-html5-video" preload="metadata" playsinline controls>
+        <source src="${rawUrl}" />
+        Trình duyệt của bạn không hỗ trợ phát video HTML5.
+      </video>
+    `;
+    activeVideoElement = document.getElementById("dictation-html5-video");
+    activeVideoElement.addEventListener("loadedmetadata", updateHtmlVideoControls);
+    activeVideoElement.addEventListener("timeupdate", updateHtmlVideoControls);
+    activeVideoElement.addEventListener("play", updateHtmlVideoControls);
+    activeVideoElement.addEventListener("pause", updateHtmlVideoControls);
+    activeVideoElement.addEventListener("ended", updateHtmlVideoControls);
+    return;
+  }
+
+  // YouTube: dùng YouTube IFrame API để Play/Pause + Seek chính xác.
+  const ytMatch = rawUrl.match(/(?:youtube\.com\/watch\?[^#]*v=|youtube\.com\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{11})/i);
+  if(ytMatch){
+    createYouTubePlayer(ytMatch[1]);
+    return;
+  }
+
+  // Nguồn khác (ví dụ Douyin): vẫn nhúng video, nhưng quyền điều khiển
+  // phụ thuộc vào chính sách của nền tảng bên ngoài.
+  activeVideoType = "external";
+  videoDisplayArea.innerHTML = `<iframe src="${rawUrl}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+  videoPlayPauseBtn.disabled = true;
+  videoForwardBtn.disabled = true;
+  videoTimeLabel.textContent = "Điều khiển phụ thuộc nền tảng";
 }
 
 document.getElementById("add-video-item-btn").addEventListener("click", () => {
@@ -2133,83 +2371,6 @@ document.getElementById("reset-leaderboard-btn").addEventListener("click", () =>
   }
 });
 
-
-/* =========================================================
-   SENTENCE PRACTICE VIEW
-   ========================================================= */
-const scTopicSel = document.getElementById("sc-topic");
-const scList = document.getElementById("sc-list");
-
-function renderSentenceStudentList(){
-  fillTopicSelect(scTopicSel, false);
-  const topic = scTopicSel.value;
-  const words = allWords().filter(w => topic === "all" || w.topic === topic);
-
-  scList.innerHTML = "";
-  if(words.length === 0){
-    scList.innerHTML = '<div class="empty-note">Không có từ vựng nào trong List này để đặt câu.</div>';
-    return;
-  }
-
-  words.forEach((w, idx) => {
-    const card = document.createElement("div");
-    card.className = "sentence-card";
-    card.innerHTML = `
-      <div class="sc-head">
-        <span style="font-size:20px;">${w.emoji || "🐼"}</span>
-        <div class="hanzi">${w.hanzi}</div>
-        <div class="pinyin">${w.pinyin}</div>
-        <div class="meaning">(${w.meaning})</div>
-      </div>
-      <textarea placeholder="Nhập câu tiếng Trung sử dụng từ '${w.hanzi}' vào đây..." data-word="${w.hanzi}"></textarea>
-    `;
-    scList.appendChild(card);
-  });
-}
-
-if(scTopicSel) scTopicSel.addEventListener("change", renderSentenceStudentList);
-
-document.getElementById("sc-change-name").addEventListener("click", () => {
-  const newName = prompt("Nhập tên mới của bạn:", state.studentName);
-  if(newName && newName.trim()){
-    state.studentName = newName.trim();
-    saveState();
-    document.getElementById("sc-student-name").textContent = state.studentName;
-    document.getElementById("dc-student-name").textContent = state.studentName;
-  }
-});
-
-document.getElementById("sc-submit-all-btn").addEventListener("click", () => {
-  const textareas = scList.querySelectorAll("textarea");
-  let submissions = [];
-  textareas.forEach(ta => {
-    const val = ta.value.trim();
-    if(val){
-      submissions.push(`Từ [${ta.dataset.word}]: ${val}`);
-    }
-  });
-
-  if(submissions.length === 0){
-    alert("Vui lòng đặt câu cho ít nhất một từ trước khi gửi!");
-    return;
-  }
-
-  const listName = scTopicSel.options[scTopicSel.selectedIndex]?.text || scTopicSel.value;
-  const fullContent = submissions.join(" | ");
-
-  fetch("https://script.google.com/macros/s/AKfycbyoyoRnW6yv3XFiHwhD83ncbVfcqSwzFs5Z_dvjsVedG4RCt1FHWhRO7giKN1LUi68FbQ/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      studentName: `${state.studentName} [Lớp: ${state.currentClassName}]`,
-      word: `[Đặt câu List: ${listName}]`,
-      sentence: fullContent
-    })
-  }).catch(err => console.error(err));
-
-  alert("Đã gửi toàn bộ câu đặt của bạn về cho Giáo viên thành công! 🎋✨");
-});
 
 /* =========================================================
    TEACHER CLASSES & MANAGEMENT VIEW
