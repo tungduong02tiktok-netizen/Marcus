@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>雅趣學堂 · Góc Học Từ Vựng Đáng Yêu</title>
-<style>
+<title id="page-title-tag">🐼 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋</title>
+<style id="custom-theme-style">
   :root{
-    --paper:#FFFBF0;
-    --paper-dark:#FCEFD2;
-    --paper-darker:#F3E2B8;
-    --ink:#4A3B32;
-    --ink-soft:#7D6A5C;
-    --seal:#D9534F;
-    --seal-dark:#A93230;
-    --jade:#4E8A69;
-    --jade-dark:#3A684F;
-    --gold:#E5A93B;
-    --pink:#E88D88;
-    --pink-light:#FADCD9;
+    --paper:#F0F7F4;
+    --paper-dark:#D8EAE1;
+    --paper-darker:#BCE0CE;
+    --ink:#2C4A3E;
+    --ink-soft:#4A7061;
+    --seal:#2E7D32;
+    --seal-dark:#1B5E20;
+    --jade:#388E3C;
+    --jade-dark:#2E7D32;
+    --gold:#D4AF37;
+    --accent:#81C784;
+    --accent-light:#E8F5E9;
     --radius:16px;
     --serif: "Noto Serif SC","Songti SC","STSong","SimSun", serif;
     --sans: -apple-system, "Comic Sans MS", "Bubblegum Sans", "Helvetica Neue", sans-serif;
@@ -28,14 +28,14 @@
   body{
     background:var(--paper);
     background-image:
-      radial-gradient(circle at 10% 15%, rgba(232,141,136,0.08) 0%, transparent 35%),
-      radial-gradient(circle at 90% 85%, rgba(78,138,105,0.08) 0%, transparent 35%);
+      radial-gradient(circle at 10% 15%, rgba(129,199,132,0.12) 0%, transparent 35%),
+      radial-gradient(circle at 90% 85%, rgba(46,125,50,0.1) 0%, transparent 35%);
     color:var(--ink);
     font-family:var(--sans);
     min-height:100vh;
     padding-bottom:60px;
   }
-  ::selection{background:var(--pink);color:#fff;}
+  ::selection{background:var(--accent);color:#fff;}
 
   /* ---------- Màn hình hỏi tên học viên (Welcome Overlay) ---------- */
   #welcome-overlay{
@@ -43,8 +43,8 @@
     inset:0;
     background:var(--paper);
     background-image:
-      radial-gradient(circle at 20% 30%, rgba(232,141,136,0.12) 0%, transparent 40%),
-      radial-gradient(circle at 80% 70%, rgba(78,138,105,0.12) 0%, transparent 40%);
+      radial-gradient(circle at 20% 30%, rgba(129,199,132,0.18) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(46,125,50,0.15) 0%, transparent 40%);
     z-index:9999;
     display:flex;
     align-items:center;
@@ -59,16 +59,16 @@
     max-width:400px;
     width:100%;
     text-align:center;
-    box-shadow:0 12px 32px rgba(74,59,50,0.08);
+    box-shadow:0 12px 32px rgba(44,74,62,0.1);
   }
   .welcome-seal{
-    width:64px;height:64px;
+    width:72px;height:72px;
     border-radius:20px;
-    background:var(--pink);
+    background:var(--jade);
     color:#fff;
     display:flex;align-items:center;justify-content:center;
     font-family:var(--serif);
-    font-size:32px;
+    font-size:36px;
     font-weight:700;
     box-shadow:0 4px 0 var(--seal-dark);
     margin:0 auto 16px;
@@ -98,7 +98,7 @@
     font-weight:700;
     color:var(--seal-dark);
   }
-  .welcome-card input:focus{outline:none; border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-light);}
+  .welcome-card input:focus{outline:none; border-color:var(--jade); box-shadow:0 0 0 3px var(--accent-light);}
   .welcome-card button{width:100%; padding:14px; font-size:15px;}
 
   /* ---------- Header ---------- */
@@ -115,13 +115,13 @@
     gap:12px;
   }
   .brand-seal{
-    width:56px;height:56px;
+    width:60px;height:60px;
     border-radius:18px;
-    background:var(--pink);
+    background:var(--jade);
     color:#fff;
     display:flex;align-items:center;justify-content:center;
     font-family:var(--serif);
-    font-size:28px;
+    font-size:30px;
     font-weight:700;
     box-shadow:0 4px 0 var(--seal-dark);
     transform:rotate(-4deg);
@@ -139,11 +139,12 @@
     margin:4px 0 0;
     color:var(--ink-soft);
     font-size:13px;
+    font-weight:600;
   }
 
   /* ---------- Tabs ---------- */
   nav.tabs{
-    max-width:860px;
+    max-width:950px;
     margin:18px auto 0;
     display:flex;
     gap:8px;
@@ -164,9 +165,9 @@
     box-shadow:0 3px 0 var(--paper-darker);
     transition:all 0.1s ease;
   }
-  nav.tabs button:hover{transform:translateY(-1px); border-color:var(--pink); color:var(--pink);}
+  nav.tabs button:hover{transform:translateY(-1px); border-color:var(--jade); color:var(--jade);}
   nav.tabs button.active{
-    background:var(--pink);
+    background:var(--jade);
     border-color:var(--seal-dark);
     color:#fff;
     box-shadow:0 3px 0 var(--seal-dark);
@@ -189,7 +190,7 @@
     margin-bottom:18px;
     align-items:center;
   }
-  select, input[type=text], input[type=password]{
+  select, input[type=text], input[type=password], input[type=number], input[type=color]{
     font-family:var(--sans);
     font-size:14px;
     padding:10px 14px;
@@ -199,15 +200,15 @@
     color:var(--ink);
     box-shadow:0 2px 0 rgba(0,0,0,0.02);
   }
-  select:focus, input:focus{outline:none; border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-light);}
+  select:focus, input:focus{outline:none; border-color:var(--jade); box-shadow:0 0 0 3px var(--accent-light);}
   .stat-pill{
     font-size:13px;
     color:var(--seal-dark);
-    background:var(--pink-light);
+    background:var(--accent-light);
     padding:8px 14px;
     border-radius:20px;
     font-weight:700;
-    border:2px solid rgba(232,141,136,0.3);
+    border:2px solid rgba(56,142,60,0.3);
   }
 
   /* ---------- Flashcard ---------- */
@@ -242,10 +243,10 @@
     padding:24px;
     background:#fff;
     border:3px solid var(--paper-darker);
-    box-shadow:0 8px 24px rgba(74,59,50,0.08);
+    box-shadow:0 8px 24px rgba(44,74,62,0.08);
     text-align:center;
   }
-  .face.back{transform:rotateY(180deg); background:var(--pink-light); border-color:var(--pink);}
+  .face.back{transform:rotateY(180deg); background:var(--accent-light); border-color:var(--jade);}
   .face .emoji{font-size:52px; margin-bottom:8px;}
   .face .hanzi{font-family:var(--serif); font-size:62px; line-height:1; color:var(--seal-dark);}
   .face .pinyin{font-family:var(--mono); font-size:18px; color:var(--jade-dark); margin-top:10px; font-weight:700;}
@@ -265,7 +266,7 @@
     box-shadow:0 3px 0 var(--paper-darker);
     transition:all 0.1s;
   }
-  .icon-btn:hover{transform:translateY(-1px); border-color:var(--pink); color:var(--pink);}
+  .icon-btn:hover{transform:translateY(-1px); border-color:var(--jade); color:var(--jade);}
   .nav-row{display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap;}
   .btn{
     font-family:var(--sans);
@@ -283,7 +284,7 @@
   .btn:active{transform:translateY(2px); box-shadow:0 1px 0 rgba(0,0,0,0.08);}
   .btn-primary{background:var(--ink); color:#fff; border-color:var(--seal-dark);}
   .btn-ok{background:var(--jade); color:#fff; border-color:var(--jade-dark);}
-  .btn-bad{background:var(--pink); color:#fff; border-color:var(--seal-dark);}
+  .btn-bad{background:#D32F2F; color:#fff; border-color:#B71C1C;}
   .btn-outline{background:#fff; border-color:var(--paper-darker); color:var(--ink); box-shadow:0 3px 0 var(--paper-darker);}
   .btn:disabled{opacity:0.4; cursor:not-allowed; transform:none!important;}
 
@@ -294,7 +295,7 @@
     border-radius:24px;
     padding:28px 24px;
     text-align:center;
-    box-shadow:0 8px 24px rgba(74,59,50,0.05);
+    box-shadow:0 8px 24px rgba(44,74,62,0.05);
   }
   .quiz-prompt .hanzi{font-family:var(--serif); font-size:60px; color:var(--seal-dark);}
   .quiz-prompt .pinyin{font-family:var(--mono); color:var(--jade-dark); font-size:18px; margin-top:6px; font-weight:700;}
@@ -312,15 +313,15 @@
     box-shadow:0 3px 0 var(--paper-darker);
     transition:all 0.1s ease;
   }
-  .option-btn:hover:not(:disabled){border-color:var(--pink); transform:translateY(-1px); background:#fff;}
+  .option-btn:hover:not(:disabled){border-color:var(--jade); transform:translateY(-1px); background:#fff;}
   .option-btn.correct{background:var(--jade); border-color:var(--jade-dark); color:#fff; box-shadow:none;}
-  .option-btn.wrong{background:var(--pink); border-color:var(--seal-dark); color:#fff; box-shadow:none;}
+  .option-btn.wrong{background:#D32F2F; border-color:#B71C1C; color:#fff; box-shadow:none;}
   .option-btn:disabled{cursor:default;}
 
   .result-box{text-align:center; padding:30px 10px;}
   .result-box .score{font-family:var(--serif); font-size:52px; color:var(--seal-dark);}
 
-  /* ---------- Timed challenge (4 Giây) ---------- */
+  /* ---------- Timed challenge ---------- */
   .timer-wrap{
     width:100%;
     height:14px;
@@ -337,7 +338,7 @@
     transition:width 0.05s linear, background 0.2s ease;
     border-radius:999px;
   }
-  .timer-bar.danger{background:var(--pink);}
+  .timer-bar.danger{background:#D32F2F;}
   .timer-num{
     font-family:var(--mono);
     font-size:14px;
@@ -351,13 +352,13 @@
     background:#fff;
     border:3px solid var(--paper-darker);
     border-radius:24px;
-    box-shadow:0 8px 24px rgba(74,59,50,0.05);
+    box-shadow:0 8px 24px rgba(44,74,62,0.05);
   }
-  .challenge-idle .big-hanzi{font-family:var(--serif); font-size:48px; color:var(--pink); letter-spacing:8px;}
+  .challenge-idle .big-hanzi{font-family:var(--serif); font-size:48px; color:var(--jade); letter-spacing:8px;}
   .fail-msg{
-    background:var(--pink-light);
-    color:var(--seal-dark);
-    border:2px solid var(--pink);
+    background:#FFEBEE;
+    color:#C62828;
+    border:2px solid #EF9A9A;
     padding:10px 14px;
     border-radius:14px;
     font-size:14px;
@@ -374,7 +375,7 @@
     width:140px;height:140px;
     margin:0 auto 20px;
     border-radius:24px;
-    border:5px solid var(--pink);
+    border:5px solid var(--jade);
     color:var(--seal-dark);
     font-family:var(--serif);
     font-size:26px;
@@ -386,7 +387,7 @@
     opacity:0;
     animation:stampDown 0.4s cubic-bezier(.2,1.4,.6,1) forwards;
     animation-delay:0.15s;
-    background:var(--pink-light);
+    background:var(--accent-light);
   }
   @keyframes stampDown{
     0%{opacity:0; transform:scale(2.4) rotate(-12deg);}
@@ -410,7 +411,7 @@
     border-radius:20px;
     padding:18px 10px;
     text-align:center;
-    box-shadow:0 4px 16px rgba(74,59,50,0.04);
+    box-shadow:0 4px 16px rgba(44,74,62,0.04);
   }
   .stat-card .num{font-family:var(--serif); font-size:32px; color:var(--seal-dark);}
   .stat-card .label{font-size:12px; color:var(--ink-soft); margin-top:4px; font-weight:700;}
@@ -428,7 +429,7 @@
     border:2px solid var(--paper-darker);
     border-radius:18px;
     padding:12px 16px;
-    box-shadow:0 3px 10px rgba(74,59,50,0.03);
+    box-shadow:0 3px 10px rgba(44,74,62,0.03);
   }
   .word-row .emoji{font-size:26px; width:30px; text-align:center;}
   .word-row .hanzi{font-family:var(--serif); font-size:24px; width:60px; color:var(--seal-dark); font-weight:700;}
@@ -437,7 +438,7 @@
   .word-row .del-btn{
     border:none; background:transparent; color:var(--ink-soft); cursor:pointer; font-size:18px;
   }
-  .word-row .del-btn:hover{color:var(--seal);}
+  .word-row .del-btn:hover{color:#D32F2F;}
 
   .add-form{
     background:#fff;
@@ -448,7 +449,7 @@
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:12px;
-    box-shadow:0 6px 20px rgba(74,59,50,0.04);
+    box-shadow:0 6px 20px rgba(44,74,62,0.04);
   }
   .add-form input{grid-column:span 1;}
   .add-form .full{grid-column:1/-1;}
@@ -475,16 +476,17 @@
     top:10px;
     left:14px;
     font-size:11px;
-    color:var(--pink);
+    color:var(--seal-dark);
     opacity:0.9;
     letter-spacing:0.2px;
     z-index:50;
     font-weight:700;
     pointer-events:none;
-    background:var(--pink-light);
-    padding:4px 8px;
-    border-radius:10px;
-    border:1px solid rgba(232,141,136,0.3);
+    background:var(--accent-light);
+    padding:5px 10px;
+    border-radius:12px;
+    border:1px solid rgba(56,142,60,0.3);
+    box-shadow:0 2px 6px rgba(44,74,62,0.05);
   }
 
   /* Sentence practice tab */
@@ -503,7 +505,7 @@
   .student-bar .who{font-size:14px; color:var(--ink-soft);}
   .student-bar .who strong{color:var(--seal-dark);}
   .link-btn{
-    background:none; border:none; color:var(--pink); font-size:13px;
+    background:none; border:none; color:var(--jade); font-size:13px;
     cursor:pointer; font-weight:700; text-decoration:underline;
     padding:0;
   }
@@ -514,7 +516,7 @@
     border-radius:20px;
     padding:18px;
     margin-bottom:16px;
-    box-shadow:0 4px 16px rgba(74,59,50,0.04);
+    box-shadow:0 4px 16px rgba(44,74,62,0.04);
   }
   .sentence-card .sc-head{display:flex; align-items:baseline; gap:10px; margin-bottom:8px;}
   .sentence-card .hanzi{font-family:var(--serif); font-size:28px; color:var(--seal-dark); font-weight:700;}
@@ -531,8 +533,7 @@
     min-height:60px;
     background:var(--paper);
   }
-  .sentence-card textarea:focus{outline:none; border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-light);}
-  .sc-actions{display:flex; justify-content:flex-end; align-items:center; margin-top:10px; gap:10px; flex-wrap:wrap;}
+  .sentence-card textarea:focus{outline:none; border-color:var(--jade); box-shadow:0 0 0 3px var(--accent-light);}
 
   /* ---------- Dictation / Video Tab Styles ---------- */
   .dictation-box {
@@ -540,7 +541,7 @@
     border: 3px solid var(--paper-darker);
     border-radius: 22px;
     padding: 20px;
-    box-shadow: 0 6px 20px rgba(74,59,50,0.04);
+    box-shadow: 0 6px 20px rgba(44,74,62,0.04);
   }
   .video-container {
     position: relative;
@@ -574,8 +575,8 @@
   }
   .dictation-input-area textarea:focus {
     outline: none;
-    border-color: var(--pink);
-    box-shadow: 0 0 0 3px var(--pink-light);
+    border-color: var(--jade);
+    box-shadow: 0 0 0 3px var(--accent-light);
   }
   .teacher-access-bar {
     display: flex;
@@ -600,35 +601,35 @@
 <!-- MÀN HÌNH NHẬP TÊN HỌC VIÊN -->
 <div id="welcome-overlay">
   <div class="welcome-card">
-    <div class="welcome-seal">学</div>
-    <h2>雅趣學堂</h2>
-    <p>Nhập tên của bạn để lưu lại tiến độ học tập nhé ~</p>
+    <div class="welcome-seal">🐼</div>
+    <h2>🎋 雅趣学堂 🎋</h2>
+    <p>Chào mừng bạn đến với lớp học gấu trúc trúc xanh! Nhập tên để lưu lại tiến độ nhé ~</p>
     <input type="text" id="welcome-name-input" placeholder="Tên của bạn..." autofocus>
-    <button class="btn btn-primary" id="welcome-submit-btn">Vào học ngay ✨</button>
+    <button class="btn btn-primary" id="welcome-submit-btn">Vào học ngay 🐼🎋</button>
   </div>
 </div>
 
-<div class="corner-note">✨ ĐỘC QUYỀN THẦY MARCUS ✨</div>
+<div class="corner-note">🐼 雅趣学堂 · ĐỘC QUYỀN THẦY MARCUS 🎋</div>
 
 <header>
   <div class="brand">
-    <div class="brand-seal">学</div>
+    <div class="brand-seal">🐼</div>
     <div>
-      <h1>雅趣學堂 · Học Từ Vựng Đáng Yêu</h1>
-      <p class="tagline">Ghi nhớ tiếng Trung nhẹ nhàng & vui vẻ mỗi ngày ~</p>
+      <h1 id="main-header-title">🎋 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋</h1>
+      <p class="tagline">Ghi nhớ tiếng Trung nhẹ nhàng & vui vẻ cùng gấu trúc mỗi ngày ~</p>
     </div>
   </div>
 </header>
 
 <nav class="tabs">
-  <button data-view="flashcard" class="active">Thẻ ghi nhớ</button>
-  <button data-view="quiz">Kiểm tra</button>
-  <button data-view="timed">Thử thách 4 giây</button>
-  <button data-view="sentence">Đặt câu</button>
-  <button data-view="dictation">Chép chính tả từ video</button>
-  <button data-view="progress">Tiến độ</button>
-  <button data-view="manage">Kho từ vựng</button>
-  <button data-view="teacher-lists" style="color:var(--seal-dark); border-color:var(--seal-dark);">⚙️ Quản lý List (GV)</button>
+  <button data-view="flashcard" class="active">🎋 Thẻ ghi nhớ</button>
+  <button data-view="quiz">🐼 Kiểm tra</button>
+  <button data-view="timed">⚡ Thử thách thời gian</button>
+  <button data-view="sentence">✍️ Đặt câu</button>
+  <button data-view="dictation">🎧 Chép chính tả video</button>
+  <button data-view="progress">📈 Tiến độ</button>
+  <button data-view="manage">📚 Kho từ vựng</button>
+  <button data-view="teacher-lists" style="color:var(--seal-dark); border-color:var(--seal-dark);">⚙️ Quản lý List & Giao diện (GV)</button>
 </nav>
 
 <main>
@@ -648,9 +649,9 @@
       <div class="flashcard" id="flashcard">
         <div class="flashcard-inner">
           <div class="face front">
-            <div class="emoji" id="fc-emoji">🍡</div>
+            <div class="emoji" id="fc-emoji">🐼</div>
             <div class="hanzi" id="fc-hanzi">漢字</div>
-            <span class="hint">chạm để lật xem nghĩa nhé ✨</span>
+            <span class="hint">chạm để gấu trúc lật xem nghĩa nhé 🎋</span>
           </div>
           <div class="face back">
             <div class="pinyin" id="fc-pinyin">hànzì</div>
@@ -681,12 +682,12 @@
         <option value="20">20 câu</option>
         <option value="9999">Tất cả</option>
       </select>
-      <button class="btn btn-primary" id="qz-start">Bắt đầu kiểm tra</button>
+      <button class="btn btn-primary" id="qz-start">Bắt đầu kiểm tra 🐼</button>
     </div>
     <div id="qz-area"></div>
   </section>
 
-  <!-- ============ TIMED CHALLENGE VIEW (4 GIÂY) ============ -->
+  <!-- ============ TIMED CHALLENGE VIEW ============ -->
   <section class="view" id="view-timed">
     <div class="filters">
       <select id="tm-topic"></select>
@@ -708,6 +709,9 @@
         <select id="sc-topic"></select>
       </div>
       <div id="sc-list"></div>
+      <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+        <button class="btn btn-ok" id="sc-submit-all-btn">🚀 Gửi toàn bộ List cho Giáo viên 🎋</button>
+      </div>
     </div>
   </section>
 
@@ -721,7 +725,6 @@
         <button class="link-btn" id="open-teacher-panel-btn" style="color:var(--seal-dark);">🔒 Khu vực Giáo viên (Đổi Video)</button>
       </div>
 
-      <!-- BẢNG ĐIỀU KHIỂN DÀNH CHO GIÁO VIÊN (BẢO MẬT MẬT KHẨU) -->
       <div class="teacher-panel" id="teacher-panel">
         <h4 style="margin:0 0 8px; color:var(--seal-dark); font-family:var(--serif);">⚙️ Bảng Quản Trị Video Của Giáo Viên</h4>
         <p style="font-size:12px; color:var(--ink-soft); margin-bottom:10px;">Dán link YouTube hoặc Douyin mới vào đây, học viên truy cập sau sẽ thấy video này.</p>
@@ -751,9 +754,9 @@
   <!-- ============ PROGRESS VIEW ============ -->
   <section class="view" id="view-progress">
     <div class="progress-grid">
-      <div class="stat-card"><div class="num" id="pg-learned">0</div><div class="label">Từ đã thuộc</div></div>
-      <div class="stat-card"><div class="num" id="pg-total">0</div><div class="label">Tổng số từ</div></div>
-      <div class="stat-card"><div class="num" id="pg-streak">0</div><div class="label">Ngày học liên tục</div></div>
+      <div class="stat-card"><div class="num" id="pg-learned">0</div><div class="label">Từ đã thuộc 🐼</div></div>
+      <div class="stat-card"><div class="num" id="pg-total">0</div><div class="label">Tổng số từ 🎋</div></div>
+      <div class="stat-card"><div class="num" id="pg-streak">0</div><div class="label">Ngày học liên tục 🔥</div></div>
     </div>
     <h3 style="font-family:var(--serif); margin-bottom:14px; color:var(--seal-dark);">Theo chủ đề</h3>
     <div id="pg-topics"></div>
@@ -772,19 +775,60 @@
     <div class="word-list" id="mg-list"></div>
   </section>
 
-  <!-- ============ TEACHER LISTS MANAGEMENT VIEW ============ -->
+  <!-- ============ TEACHER LISTS & CUSTOMIZATION MANAGEMENT VIEW ============ -->
   <section class="view" id="view-teacher-lists">
     <div id="teacher-auth-box" style="background:#fff; border:3px solid var(--paper-darker); border-radius:24px; padding:30px; text-align:center; max-width:450px; margin:40px auto;">
       <h3 style="font-family:var(--serif); color:var(--seal-dark); margin-top:0;">🔒 Khu Vực Quản Lý Của Giáo Viên</h3>
-      <p style="font-size:13px; color:var(--ink-soft); margin-bottom:20px;">Vui lòng nhập mật khẩu để tạo List, thêm hoặc xóa từ vựng ôn tập cho học sinh.</p>
+      <p style="font-size:13px; color:var(--ink-soft); margin-bottom:20px;">Vui lòng nhập mật khẩu để thay đổi tiêu đề, màu sắc, hình nền, hoặc quản lý danh sách từ vựng.</p>
       <input type="password" id="teacher-password-input" placeholder="Nhập mật khẩu giáo viên..." style="width:100%; margin-bottom:16px; text-align:center;">
       <button class="btn btn-primary" id="teacher-login-btn" style="width:100%;">Truy cập bảng quản trị</button>
     </div>
 
     <div id="teacher-dashboard" style="display:none;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-        <h3 style="font-family:var(--serif); color:var(--seal-dark); margin:0;">📚 Tạo và Quản Lý List Từ Vựng</h3>
+        <h3 style="font-family:var(--serif); color:var(--seal-dark); margin:0;">⚙️ Bảng Quản Trị Toàn Diện Của Giáo Viên</h3>
         <button class="btn btn-outline" id="teacher-logout-btn" style="font-size:12px; padding:6px 12px;">Đăng xuất</button>
+      </div>
+
+      <!-- CÀI ĐẶT GIAO DIỆN, TIÊU ĐỀ & UPLOAD ẢNH -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🎨 Tùy chỉnh Tiêu đề & Giao diện Website</h4>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Sửa tiêu đề trang web:</label>
+          <input type="text" id="cfg-title-input" placeholder="Tiêu đề mới..." style="width:100%;">
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
+          <div style="flex:1; min-width:140px;">
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Màu nền chính (--paper):</label>
+            <input type="color" id="cfg-color-paper" value="#F0F7F4" style="width:100%; height:40px; padding:0; cursor:pointer;">
+          </div>
+          <div style="flex:1; min-width:140px;">
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Màu chữ chính (--ink):</label>
+            <input type="color" id="cfg-color-ink" value="#2C4A3E" style="width:100%; height:40px; padding:0; cursor:pointer;">
+          </div>
+          <div style="flex:1; min-width:140px;">
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Màu chủ đạo (--jade):</label>
+            <input type="color" id="cfg-color-jade" value="#388E3C" style="width:100%; height:40px; padding:0; cursor:pointer;">
+          </div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Upload ảnh nền / Ảnh giao diện (chọn file ảnh từ máy):</label>
+          <input type="file" id="cfg-image-file" accept="image/*" style="width:100%; padding:8px; background:var(--paper); border:2px solid var(--paper-darker); border-radius:12px;">
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-primary" id="cfg-save-theme-btn">Lưu thay đổi giao diện</button>
+          <button class="btn btn-outline" id="cfg-reset-theme-btn">Khôi phục mặc định</button>
+        </div>
+      </div>
+
+      <!-- Cài đặt thời gian thử thách -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">⏱ Cài đặt Thời gian Thử thách (Giây)</h4>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <label style="font-size:13px; font-weight:700;">Số giây cho mỗi từ:</label>
+          <input type="number" id="tl-timer-seconds" min="1" max="60" value="4" style="width:100px;">
+          <button class="btn btn-primary" id="tl-save-timer-btn">Lưu thời gian</button>
+        </div>
       </div>
 
       <!-- Form tạo List mới / Thêm từ -->
@@ -801,8 +845,8 @@
         <div><label>Hán tự *</label><input type="text" id="tl-hanzi" placeholder="猫"></div>
         <div><label>Pinyin *</label><input type="text" id="tl-pinyin" placeholder="māo"></div>
         <div><label>Nghĩa *</label><input type="text" id="tl-meaning" placeholder="con mèo"></div>
-        <div><label>Emoji minh hoạ</label><input type="text" id="tl-emoji" placeholder="🐱"></div>
-        <div class="full"><label>Câu ví dụ (tuỳ chọn)</label><input type="text" id="tl-example" placeholder="我家有一只猫。"></div>
+        <div><label>Emoji minh hoạ</label><input type="text" id="tl-emoji" placeholder="🐼"></div>
+        <div class="full"><label>Câu ví dụ (tuỳ chọn)</label><input type="text" id="tl-example" placeholder="我家有一只大熊猫。"></div>
         <div class="full"><button class="btn btn-primary" id="tl-add-btn">+ Thêm từ vào List</button></div>
       </div>
 
@@ -815,14 +859,14 @@
         </div>
       </div>
 
-      <h4 style="font-family:var(--serif); color:var(--seal-dark);">Danh sách từ vựng hiện có:</h4>
+      <h4 style="font-family:var(--serif); color:var(--seal-dark);">Danh sách từ vựng hiện có (Xóa từng từ riêng lẻ):</h4>
       <div class="word-list" id="tl-word-list"></div>
     </div>
   </section>
 
 </main>
 
-<footer>🌸 Chúc bạn học tập thật vui vẻ và tiến bộ mỗi ngày! 🌸</footer>
+<footer>🐼 Chúc bạn học tập cùng gấu trúc thật vui vẻ và tiến bộ mỗi ngày! 🎋</footer>
 
 <script>
 /* =========================================================
@@ -830,15 +874,15 @@
    ========================================================= */
 const DEFAULT_WORDS = [
   {id:"w1", hanzi:"反省", pinyin:"fǎnxǐng", meaning:"tự kiểm điểm, suy ngẫm lại", emoji:"🍵", topic:"Chuyên đề", level:"HSK2", example:"他犯错后认真反省。"},
-  {id:"w2", hanzi:"据说", pinyin:"jùshuō", meaning:"nghe nói rằng", emoji:"💌", topic:"Chuyên đề", level:"HSK2", example:"据说明天会下雨。"},
-  {id:"w3", hanzi:"个性", pinyin:"gèxìng", meaning:"cá tính", emoji:"🎨", topic:"Chuyên đề", level:"HSK2", example:"她的个性很独立。"},
+  {id:"w2", hanzi:"据说", pinyin:"jùshuō", meaning:"nghe nói rằng", emoji:"🎋", topic:"Chuyên đề", level:"HSK2", example:"据说明天会下雨。"},
+  {id:"w3", hanzi:"个性", pinyin:"gèxìng", meaning:"cá tính", emoji:"🐼", topic:"Chuyên đề", level:"HSK2", example:"她的个性很独立。"},
   {id:"w4", hanzi:"冒险", pinyin:"màoxiǎn", meaning:"mạo hiểm, phiêu lưu", emoji:"🧗", topic:"Chuyên đề", level:"HSK2", example:"年轻人喜欢冒险。"}
 ];
 
 /* =========================================================
    STATE & LOCALSTORAGE
    ========================================================= */
-const STORAGE_KEY = "zhVocabApp_cute_v5";
+const STORAGE_KEY = "zhVocabApp_panda_bamboo_v2";
 
 function loadState(){
   try{
@@ -848,12 +892,18 @@ function loadState(){
   return {
     studentName: "",
     customWords: [],
-    deletedDefaultIds: [], // Lưu các từ mặc định bị giáo viên xóa
+    deletedDefaultIds: [],
     learned: {},        
     lastStudyDate: null,
     streak: 0,
     timedBest: {},
-    globalVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    globalVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    challengeSeconds: 4,
+    customTitle: "🎋 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋",
+    colorPaper: "#F0F7F4",
+    colorInk: "#2C4A3E",
+    colorJade: "#388E3C",
+    bgImage: ""
   };
 }
 function saveState(){
@@ -862,7 +912,29 @@ function saveState(){
 
 let state = loadState();
 
-// Xử lý màn hình nhập tên
+// Áp dụng cấu hình giao diện tùy chỉnh khi tải trang
+function applyCustomTheme(){
+  if(state.customTitle){
+    document.getElementById("page-title-tag").textContent = state.customTitle;
+    document.getElementById("main-header-title").textContent = state.customTitle;
+  }
+  const rootStyle = document.documentElement.style;
+  if(state.colorPaper) rootStyle.setProperty('--paper', state.colorPaper);
+  if(state.colorInk) rootStyle.setProperty('--ink', state.colorInk);
+  if(state.colorJade) {
+    rootStyle.setProperty('--jade', state.colorJade);
+    rootStyle.setProperty('--seal', state.colorJade);
+  }
+  if(state.bgImage){
+    document.body.style.backgroundImage = `url('${state.bgImage}'), radial-gradient(circle at 10% 15%, rgba(129,199,132,0.12) 0%, transparent 35%)`;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
+  } else {
+    document.body.style.backgroundImage = '';
+  }
+}
+applyCustomTheme();
+
 const welcomeOverlay = document.getElementById("welcome-overlay");
 const welcomeNameInput = document.getElementById("welcome-name-input");
 const welcomeSubmitBtn = document.getElementById("welcome-submit-btn");
@@ -897,7 +969,6 @@ welcomeNameInput.addEventListener("keydown", (e) => {
   if(e.key === "Enter") welcomeSubmitBtn.click();
 });
 
-// Lấy danh sách từ (đã loại bỏ các từ mặc định bị giáo viên xóa)
 function allWords(){
   const activeDefaults = DEFAULT_WORDS.filter(w => !state.deletedDefaultIds.includes(w.id));
   return activeDefaults.concat(state.customWords);
@@ -934,9 +1005,6 @@ tabButtons.forEach(btn=>{
     if(btn.dataset.view === "dictation") {
       document.getElementById("dc-student-name").textContent = state.studentName || "Học viên";
       loadVideoIntoDisplay(state.globalVideoUrl);
-    }
-    if(btn.dataset.view === "teacher-lists") {
-      // Giữ nguyên trạng thái đăng nhập giáo viên nếu đã xác thực
     }
   });
 });
@@ -988,7 +1056,7 @@ function renderFcCard(){
   card.classList.remove("flipped");
   const counter = document.getElementById("fc-counter");
   if(fcDeck.length===0){
-    document.getElementById("fc-emoji").textContent="🈳";
+    document.getElementById("fc-emoji").textContent="🐼";
     document.getElementById("fc-hanzi").textContent="Hết từ rồi";
     document.getElementById("fc-pinyin").textContent="";
     document.getElementById("fc-meaning").textContent="";
@@ -997,7 +1065,7 @@ function renderFcCard(){
     return;
   }
   const w = fcDeck[fcIndex];
-  document.getElementById("fc-emoji").textContent = w.emoji || "🍡";
+  document.getElementById("fc-emoji").textContent = w.emoji || "🐼";
   document.getElementById("fc-hanzi").textContent = w.hanzi;
   document.getElementById("fc-pinyin").textContent = w.pinyin;
   document.getElementById("fc-meaning").textContent = w.meaning;
@@ -1134,7 +1202,7 @@ function renderQuizResult(){
   qzArea.innerHTML = `
     <div class="quiz-box result-box">
       <div class="score">${qzScore} / ${qzQueue.length}</div>
-      <p style="font-weight:600; margin:10px 0;">Tuyệt vời! Bạn đạt ${pct}% câu trả lời đúng.</p>
+      <p style="font-weight:600; margin:10px 0;">Tuyệt vời! Bạn đạt ${pct}% câu trả lời đúng 🐼.</p>
       <button class="btn btn-primary" id="qz-again">Làm lại</button>
     </div>
   `;
@@ -1142,23 +1210,21 @@ function renderQuizResult(){
 }
 
 /* =========================================================
-   TIMED CHALLENGE VIEW (4 GIÂY) & TỰ ĐỘNG GỬI GOOGLE SHEET
+   TIMED CHALLENGE VIEW
    ========================================================= */
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoyoRnW6yv3XFiHwhD83ncbVfcqSwzFs5Z_dvjsVedG4RCt1FHWhRO7giKN1LUi68FbQ/exec";
 
 const tmTopicSel = document.getElementById("tm-topic");
 fillTopicSelect(tmTopicSel);
 const tmArea = document.getElementById("tm-area");
-const TIME_LIMIT = 4000;
 
-let tmQueue = [], tmIdx = 0, tmTimerId = null, tmStart = 0, tmRunning = false, tmFailMsg = "";
+let tmQueue = [], tmIdx = 0, tmTimerId = null, tmStart = 0, tmFailMsg = "";
 
 tmTopicSel.addEventListener("change", renderTimedIdle);
 
 function tmKey(){ return tmTopicSel.value; }
 
 function renderTimedIdle(){
-  tmRunning = false;
   clearInterval(tmTimerId);
   const words = getFilteredWords(tmTopicSel.value, "all");
   const bestPill = document.getElementById("tm-best");
@@ -1170,12 +1236,13 @@ function renderTimedIdle(){
     return;
   }
 
+  const limitSec = state.challengeSeconds || 4;
   tmArea.innerHTML = `
     <div class="challenge-idle">
-      <div class="big-hanzi">极速</div>
-      <p style="margin-top:14px; font-weight:600;">Mỗi từ chỉ có đúng <strong style="color:var(--seal-dark);">4 giây</strong> để chọn đáp án!<br>
-      Chọn sai hoặc hết giờ sẽ phải làm lại từ đầu.<br>Cố gắng vượt qua nhé ~</p>
-      <button class="btn btn-primary" id="tm-start" style="margin-top:16px;">Bắt đầu thử thách</button>
+      <div class="big-hanzi">竹林极速</div>
+      <p style="margin-top:14px; font-weight:600;">Mỗi từ chỉ có đúng <strong style="color:var(--seal-dark);">${limitSec} giây</strong> để chọn đáp án!<br>
+      Chọn sai hoặc hết giờ sẽ phải làm lại từ đầu cùng gấu trúc nhé.<br>Cố gắng vượt qua nhé ~</p>
+      <button class="btn btn-primary" id="tm-start" style="margin-top:16px;">Bắt đầu thử thách 🎋</button>
     </div>
   `;
   document.getElementById("tm-start").addEventListener("click", startTimedChallenge);
@@ -1187,7 +1254,6 @@ function startTimedChallenge(){
   const words = getFilteredWords(tmTopicSel.value, "all");
   tmQueue = shuffle(words);
   tmIdx = 0;
-  tmRunning = true;
   tmFailMsg = "";
   tmAttempts = 1;
   renderTimedQuestion();
@@ -1212,6 +1278,7 @@ function renderTimedQuestion(){
   const w = tmQueue[tmIdx];
   const distractors = shuffle(words.filter(x=>x.id!==w.id)).slice(0,3);
   const options = shuffle([w, ...distractors]);
+  const limitMs = (state.challengeSeconds || 4) * 1000;
 
   tmArea.innerHTML = `
     ${tmFailMsg ? `<div class="fail-msg">${tmFailMsg}</div>` : ""}
@@ -1222,7 +1289,7 @@ function renderTimedQuestion(){
         <div class="pinyin">${w.pinyin}</div>
       </div>
       <div class="timer-wrap"><div class="timer-bar" id="tm-bar"></div></div>
-      <div class="timer-num" id="tm-num">4.0s</div>
+      <div class="timer-num" id="tm-num">${(limitMs/1000).toFixed(1)}s</div>
       <div class="options" id="tm-options"></div>
     </div>
   `;
@@ -1246,7 +1313,7 @@ function renderTimedQuestion(){
         b.classList.add("wrong");
         const correctBtn = Array.from(optWrap.children).find(x=>x.textContent===w.meaning);
         if(correctBtn) correctBtn.classList.add("correct");
-        setTimeout(()=>{ restartTimedChallenge("Hơi tiếc chút, làm lại từ đầu nào!"); }, 600);
+        setTimeout(()=>{ restartTimedChallenge("Hơi tiếc chút, gấu trúc bảo làm lại từ đầu nào!"); }, 600);
       }
     });
     optWrap.appendChild(b);
@@ -1257,8 +1324,8 @@ function renderTimedQuestion(){
   const num = document.getElementById("tm-num");
   tmTimerId = setInterval(()=>{
     const elapsed = Date.now() - tmStart;
-    const remaining = Math.max(0, TIME_LIMIT - elapsed);
-    const pct = (remaining/TIME_LIMIT)*100;
+    const remaining = Math.max(0, limitMs - elapsed);
+    const pct = (remaining/limitMs)*100;
     bar.style.width = pct + "%";
     num.textContent = (remaining/1000).toFixed(1) + "s";
     if(pct < 30) bar.classList.add("danger"); else bar.classList.remove("danger");
@@ -1281,25 +1348,22 @@ function renderTimedPass(){
     saveState();
   }
 
-  // Tự động gửi tên học viên và tên list từ vựng hoàn thành về Google Sheet
   const listName = tmTopicSel.options[tmTopicSel.selectedIndex]?.text || tmTopicSel.value;
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       studentName: state.studentName || "Học viên ẩn danh",
-      word: "[Thử Thách 4 Giây - HOÀN THÀNH]",
+      word: "[Thử Thách Thời Gian - HOÀN THÀNH]",
       sentence: `Đã hoàn thành xuất sắc List: "${listName}" sau ${tmAttempts} lượt thử.`
     })
-  }).catch(err => console.error("Lỗi gửi dữ liệu thử thách:", err));
+  }).catch(err => console.error(err));
 
   tmArea.innerHTML = `
     <div class="stamp-overlay">
-      <div class="stamp">通過<br>PASS</div>
-      <div class="stamp-title">Quá đỉnh! Bạn đã vượt thử thách!</div>
+      <div class="stamp">通過<br>🐼 PASS</div>
+      <div class="stamp-title">Quá đỉnh! Gấu trúc khen bạn xuất sắc!</div>
       <div class="stamp-sub">Hoàn thành sau ${tmAttempts} lượt thử. (Đã gửi kết quả về cho giáo viên ✨)</div>
       <button class="btn btn-primary" id="tm-restart" style="margin-top:18px;">Thử lại</button>
     </div>
@@ -1346,7 +1410,7 @@ document.getElementById("pg-reset").addEventListener("click", ()=>{
 });
 
 /* =========================================================
-   MANAGE / WORD BANK VIEW (Dành cho học viên xem danh sách)
+   MANAGE / WORD BANK VIEW
    ========================================================= */
 const mgSearch = document.getElementById("mg-search");
 const mgTopicSel = document.getElementById("mg-topic");
@@ -1376,7 +1440,7 @@ function renderManage(){
     const row = document.createElement("div");
     row.className = "word-row";
     row.innerHTML = `
-      <div class="emoji">${w.emoji||"🍡"}</div>
+      <div class="emoji">${w.emoji||"🐼"}</div>
       <div class="hanzi">${w.hanzi}</div>
       <div class="pinyin">${w.pinyin}</div>
       <div class="meaning">${w.meaning} <span style="color:var(--ink-soft); font-size:12px; font-weight:normal;">· ${w.topic}</span></div>
@@ -1388,7 +1452,7 @@ mgSearch.addEventListener("input", renderManage);
 mgTopicSel.addEventListener("change", renderManage);
 
 /* =========================================================
-   TEACHER LISTS MANAGEMENT VIEW (Tạo list, thêm từ, xóa từ, xóa list)
+   TEACHER LISTS & CUSTOMIZATION MANAGEMENT VIEW
    ========================================================= */
 const teacherAuthBox = document.getElementById("teacher-auth-box");
 const teacherDashboard = document.getElementById("teacher-dashboard");
@@ -1401,6 +1465,11 @@ teacherLoginBtn.addEventListener("click", () => {
     teacherAuthBox.style.display = "none";
     teacherDashboard.style.display = "block";
     teacherPasswordInput.value = "";
+    document.getElementById("tl-timer-seconds").value = state.challengeSeconds || 4;
+    document.getElementById("cfg-title-input").value = state.customTitle || "";
+    document.getElementById("cfg-color-paper").value = state.colorPaper || "#F0F7F4";
+    document.getElementById("cfg-color-ink").value = state.colorInk || "#2C4A3E";
+    document.getElementById("cfg-color-jade").value = state.colorJade || "#388E3C";
     renderTeacherManage();
   } else {
     alert("Mật khẩu giáo viên không chính xác!");
@@ -1414,8 +1483,62 @@ teacherLogoutBtn.addEventListener("click", () => {
   teacherAuthBox.style.display = "block";
 });
 
+// Lưu cấu hình giao diện & upload ảnh
+document.getElementById("cfg-save-theme-btn").addEventListener("click", () => {
+  const newTitle = document.getElementById("cfg-title-input").value.trim();
+  if(newTitle) state.customTitle = newTitle;
+  
+  state.colorPaper = document.getElementById("cfg-color-paper").value;
+  state.colorInk = document.getElementById("cfg-color-ink").value;
+  state.colorJade = document.getElementById("cfg-color-jade").value;
+
+  const fileInput = document.getElementById("cfg-image-file");
+  if(fileInput.files && fileInput.files[0]){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      state.bgImage = e.target.result;
+      saveState();
+      applyCustomTheme();
+      alert("Cập nhật giao diện, tiêu đề và hình nền thành công! ✨");
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+  } else {
+    saveState();
+    applyCustomTheme();
+    alert("Cập nhật giao diện và tiêu đề thành công! ✨");
+  }
+});
+
+// Khôi phục mặc định
+document.getElementById("cfg-reset-theme-btn").addEventListener("click", () => {
+  if(confirm("Bạn có chắc chắn muốn khôi phục giao diện mặc định không?")){
+    state.customTitle = "🎋 雅趣学堂 · WEB TỪ VỰNG CỦA THẦY MARCUS 🎋";
+    state.colorPaper = "#F0F7F4";
+    state.colorInk = "#2C4A3E";
+    state.colorJade = "#388E3C";
+    state.bgImage = "";
+    saveState();
+    applyCustomTheme();
+    document.getElementById("cfg-title-input").value = state.customTitle;
+    document.getElementById("cfg-color-paper").value = state.colorPaper;
+    document.getElementById("cfg-color-ink").value = state.colorInk;
+    document.getElementById("cfg-color-jade").value = state.colorJade;
+    alert("Đã khôi phục giao diện mặc định!");
+  }
+});
+
+document.getElementById("tl-save-timer-btn").addEventListener("click", () => {
+  const sec = parseInt(document.getElementById("tl-timer-seconds").value);
+  if(!sec || sec < 1){
+    alert("Vui lòng nhập số giây hợp lệ!");
+    return;
+  }
+  state.challengeSeconds = sec;
+  saveState();
+  alert(`Đã lưu thời gian thử thách thành công (${sec} giây)! ✨`);
+});
+
 function renderTeacherManage(){
-  // Đổ dữ liệu vào select chọn list trong form thêm từ
   const topicSel = document.getElementById("tl-topic-select");
   topicSel.innerHTML = "";
   topicList().forEach(t=>{
@@ -1424,7 +1547,6 @@ function renderTeacherManage(){
     topicSel.appendChild(o);
   });
 
-  // Đổ dữ liệu vào select chọn list để xóa
   const deleteTopicSel = document.getElementById("tl-delete-topic-select");
   deleteTopicSel.innerHTML = "";
   topicList().forEach(t=>{
@@ -1433,7 +1555,6 @@ function renderTeacherManage(){
     deleteTopicSel.appendChild(o);
   });
 
-  // Hiển thị danh sách từ toàn hệ thống để giáo viên có thể xóa từng từ
   const wordListWrap = document.getElementById("tl-word-list");
   wordListWrap.innerHTML = "";
   const words = allWords();
@@ -1445,7 +1566,7 @@ function renderTeacherManage(){
     const row = document.createElement("div");
     row.className = "word-row";
     row.innerHTML = `
-      <div class="emoji">${w.emoji||"🍡"}</div>
+      <div class="emoji">${w.emoji||"🐼"}</div>
       <div class="hanzi">${w.hanzi}</div>
       <div class="pinyin">${w.pinyin}</div>
       <div class="meaning">${w.meaning} <span style="color:var(--ink-soft); font-size:12px; font-weight:normal;">· [${w.topic}]</span></div>
@@ -1458,10 +1579,8 @@ function renderTeacherManage(){
     btn.addEventListener("click", ()=>{
       const id = btn.dataset.id;
       if(id.startsWith("w")){
-        // Là từ mặc định -> đưa vào danh sách ẩn
         state.deletedDefaultIds.push(id);
       } else {
-        // Là từ tự thêm -> xóa khỏi customWords
         state.customWords = state.customWords.filter(c=>c.id!==id);
       }
       saveState();
@@ -1471,7 +1590,6 @@ function renderTeacherManage(){
   });
 }
 
-// Thêm từ vào List
 document.getElementById("tl-add-btn").addEventListener("click", ()=>{
   const newTopicInput = document.getElementById("tl-new-topic").value.trim();
   const selectedTopic = document.getElementById("tl-topic-select").value;
@@ -1504,14 +1622,11 @@ document.getElementById("tl-add-btn").addEventListener("click", ()=>{
   alert("Đã thêm từ mới vào List thành công! ✨");
 });
 
-// Xóa toàn bộ một List
 document.getElementById("tl-delete-topic-btn").addEventListener("click", ()=>{
   const topicToDelete = document.getElementById("tl-delete-topic-select").value;
   if(!topicToDelete) return;
   if(confirm(`Bạn có chắc chắn muốn xóa toàn bộ List "${topicToDelete}" và các từ trong đó không?`)){
-    // Xóa các từ tự thêm thuộc list này
     state.customWords = state.customWords.filter(w => w.topic !== topicToDelete);
-    // Nếu list đó chứa từ mặc định, đưa các từ mặc định đó vào danh sách ẩn
     DEFAULT_WORDS.forEach(w => {
       if(w.topic === topicToDelete && !state.deletedDefaultIds.includes(w.id)){
         state.deletedDefaultIds.push(w.id);
@@ -1525,7 +1640,7 @@ document.getElementById("tl-delete-topic-btn").addEventListener("click", ()=>{
 });
 
 /* =========================================================
-   SENTENCE PRACTICE (Tích hợp Google Sheet)
+   SENTENCE PRACTICE
    ========================================================= */
 const scTopicSel = document.getElementById("sc-topic");
 fillTopicSelect(scTopicSel);
@@ -1560,57 +1675,72 @@ function renderSentenceStudentList(){
   words.forEach(w=>{
     const card = document.createElement("div");
     card.className = "sentence-card";
+    card.dataset.wordId = w.id;
+    card.dataset.wordHanzi = w.hanzi;
     card.innerHTML = `
       <div class="sc-head">
         <span class="hanzi">${w.hanzi}</span>
         <span class="pinyin">${w.pinyin}</span>
         <span class="meaning">${w.meaning}</span>
       </div>
-      <textarea placeholder="Hãy thử đặt một câu với từ &quot;${w.hanzi}&quot; nhé..."></textarea>
-      <div class="sc-actions">
-        <button class="btn btn-primary sc-send-btn">Gửi giáo viên</button>
-      </div>
+      <textarea class="sentence-input" placeholder="Hãy thử đặt một câu với từ &quot;${w.hanzi}&quot; nhé..."></textarea>
     `;
-    const textarea = card.querySelector("textarea");
-    const sendBtn = card.querySelector(".sc-send-btn");
-    
-    sendBtn.addEventListener("click", async ()=>{
-      const sentence = textarea.value.trim();
-      if(!sentence){ alert("Vui lòng viết một câu trước khi gửi nhé!"); return; }
-      
-      sendBtn.disabled = true;
-      sendBtn.textContent = "Đang gửi...";
-
-      try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            studentName: state.studentName || "Học viên ẩn danh",
-            word: w.hanzi,
-            sentence: sentence
-          })
-        });
-
-        alert("Gửi câu thành công về Google Sheet của giáo viên! ✨");
-        textarea.value = "";
-      } catch (error) {
-        alert("Gửi thất bại, vui lòng kiểm tra lại kết nối mạng.");
-      } finally {
-        sendBtn.disabled = false;
-        sendBtn.textContent = "Gửi giáo viên";
-      }
-    });
-
     listWrap.appendChild(card);
   });
 }
 
+document.getElementById("sc-submit-all-btn").addEventListener("click", async () => {
+  const cards = document.querySelectorAll(".sentence-card");
+  if(cards.length === 0){
+    alert("Không có từ nào để đặt câu!");
+    return;
+  }
+
+  let resultsSummary = [];
+  cards.forEach(card => {
+    const hanzi = card.dataset.wordHanzi;
+    const text = card.querySelector(".sentence-input").value.trim();
+    if(text){
+      resultsSummary.push(`• Từ [${hanzi}]: ${text}`);
+    }
+  });
+
+  if(resultsSummary.length === 0){
+    alert("Vui lòng điền câu ít nhất một từ trong list trước khi gửi nhé!");
+    return;
+  }
+
+  const listName = scTopicSel.options[scTopicSel.selectedIndex]?.text || scTopicSel.value;
+  const fullContent = `[Đặt câu nguyên List: "${listName}"]\n` + resultsSummary.join("\n");
+
+  const submitBtn = document.getElementById("sc-submit-all-btn");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Đang gửi cả list...";
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        studentName: state.studentName || "Học viên ẩn danh",
+        word: `List: ${listName}`,
+        sentence: fullContent
+      })
+    });
+
+    alert("Gửi toàn bộ list đặt câu về Google Sheet thành công! ✨");
+    cards.forEach(card => card.querySelector(".sentence-input").value = "");
+  } catch (error) {
+    alert("Gửi thất bại, vui lòng kiểm tra lại kết nối mạng.");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "🚀 Gửi toàn bộ List cho Giáo viên 🎋";
+  }
+});
+
 /* =========================================================
-   DICTATION / VIDEO FEATURE (BẢO MẬT MẬT KHẨU GIÁO VIÊN)
+   DICTATION / VIDEO FEATURE
    ========================================================= */
 const openTeacherPanelBtn = document.getElementById("open-teacher-panel-btn");
 const teacherPanel = document.getElementById("teacher-panel");
@@ -1620,7 +1750,6 @@ const videoDisplayArea = document.getElementById("video-display-area");
 const submitDictationBtn = document.getElementById("submit-dictation-btn");
 const dictationText = document.getElementById("dictation-text");
 
-// Mở khoá khu vực giáo viên bằng mật khẩu 123455
 openTeacherPanelBtn.addEventListener("click", () => {
   const pass = prompt("Nhập mật khẩu giáo viên:");
   if(pass === "123455"){
@@ -1636,7 +1765,6 @@ openTeacherPanelBtn.addEventListener("click", () => {
   }
 });
 
-// Hàm hiển thị video ra màn hình chung cho cả học sinh
 function loadVideoIntoDisplay(rawUrl){
   if(!rawUrl) {
     videoDisplayArea.innerHTML = '<span>Chưa có video bài học nào từ giáo viên. 📺</span>';
@@ -1666,7 +1794,6 @@ function loadVideoIntoDisplay(rawUrl){
   videoDisplayArea.innerHTML = embedHtml;
 }
 
-// Giáo viên lưu video mới (đồng bộ toàn hệ thống)
 saveTeacherVideoBtn.addEventListener("click", () => {
   const newUrl = teacherVideoUrl.value.trim();
   if(!newUrl){
@@ -1682,7 +1809,6 @@ saveTeacherVideoBtn.addEventListener("click", () => {
   openTeacherPanelBtn.textContent = "🔒 Khu vực Giáo viên (Đổi Video)";
 });
 
-// Học viên gửi bài chép chính tả
 submitDictationBtn.addEventListener("click", async () => {
   const content = dictationText.value.trim();
   if(!content){
@@ -1697,12 +1823,10 @@ submitDictationBtn.addEventListener("click", async () => {
     await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         studentName: state.studentName || "Học viên ẩn danh",
-        word: "[Chép Chính Tả Video] Link: " + (state.globalVideoUrl || "Chura rõ link"),
+        word: "[Chép Chính Tả Video]",
         sentence: content
       })
     });
