@@ -532,6 +532,31 @@
     padding:0;
   }
 
+  .sentence-card{
+    background:#fff;
+    border:3px solid var(--paper-darker);
+    border-radius:20px;
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 4px 16px rgba(44,74,62,0.04);
+  }
+  .sentence-card .sc-head{display:flex; align-items:baseline; gap:10px; margin-bottom:8px;}
+  .sentence-card .hanzi{font-family:var(--serif); font-size:28px; color:var(--seal-dark); font-weight:700;}
+  .sentence-card .pinyin{font-family:var(--mono); font-size:13px; color:var(--jade-dark); font-weight:700;}
+  .sentence-card .meaning{font-size:13px; color:var(--ink-soft); font-weight:600;}
+  .sentence-card textarea{
+    width:100%;
+    font-family:var(--sans);
+    font-size:14px;
+    padding:12px;
+    border-radius:14px;
+    border:2px solid var(--paper-darker);
+    resize:vertical;
+    min-height:60px;
+    background:var(--paper);
+  }
+  .sentence-card textarea:focus{outline:none; border-color:var(--jade); box-shadow:0 0 0 3px var(--accent-light);}
+
   /* ---------- Dictation / Video Tab Styles (Cute Note Style) ---------- */
   .dictation-box {
     background: #fff;
@@ -547,7 +572,7 @@
     background: #000;
     border-radius: 16px;
     overflow: hidden;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     border: 2px solid var(--paper-darker);
     display: flex;
     align-items: center;
@@ -559,67 +584,6 @@
     height: 100%;
     border: none;
   }
-  
-  /* Giao diện điều khiển phát video (Player Controls) */
-  .player-controls-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-    background: var(--paper);
-    border: 2px solid var(--paper-darker);
-    border-radius: 16px;
-    padding: 12px 16px;
-    margin-bottom: 16px;
-  }
-  .pc-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .pc-btn {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 8px 14px;
-    border-radius: 12px;
-    border: 2px solid var(--paper-darker);
-    background: #fff;
-    color: var(--seal-dark);
-    cursor: pointer;
-    box-shadow: 0 2px 0 var(--paper-darker);
-    transition: all 0.1s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .pc-btn:hover {
-    border-color: var(--jade);
-    background: var(--accent-light);
-    transform: translateY(-1px);
-  }
-  .pc-setting-box {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    color: var(--ink-soft);
-    background: #fff;
-    padding: 4px 8px;
-    border-radius: 10px;
-    border: 2px solid var(--paper-darker);
-  }
-  .pc-setting-box input[type="number"] {
-    width: 50px;
-    padding: 4px 6px;
-    font-size: 12px;
-    border-radius: 8px;
-    border: 1px solid var(--paper-darker);
-    text-align: center;
-  }
-
   /* Cute Teacher Note Box */
   .teacher-note-box {
     background: #FFFDE7;
@@ -678,6 +642,68 @@
   .teacher-panel.active {
     display: block;
   }
+
+  /* ---------- Player Controls Styling ---------- */
+  .player-controls-bar {
+    background: #fff;
+    border: 2px solid var(--paper-darker);
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(44,74,62,0.04);
+  }
+  .player-btn {
+    background: var(--jade);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.1s, background 0.2s;
+  }
+  .player-btn:hover {
+    transform: scale(1.05);
+    background: var(--seal-dark);
+  }
+  .player-progress-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .player-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--paper-dark);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+  }
+  .player-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--jade);
+    border-radius: 4px;
+    transition: width 0.1s linear;
+  }
+  .player-time-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-weight: 700;
+  }
 </style>
 </head>
 <body>
@@ -695,7 +721,9 @@
     </div>
 
     <label style="font-size:12px; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:4px; text-align: left;">Danh sách lớp học:</label>
-    <div class="class-list-container" id="class-selection-list"></div>
+    <div class="class-list-container" id="class-selection-list">
+      <!-- Render dynamic classes here -->
+    </div>
   </div>
 </div>
 
@@ -712,7 +740,7 @@
   </div>
 </div>
 
-<!-- MODAL NHẬP MẬT KHẨU KHU VỰC GIÁO VIÊN -->
+<!-- MODAL NHẬP MẬT KHẨU KHU VỰC GIÁO VIÊN (THÊM & QUẢN LÝ VIDEO) -->
 <div id="video-teacher-pass-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 10000; display: none; align-items: center; justify-content: center; padding: 20px;">
   <div class="pass-modal-card">
     <h3 style="font-family:var(--serif); color:var(--seal-dark); margin-top:0;">🔒 Mật Khẩu Khu Vực Giáo Viên</h3>
@@ -741,6 +769,7 @@
   <button data-view="flashcard" class="active">🎋 Thẻ ghi nhớ</button>
   <button data-view="quiz">🐼 Kiểm tra</button>
   <button data-view="timed">⚡ Thử thách thời gian</button>
+  <button data-view="sentence">✍️ Đặt câu</button>
   <button data-view="dictation">🎧 Chép chính tả video</button>
   <button data-view="leaderboard">🏆 Bảng Xếp Hạng</button>
   <button data-view="progress">📈 Tiến độ</button>
@@ -749,8 +778,9 @@
 </nav>
 
 <main>
+
   <!-- ============ FLASHCARD VIEW ============ -->
-  <section class="view active" id="view-flashcard">
+  <section class="view" id="view-flashcard">
     <div class="filters">
       <select id="fc-topic"></select>
       <select id="fc-level">
@@ -811,6 +841,25 @@
     <div id="tm-area"></div>
   </section>
 
+  <!-- ============ SENTENCE PRACTICE VIEW ============ -->
+  <section class="view" id="view-sentence">
+    <div class="student-bar">
+      <div class="who">Học viên: <strong id="sc-student-name">—</strong>
+        <button class="link-btn" id="sc-change-name">đổi tên</button>
+      </div>
+    </div>
+
+    <div id="sc-student-view">
+      <div class="filters">
+        <select id="sc-topic"></select>
+      </div>
+      <div id="sc-list"></div>
+      <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+        <button class="btn btn-ok" id="sc-submit-all-btn">🚀 Gửi toàn bộ List cho Giáo viên 🎋</button>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ DICTATION / VIDEO VIEW ============ -->
   <section class="view" id="view-dictation">
     <div class="student-bar">
@@ -823,23 +872,26 @@
 
       <div class="teacher-panel" id="teacher-panel">
         <h4 style="margin:0 0 8px; color:var(--seal-dark); font-family:var(--serif);">⚙️ Quản Trị Danh Sách Bài Tập & Video Cho Lớp Này</h4>
+        <p style="font-size:12px; color:var(--ink-soft); margin-bottom:10px;">Thêm nhiều video và bài tập chép chính tả, đặt tiêu đề và viết hướng dẫn cute cho học sinh.</p>
+        
         <div style="background:#fff; padding:12px; border-radius:12px; border:2px solid var(--paper-darker); margin-bottom:12px;">
           <h5 style="margin:0 0 8px; color:var(--seal-dark);">➕ Thêm Bài Tập Video Mới</h5>
           <div style="margin-bottom:8px;">
-            <label style="font-size:11px; font-weight:700; display:block; margin-bottom:2px;">Tên bài tập:</label>
-            <input type="text" id="new-video-title" placeholder="Ví dụ: Bài 1..." style="width:100%;">
+            <label style="font-size:11px; font-weight:700; display:block; margin-bottom:2px;">Tên bài tập / Tiêu đề video:</label>
+            <input type="text" id="new-video-title" placeholder="Ví dụ: Bài 1 - Hội thoại mua sắm..." style="width:100%;">
           </div>
           <div style="margin-bottom:8px;">
-            <label style="font-size:11px; font-weight:700; display:block; margin-bottom:2px;">Link Video YouTube:</label>
+            <label style="font-size:11px; font-weight:700; display:block; margin-bottom:2px;">Link Video (YouTube/Douyin/MP4):</label>
             <input type="text" id="new-video-url" placeholder="Dán link video..." style="width:100%;">
           </div>
           <div style="margin-bottom:8px;">
             <label style="font-size:11px; font-weight:700; display:block; margin-bottom:2px;">Nội dung Note hướng dẫn:</label>
-            <textarea id="new-video-note" placeholder="Hướng dẫn..." style="width:100%; height:50px; padding:8px; border-radius:8px; border:2px solid var(--paper-darker); font-family:var(--sans);"></textarea>
+            <textarea id="new-video-note" placeholder="Ví dụ: Các bé nghe từ phút 01:00..." style="width:100%; height:50px; padding:8px; border-radius:8px; border:2px solid var(--paper-darker); font-family:var(--sans);"></textarea>
           </div>
           <button class="btn btn-primary" id="add-video-item-btn" style="font-size:13px; padding:8px 16px;">+ Thêm bài tập video này</button>
         </div>
-        <h5 style="margin:12px 0 6px; color:var(--seal-dark);">📋 Danh sách video hiện có:</h5>
+
+        <h5 style="margin:12px 0 6px; color:var(--seal-dark);">📋 Danh sách video hiện có của lớp:</h5>
         <div id="teacher-video-list-manager" style="display:flex; flex-direction:column; gap:6px; max-height:180px; overflow-y:auto;"></div>
       </div>
 
@@ -848,40 +900,26 @@
         <select id="dictation-video-select" style="width:100%; font-weight:700;"></select>
       </div>
 
+      <!-- Cute Teacher Note Display -->
       <div class="teacher-note-box" id="student-teacher-note-box">
-        <div class="teacher-note-content" id="student-teacher-note-text">Thầy cô chưa có ghi chú nào. Chúc các em học tốt! 🐼</div>
+        <div class="teacher-note-content" id="student-teacher-note-text">Thầy cô chưa có ghi chú nào cho bài tập này. Chúc các em học tốt! 🐼</div>
       </div>
 
-      <!-- Vùng hiển thị video -->
       <div class="video-container" id="video-display-area">
         <span>Đang tải video bài học... 📺</span>
       </div>
 
-      <!-- GIAO DIỆN ĐIỀU KHIỂN PHÁT VIDEO (PLAYER CONTROLS - TUA LÊN / TUA XUỐNG) -->
-      <div class="player-controls-bar">
-        <div class="pc-group">
-          <button class="pc-btn" id="pc-speed-btn" title="Thay đổi tốc độ phát">⚡ Tốc độ: <span id="pc-speed-label">1.0x</span></button>
-          <div class="pc-setting-box">
-            <span>Tùy chỉnh:</span>
-            <input type="number" id="pc-custom-speed" step="0.05" min="0.25" max="3.0" value="1.0" style="width:55px;">
+      <!-- TÍCH HỢP PLAYER CONTROLS (Thanh điều khiển tùy chỉnh audio/video) -->
+      <div class="player-controls-bar" id="custom-player-controls">
+        <button class="player-btn" id="pc-play-pause-btn" title="Phát / Tạm dừng">▶</button>
+        <button class="player-btn" id="pc-replay-btn" title="Nghe lại (-5s)">↺</button>
+        <div class="player-progress-container">
+          <div class="player-progress-bar" id="pc-progress-bar">
+            <div class="player-progress-fill" id="pc-progress-fill"></div>
           </div>
-        </div>
-
-        <div class="pc-group">
-          <button class="pc-btn" id="pc-play-pause-btn" title="Dừng hoặc tiếp tục video">⏸ Dừng / Phát</button>
-        </div>
-
-        <div class="pc-group">
-          <div class="pc-setting-box" title="Số giây tua lại">
-            <span>⏪ Lùi:</span>
-            <input type="number" id="pc-rewind-sec" min="1" max="60" value="5"><span>s</span>
-          </div>
-          <button class="pc-btn" id="pc-rewind-btn" title="Lùi lại đoạn vừa lỡ">⏪ Tua xuống</button>
-
-          <button class="pc-btn" id="pc-forward-btn" title="Tua nhanh lên">Tua lên ⏩</button>
-          <div class="pc-setting-box" title="Số giây tua nhanh">
-            <span>Tới:</span>
-            <input type="number" id="pc-forward-sec" min="1" max="60" value="5"><span>s</span>
+          <div class="player-time-info">
+            <span id="pc-current-time">00:00</span>
+            <span id="pc-duration">00:00</span>
           </div>
         </div>
       </div>
@@ -902,10 +940,10 @@
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
         <div>
           <h3 style="font-family:var(--serif); color:var(--seal-dark); margin:0;">🏆 Bảng Xếp Hạng Lớp Học</h3>
-          <p style="font-size:12px; color:var(--ink-soft); margin:4px 0 0;">Vinh danh các học viên chăm chỉ nộp bài và vượt thử thách tốc độ!</p>
+          <p style="font-size:12px; color:var(--ink-soft); margin:4px 0 0;">Vinh danh các học viên chăm chỉ nộp bài sớm/muộn và tốc độ thử thách thời gian!</p>
         </div>
         <div id="teacher-lb-controls" style="display:none;">
-          <button class="btn btn-bad" id="reset-leaderboard-btn" style="font-size:12px; padding:8px 14px;">🗑️ Reset Bảng Xếp Hạng</button>
+          <button class="btn btn-bad" id="reset-leaderboard-btn" style="font-size:12px; padding:8px 14px;">🗑️ Reset/Xóa Bảng Xếp Hạng</button>
         </div>
       </div>
 
@@ -941,6 +979,7 @@
       <input type="text" id="mg-search" placeholder="Tìm kiếm từ vựng...">
       <select id="mg-topic"></select>
     </div>
+
     <div class="word-list" id="mg-list"></div>
   </section>
 
@@ -948,6 +987,7 @@
   <section class="view" id="view-teacher-lists">
     <div id="teacher-auth-box" style="background:#fff; border:3px solid var(--paper-darker); border-radius:24px; padding:30px; text-align:center; max-width:450px; margin:40px auto;">
       <h3 style="font-family:var(--serif); color:var(--seal-dark); margin-top:0;">🔒 Khu Vực Quản Lý Của Giáo Viên</h3>
+      <p style="font-size:13px; color:var(--ink-soft); margin-bottom:20px;">Vui lòng nhập mật khẩu để tạo lớp học mới, thiết lập mật khẩu cho lớp, quản lý từ vựng và giao diện.</p>
       <input type="password" id="teacher-password-input" placeholder="Nhập mật khẩu giáo viên..." style="width:100%; margin-bottom:16px; text-align:center;">
       <button class="btn btn-primary" id="teacher-login-btn" style="width:100%;">Truy cập bảng quản trị</button>
     </div>
@@ -957,18 +997,159 @@
         <h3 style="font-family:var(--serif); color:var(--seal-dark); margin:0;">⚙️ Bảng Quản Trị Đa Lớp Học</h3>
         <button class="btn btn-outline" id="teacher-logout-btn" style="font-size:12px; padding:6px 12px;">Đăng xuất</button>
       </div>
-      <!-- Các tính năng quản trị lớp học khác có thể giữ nguyên ở đây -->
+
+      <!-- SAO LƯU & KHÔI PHỤC DỮ LIỆU -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">💾 Sao Lưu & Khôi Phục Dữ Liệu</h4>
+        <p style="font-size:12px; color:var(--ink-soft); margin:0 0 12px;">Tải toàn bộ dữ liệu (danh sách lớp, từ vựng, tiến độ học, bảng xếp hạng...) về máy dưới dạng file JSON.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" id="backup-export-btn">⬇️ Xuất toàn bộ dữ liệu (JSON)</button>
+          <button class="btn btn-outline" id="backup-import-trigger-btn">⬆️ Khôi phục từ file JSON</button>
+          <input type="file" id="backup-import-file" accept=".json,application/json" style="display:none;">
+        </div>
+      </div>
+
+      <!-- TẠO LỚP HỌC MỚI & THIẾT LẬP MẬT KHẨU -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🏫 Tạo Lớp Học Mới & Đặt Mật Khẩu</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Tên lớp học *</label>
+            <input type="text" id="new-class-name" placeholder="Ví dụ: Lớp HSK 3 - Ca Tối" style="width:100%;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Mật khẩu bảo vệ lớp *</label>
+            <input type="text" id="new-class-pass" placeholder="Mật khẩu (ví dụ: 1234)" style="width:100%;">
+          </div>
+        </div>
+        <button class="btn btn-primary" id="create-class-btn">+ Thêm lớp học mới</button>
+
+        <h5 style="margin:18px 0 8px; color:var(--seal-dark); font-family:var(--serif);">Danh sách các lớp hiện có:</h5>
+        <div id="teacher-class-list-manage" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
+      <!-- SAO CHÉP LIST TỪ VỰNG GIỮA CÁC LỚP -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">📋 Sao Chép List Từ Vựng Giữa Các Lớp</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Lớp nguồn (copy từ lớp này)</label>
+            <select id="copy-source-class" style="width:100%;"></select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">List / Chủ đề cần copy</label>
+            <select id="copy-source-topic" style="width:100%;"></select>
+          </div>
+        </div>
+        <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Lớp đích (copy sang lớp nào) - có thể chọn nhiều lớp:</label>
+        <div id="copy-target-classes" style="display:flex; flex-direction:column; gap:6px; max-height:160px; overflow-y:auto; background:var(--paper); border:2px solid var(--paper-darker); border-radius:12px; padding:10px; margin-bottom:12px;"></div>
+        <button class="btn btn-primary" id="copy-list-btn">📋 Sao chép List sang lớp đã chọn</button>
+      </div>
+
+      <!-- CÀI ĐẶT GIAO DIỆN & TIÊU ĐỀ -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🎨 Tùy chỉnh Giao diện Website</h4>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Sửa tiêu đề trang web:</label>
+          <input type="text" id="cfg-title-input" placeholder="Tiêu đề mới..." style="width:100%;">
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
+          <div style="flex:1; min-width:140px;">
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Màu nền chính (--paper):</label>
+            <input type="color" id="cfg-color-paper" value="#F0F7F4" style="width:100%; height:40px; padding:0; cursor:pointer;">
+          </div>
+          <div style="flex:1; min-width:140px;">
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Màu chữ chính (--ink):</label>
+            <input type="color" id="cfg-color-ink" value="#2C4A3E" style="width:100%; height:40px; padding:0; cursor:pointer;">
+          </div>
+          <div style="flex:1; min-width:140px;">
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Màu chủ đạo (--jade):</label>
+            <input type="color" id="cfg-color-jade" value="#388E3C" style="width:100%; height:40px; padding:0; cursor:pointer;">
+          </div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Upload ảnh nền (chọn file ảnh từ máy):</label>
+          <input type="file" id="cfg-image-file" accept="image/*" style="width:100%; padding:8px; background:var(--paper); border:2px solid var(--paper-darker); border-radius:12px;">
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-primary" id="cfg-save-theme-btn">Lưu thay đổi giao diện</button>
+          <button class="btn btn-outline" id="cfg-reset-theme-btn">Khôi phục mặc định</button>
+        </div>
+      </div>
+
+      <!-- Cài đặt thời gian thử thách -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">⏱ Cài đặt Thời gian Thử thách (Giây)</h4>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <label style="font-size:13px; font-weight:700;">Số giây cho mỗi từ:</label>
+          <input type="number" id="tl-timer-seconds" min="1" max="60" value="4" style="width:100px;">
+          <button class="btn btn-primary" id="tl-save-timer-btn">Lưu thời gian</button>
+        </div>
+      </div>
+
+      <!-- ĐỔI TÊN LIST / CHỦ ĐỀ CỦA LỚP HIỆN TẠI -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🏷️ Đổi Tên List / Chủ Đề (Lớp hiện tại)</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">List hiện tại cần đổi tên</label>
+            <select id="rename-topic-select" style="width:100%;"></select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; display:block; margin-bottom:4px;">Tên List mới</label>
+            <input type="text" id="rename-topic-new" placeholder="Ví dụ: Bài 6 HSK 3" style="width:100%;">
+          </div>
+        </div>
+        <button class="btn btn-primary" id="rename-topic-btn">🏷️ Đổi tên List</button>
+      </div>
+
+      <!-- Form tạo List mới / Thêm - Sửa từ cho Lớp đang chọn -->
+      <div class="add-form">
+        <div class="full"><label id="tl-form-title">✨ Thêm từ mới vào Danh sách (List) của lớp hiện tại</label></div>
+        <div>
+          <label>Chọn hoặc tạo List (Chủ đề) *</label>
+          <select id="tl-topic-select" style="width:100%; padding:10px; border-radius:12px; border:2px solid var(--paper-darker);"></select>
+        </div>
+        <div>
+          <label>Hoặc nhập tên List mới</label>
+          <input type="text" id="tl-new-topic" placeholder="Ví dụ: Bài 5 HSK 3">
+        </div>
+        <div><label>Hán tự *</label><input type="text" id="tl-hanzi" placeholder="猫"></div>
+        <div><label>Pinyin *</label><input type="text" id="tl-pinyin" placeholder="māo"></div>
+        <div><label>Nghĩa *</label><input type="text" id="tl-meaning" placeholder="con mèo"></div>
+        <div><label>Emoji minh hoạ</label><input type="text" id="tl-emoji" placeholder="🐼"></div>
+        <div class="full"><label>Câu ví dụ (tuỳ chọn)</label><input type="text" id="tl-example" placeholder="我家有一只大熊猫。"></div>
+        <div class="full" style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" id="tl-add-btn">+ Thêm từ vào List</button>
+          <button class="btn btn-outline" id="tl-cancel-edit-btn" style="display:none;">✖ Hủy chỉnh sửa</button>
+        </div>
+      </div>
+
+      <!-- XUẤT / NHẬP TỪ VỰNG BẰNG CSV -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:16px 20px; margin:16px 0;">
+        <h4 style="margin:0 0 8px; color:var(--seal-dark); font-family:var(--serif); font-size:15px;">📄 Xuất / Nhập Từ Vựng Hàng Loạt (CSV / Excel)</h4>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-outline" id="csv-export-btn">⬇️ Xuất CSV lớp hiện tại</button>
+          <button class="btn btn-outline" id="csv-import-trigger-btn">⬆️ Nhập từ file CSV</button>
+          <input type="file" id="csv-import-file" accept=".csv,text/csv" style="display:none;">
+        </div>
+      </div>
+
+      <h4 style="font-family:var(--serif); color:var(--seal-dark); margin-bottom:8px;">Danh sách từ vựng của lớp hiện tại:</h4>
+      <input type="text" id="tl-search-word" placeholder="🔍 Tìm theo Hán tự / Pinyin / Nghĩa..." style="width:100%; margin-bottom:12px;">
+      <div class="word-list" id="tl-word-list"></div>
     </div>
   </section>
+
 </main>
 
-<footer>🐼 Chúc bạn học tập cùng gấu trúc thật vui vẻ mỗi ngày! 🎋</footer>
+<footer>🐼 Chúc bạn học tập cùng gấu trúc thật vui vẻ và tiến bộ mỗi ngày! 🎋</footer>
 
 <script>
 /* =========================================================
-   STATE & LOCALSTORAGE SETUP
+   STATE & LOCALSTORAGE (MULTI-CLASS SUPPORT)
    ========================================================= */
-const STORAGE_KEY = "zhVocabApp_multiclass_panda_v5";
+const STORAGE_KEY = "zhVocabApp_multiclass_panda_v4";
 
 function loadState(){
   try{
@@ -982,10 +1163,22 @@ function loadState(){
       "Lớp Cơ Bản HSK 1": {
         password: "123",
         videos: [
-          {id: "v1", title: "Bài 1: Giao tiếp chào hỏi", url: "https://www.youtube.com/embed/dQw4w9WgXcQ", note: "Xem video và chép lại đoạn đầu nhé ~ 🐼"}
+          {id: "v1", title: "Bài 1: Giao tiếp chào hỏi", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", note: "Các em xem video và chép lại từ đầu đến phút 02:00 nhé ~ 🐼"}
         ],
         customWords: [
-          {id:"w1", hanzi:"反省", pinyin:"fǎnxǐng", meaning:"tự kiểm điểm", emoji:"🍵", topic:"Chuyên đề", level:"HSK2", example:"认真反省。"}
+          {id:"w1", hanzi:"反省", pinyin:"fǎnxǐng", meaning:"tự kiểm điểm, suy ngẫm lại", emoji:"🍵", topic:"Chuyên đề", level:"HSK2", example:"他犯错后认真反省。"},
+          {id:"w2", hanzi:"据说", pinyin:"jùshuō", meaning:"nghe nói rằng", emoji:"🎋", topic:"Chuyên đề", level:"HSK2", example:"据说明天会下雨。"}
+        ],
+        deletedDefaultIds: []
+      },
+      "Lớp Nâng Cao HSK 3-4": {
+        password: "456",
+        videos: [
+          {id: "v2", title: "Bài 1: Hội thoại tốc độ cao", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", note: "Lớp mình chú ý nghe phần hội thoại tốc độ nhanh và ghi chép đầy đủ từ mới nha! ✨"}
+        ],
+        customWords: [
+          {id:"w3", hanzi:"个性", pinyin:"gèxìng", meaning:"cá tính", emoji:"🐼", topic:"Chuyên đề", level:"HSK2", example:"她的个性很独立。"},
+          {id:"w4", hanzi:"冒险", pinyin:"màoxiǎn", meaning:"mạo hiểm, phiêu lưu", emoji:"🧗", topic:"Chuyên đề", level:"HSK2", example:"年轻人喜欢冒险。"}
         ],
         deletedDefaultIds: []
       }
@@ -996,7 +1189,12 @@ function loadState(){
     lastStudyDate: null,
     streak: 0,
     timedBest: {},
-    challengeSeconds: 4
+    challengeSeconds: 4,
+    customTitle: "🎋 雅趣学堂 · WEB TỪ VỰNG ĐA LỚP HỌC 🎋",
+    colorPaper: "#F0F7F4",
+    colorInk: "#2C4A3E",
+    colorJade: "#388E3C",
+    bgImage: ""
   };
 }
 function saveState(){
@@ -1004,6 +1202,28 @@ function saveState(){
 }
 
 let state = loadState();
+
+function applyCustomTheme(){
+  if(state.customTitle){
+    document.getElementById("page-title-tag").textContent = state.customTitle;
+    document.getElementById("main-header-title").textContent = state.customTitle;
+  }
+  const rootStyle = document.documentElement.style;
+  if(state.colorPaper) rootStyle.setProperty('--paper', state.colorPaper);
+  if(state.colorInk) rootStyle.setProperty('--ink', state.colorInk);
+  if(state.colorJade) {
+    rootStyle.setProperty('--jade', state.colorJade);
+    rootStyle.setProperty('--seal', state.colorJade);
+  }
+  if(state.bgImage){
+    document.body.style.backgroundImage = `url('${state.bgImage}'), radial-gradient(circle at 10% 15%, rgba(129,199,132,0.12) 0%, transparent 35%)`;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
+  } else {
+    document.body.style.backgroundImage = '';
+  }
+}
+applyCustomTheme();
 
 function getCurrentClassData(){
   if(!state.currentClassName || !state.classes[state.currentClassName]){
@@ -1014,8 +1234,8 @@ function getCurrentClassData(){
 }
 
 const DEFAULT_WORDS = [
-  {id:"d1", hanzi:"你好", pinyin:"nǐ hǎo", meaning:"xin chào", emoji:"👋", topic:"Giao tiếp cơ bản", level:"HSK1", example:"你好！"},
-  {id:"d2", hanzi:"谢谢", pinyin:"xièxie", meaning:"cảm ơn", emoji:"🙏", topic:"Giao tiếp cơ bản", level:"HSK1", example:"谢谢你。"}
+  {id:"d1", hanzi:"你好", pinyin:"nǐ hǎo", meaning:"xin chào", emoji:"👋", topic:"Giao tiếp cơ bản", level:"HSK1", example:"你好，很高兴认识你。"},
+  {id:"d2", hanzi:"谢谢", pinyin:"xièxie", meaning:"cảm ơn", emoji:"🙏", topic:"Giao tiếp cơ bản", level:"HSK1", example:"谢谢你的帮助。"}
 ];
 
 function getWordsOfClass(cName){
@@ -1044,7 +1264,7 @@ function touchStreak(){
 }
 
 /* =========================================================
-   MÀN HÌNH CHỌN LỚP & ĐĂNG NHẬP
+   HỆ THỐNG CHỌN LỚP & NHẬP MẬT KHẨU
    ========================================================= */
 const classSelectorOverlay = document.getElementById("class-selector-overlay");
 const classSelectionList = document.getElementById("class-selection-list");
@@ -1066,6 +1286,10 @@ function initClassSelector(){
 function renderClassSelectionList(){
   classSelectionList.innerHTML = "";
   const classNames = Object.keys(state.classes);
+  if(classNames.length === 0){
+    classSelectionList.innerHTML = '<div class="empty-note">Chưa có lớp học nào được tạo.</div>';
+    return;
+  }
   classNames.forEach(cName => {
     const item = document.createElement("div");
     item.className = "class-item-box";
@@ -1085,6 +1309,7 @@ function renderClassSelectionList(){
       }
       state.studentName = sName;
       selectedTargetClass = cName;
+      
       const cData = state.classes[cName];
       if(!cData.password){
         enterClass(cName);
@@ -1099,7 +1324,10 @@ function renderClassSelectionList(){
   });
 }
 
-cancelPassBtn.addEventListener("click", () => { classPassModal.style.display = "none"; });
+cancelPassBtn.addEventListener("click", () => {
+  classPassModal.style.display = "none";
+});
+
 submitPassBtn.addEventListener("click", () => {
   const enteredPass = classPasswordInput.value.trim();
   const cData = state.classes[selectedTargetClass];
@@ -1107,9 +1335,13 @@ submitPassBtn.addEventListener("click", () => {
     classPassModal.style.display = "none";
     enterClass(selectedTargetClass);
   } else {
-    alert("Mật khẩu lớp học không chính xác!");
+    alert("Mật khẩu lớp học không chính xác! Vui lòng thử lại.");
     classPasswordInput.focus();
   }
+});
+
+classPasswordInput.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") submitPassBtn.click();
 });
 
 function enterClass(cName){
@@ -1117,7 +1349,9 @@ function enterClass(cName){
   saveState();
   classSelectorOverlay.style.display = "none";
   document.getElementById("current-class-badge").textContent = cName;
+  document.getElementById("sc-student-name").textContent = state.studentName;
   document.getElementById("dc-student-name").textContent = state.studentName;
+  
   refreshActiveViewData();
 }
 
@@ -1145,6 +1379,7 @@ function refreshActiveViewData(){
   fillTopicSelect(fcTopicSel);
   fillTopicSelect(qzTopicSel);
   fillTopicSelect(tmTopicSel);
+  fillTopicSelect(scTopicSel);
   fillTopicSelect(mgTopicSel);
 
   const activeViewId = document.querySelector("section.view.active")?.id;
@@ -1152,12 +1387,17 @@ function refreshActiveViewData(){
   if(activeViewId === "view-timed") renderTimedIdle();
   if(activeViewId === "view-progress") renderProgress();
   if(activeViewId === "view-manage") renderManage();
-  if(activeViewId === "view-dictation") initDictationView();
+  if(activeViewId === "view-sentence") renderSentenceStudentList();
+  if(activeViewId === "view-dictation") {
+    document.getElementById("dc-student-name").textContent = state.studentName || "Học viên";
+    initDictationView();
+  }
   if(activeViewId === "view-leaderboard") initLeaderboardView();
 }
 
 function topicList(){
-  return Array.from(new Set(allWords().map(w=>w.topic)));
+  const set = new Set(allWords().map(w=>w.topic));
+  return Array.from(set);
 }
 function fillTopicSelect(sel, includeAll=true){
   if(!sel) return;
@@ -1179,7 +1419,9 @@ function fillTopicSelect(sel, includeAll=true){
    ========================================================= */
 const fcTopicSel = document.getElementById("fc-topic");
 const fcLevelSel = document.getElementById("fc-level");
-let fcDeck = [], fcIndex = 0;
+
+let fcDeck = [];
+let fcIndex = 0;
 
 function getFilteredWords(topic, level){
   return allWords().filter(w=>{
@@ -1196,6 +1438,8 @@ function buildFcDeck(){
 }
 
 function renderFcCard(){
+  const card = document.getElementById("flashcard");
+  card.classList.remove("flipped");
   const counter = document.getElementById("fc-counter");
   if(fcDeck.length===0){
     document.getElementById("fc-emoji").textContent="🐼";
@@ -1215,7 +1459,9 @@ function renderFcCard(){
   counter.textContent = (fcIndex+1)+" / "+fcDeck.length;
 }
 
-document.getElementById("flashcard").addEventListener("click", ()=>document.getElementById("flashcard").classList.toggle("flipped"));
+document.getElementById("flashcard").addEventListener("click", ()=>{
+  document.getElementById("flashcard").classList.toggle("flipped");
+});
 document.getElementById("fc-prev").addEventListener("click", ()=>{
   if(fcDeck.length===0) return;
   fcIndex = (fcIndex-1+fcDeck.length)%fcDeck.length;
@@ -1226,6 +1472,14 @@ document.getElementById("fc-next").addEventListener("click", ()=>{
   fcIndex = (fcIndex+1)%fcDeck.length;
   renderFcCard();
 });
+document.getElementById("fc-shuffle").addEventListener("click", ()=>{
+  for(let i=fcDeck.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [fcDeck[i],fcDeck[j]]=[fcDeck[j],fcDeck[i]];
+  }
+  fcIndex=0;
+  renderFcCard();
+});
 document.getElementById("fc-known").addEventListener("click", ()=>{
   if(fcDeck.length===0) return;
   state.learned[fcDeck[fcIndex].id] = true;
@@ -1233,12 +1487,389 @@ document.getElementById("fc-known").addEventListener("click", ()=>{
   saveState();
   document.getElementById("fc-next").click();
 });
+document.getElementById("fc-unknown").addEventListener("click", ()=>{
+  if(fcDeck.length===0) return;
+  delete state.learned[fcDeck[fcIndex].id];
+  saveState();
+  document.getElementById("fc-next").click();
+});
+document.getElementById("fc-speak").addEventListener("click", (e)=>{
+  e.stopPropagation();
+  if(fcDeck.length===0) return;
+  speak(fcDeck[fcIndex].hanzi);
+});
 fcTopicSel.addEventListener("change", buildFcDeck);
 fcLevelSel.addEventListener("change", buildFcDeck);
 
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "zh-CN";
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
 /* =========================================================
-   DICTATION / VIDEO & PLAYER CONTROLS (TUA LÊN / TUA XUỐNG ĐÃ SỬA)
+   QUIZ VIEW
    ========================================================= */
+const qzTopicSel = document.getElementById("qz-topic");
+const qzArea = document.getElementById("qz-area");
+
+let qzQueue = [], qzIdx = 0, qzScore = 0;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+document.getElementById("qz-start").addEventListener("click", ()=>{
+  const words = getFilteredWords(qzTopicSel.value, "all");
+  if(words.length < 4){
+    qzArea.innerHTML = '<div class="empty-note">Cần ít nhất 4 từ trong chủ đề/list này để tạo câu hỏi trắc nghiệm nhé!</div>';
+    return;
+  }
+  const count = Math.min(parseInt(document.getElementById("qz-count").value), words.length);
+  qzQueue = shuffle(words).slice(0, count);
+  qzIdx = 0; qzScore = 0;
+  renderQuizQuestion();
+});
+
+function renderQuizQuestion(){
+  if(qzIdx >= qzQueue.length){
+    renderQuizResult();
+    return;
+  }
+  const words = getFilteredWords(qzTopicSel.value, "all");
+  const w = qzQueue[qzIdx];
+  const distractors = shuffle(words.filter(x=>x.id!==w.id)).slice(0,3);
+  const options = shuffle([w, ...distractors]);
+
+  qzArea.innerHTML = `
+    <div class="quiz-box">
+      <div class="quiz-progress">Câu ${qzIdx+1} / ${qzQueue.length} · Điểm: ${qzScore}</div>
+      <div class="quiz-prompt">
+        <div class="hanzi">${w.hanzi}</div>
+        <div class="pinyin">${w.pinyin}</div>
+      </div>
+      <div class="options" id="qz-options"></div>
+    </div>
+  `;
+  const optWrap = document.getElementById("qz-options");
+  options.forEach(opt=>{
+    const b = document.createElement("button");
+    b.className = "option-btn";
+    b.textContent = opt.meaning;
+    b.addEventListener("click", ()=>{
+      document.querySelectorAll("#qz-options .option-btn").forEach(x=>x.disabled=true);
+      if(opt.id === w.id){
+        b.classList.add("correct");
+        qzScore++;
+      } else {
+        b.classList.add("wrong");
+        const correctBtn = Array.from(optWrap.children).find(x=>x.textContent===w.meaning);
+        if(correctBtn) correctBtn.classList.add("correct");
+      }
+      touchStreak();
+      setTimeout(()=>{ qzIdx++; renderQuizQuestion(); }, 900);
+    });
+    optWrap.appendChild(b);
+  });
+}
+
+function renderQuizResult(){
+  const pct = Math.round((qzScore/qzQueue.length)*100);
+  qzArea.innerHTML = `
+    <div class="quiz-box result-box">
+      <div class="score">${qzScore} / ${qzQueue.length}</div>
+      <p style="font-weight:600; margin:10px 0;">Tuyệt vời! Bạn đạt ${pct}% câu trả lời đúng 🐼.</p>
+      <button class="btn btn-primary" id="qz-again">Làm lại</button>
+    </div>
+  `;
+  document.getElementById("qz-again").addEventListener("click", ()=>document.getElementById("qz-start").click());
+}
+
+/* =========================================================
+   TIMED CHALLENGE VIEW
+   ========================================================= */
+const tmTopicSel = document.getElementById("tm-topic");
+const tmArea = document.getElementById("tm-area");
+
+let tmQueue = [], tmIdx = 0, tmTimerId = null, tmStart = 0, tmFailMsg = "";
+
+tmTopicSel.addEventListener("change", renderTimedIdle);
+
+function tmKey(){ return state.currentClassName + "_" + tmTopicSel.value; }
+
+function renderTimedIdle(){
+  clearInterval(tmTimerId);
+  const words = getFilteredWords(tmTopicSel.value, "all");
+  const bestPill = document.getElementById("tm-best");
+  const best = state.timedBest[tmKey()];
+  bestPill.textContent = best ? ("Kỷ lục: " + best + " lượt") : "Kỷ lục: —";
+
+  if(words.length < 4){
+    tmArea.innerHTML = '<div class="empty-note">Cần ít nhất 4 từ trong chủ đề này để thử thách nhé!</div>';
+    return;
+  }
+
+  const limitSec = state.challengeSeconds || 4;
+  tmArea.innerHTML = `
+    <div class="challenge-idle">
+      <div class="big-hanzi">竹林极速</div>
+      <p style="margin-top:14px; font-weight:600;">Mỗi từ chỉ có đúng <strong style="color:var(--seal-dark);">${limitSec} giây</strong> để chọn đáp án!<br>
+      Chọn sai hoặc hết giờ sẽ phải làm lại từ đầu cùng gấu trúc nhé.<br>Cố gắng vượt qua nhé ~</p>
+      <button class="btn btn-primary" id="tm-start" style="margin-top:16px;">Bắt đầu thử thách 🎋</button>
+    </div>
+  `;
+  document.getElementById("tm-start").addEventListener("click", startTimedChallenge);
+}
+
+let tmAttempts = 0;
+
+function startTimedChallenge(){
+  const words = getFilteredWords(tmTopicSel.value, "all");
+  tmQueue = shuffle(words);
+  tmIdx = 0;
+  tmFailMsg = "";
+  tmAttempts = 1;
+  renderTimedQuestion();
+}
+
+function restartTimedChallenge(msg){
+  const words = getFilteredWords(tmTopicSel.value, "all");
+  tmQueue = shuffle(words);
+  tmIdx = 0;
+  tmFailMsg = msg;
+  tmAttempts++;
+  renderTimedQuestion();
+}
+
+function renderTimedQuestion(){
+  clearInterval(tmTimerId);
+  if(tmIdx >= tmQueue.length){
+    renderTimedPass();
+    return;
+  }
+  const words = getFilteredWords(tmTopicSel.value, "all");
+  const w = tmQueue[tmIdx];
+  const distractors = shuffle(words.filter(x=>x.id!==w.id)).slice(0,3);
+  const options = shuffle([w, ...distractors]);
+  const limitMs = (state.challengeSeconds || 4) * 1000;
+
+  tmArea.innerHTML = `
+    ${tmFailMsg ? `<div class="fail-msg">${tmFailMsg}</div>` : ""}
+    <div class="quiz-box">
+      <div class="quiz-progress">Từ ${tmIdx+1} / ${tmQueue.length} · Lượt thử: ${tmAttempts}</div>
+      <div class="quiz-prompt">
+        <div class="hanzi">${w.hanzi}</div>
+        <div class="pinyin">${w.pinyin}</div>
+      </div>
+      <div class="timer-wrap"><div class="timer-bar" id="tm-bar"></div></div>
+      <div class="timer-num" id="tm-num">${(limitMs/1000).toFixed(1)}s</div>
+      <div class="options" id="tm-options"></div>
+    </div>
+  `;
+
+  const optWrap = document.getElementById("tm-options");
+  let answered = false;
+  options.forEach(opt=>{
+    const b = document.createElement("button");
+    b.className = "option-btn";
+    b.textContent = opt.meaning;
+    b.addEventListener("click", ()=>{
+      if(answered) return;
+      answered = true;
+      clearInterval(tmTimerId);
+      document.querySelectorAll("#tm-options .option-btn").forEach(x=>x.disabled=true);
+      if(opt.id === w.id){
+        b.classList.add("correct");
+        touchStreak();
+        setTimeout(()=>{ tmIdx++; tmFailMsg=""; renderTimedQuestion(); }, 400);
+      } else {
+        b.classList.add("wrong");
+        const correctBtn = Array.from(optWrap.children).find(x=>x.textContent===w.meaning);
+        if(correctBtn) correctBtn.classList.add("correct");
+        setTimeout(()=>{ restartTimedChallenge("Hơi tiếc chút, gấu trúc bảo làm lại từ đầu nào!"); }, 600);
+      }
+    });
+    optWrap.appendChild(b);
+  });
+
+  tmStart = Date.now();
+  const bar = document.getElementById("tm-bar");
+  const num = document.getElementById("tm-num");
+  tmTimerId = setInterval(()=>{
+    const elapsed = Date.now() - tmStart;
+    const remaining = Math.max(0, limitMs - elapsed);
+    const pct = (remaining/limitMs)*100;
+    bar.style.width = pct + "%";
+    num.textContent = (remaining/1000).toFixed(1) + "s";
+    if(pct < 30) bar.classList.add("danger"); else bar.classList.remove("danger");
+    if(remaining <= 0 && !answered){
+      answered = true;
+      clearInterval(tmTimerId);
+      document.querySelectorAll("#tm-options .option-btn").forEach(x=>x.disabled=true);
+      const correctBtn = Array.from(optWrap.children).find(x=>x.textContent===w.meaning);
+      if(correctBtn) correctBtn.classList.add("correct");
+      setTimeout(()=>{ restartTimedChallenge("Hết giờ mất rồi! Thử lại nhé."); }, 600);
+    }
+  }, 40);
+}
+
+function renderTimedPass(){
+  clearInterval(tmTimerId);
+  const key = tmKey();
+  if(!state.timedBest[key] || tmAttempts < state.timedBest[key]){
+    state.timedBest[key] = tmAttempts;
+    saveState();
+  }
+
+  const listName = tmTopicSel.options[tmTopicSel.selectedIndex]?.text || tmTopicSel.value;
+  if(!state.timedSubmissions) state.timedSubmissions = {};
+  if(!state.timedSubmissions[state.currentClassName]) state.timedSubmissions[state.currentClassName] = {};
+  if(!state.timedSubmissions[state.currentClassName][listName]) state.timedSubmissions[state.currentClassName][listName] = [];
+  
+  const studentName = state.studentName || "Học viên ẩn danh";
+  const listSub = state.timedSubmissions[state.currentClassName][listName];
+  const existingSub = listSub.find(s => s.studentName === studentName);
+  if(existingSub){
+    if(tmAttempts < existingSub.attempts){
+      existingSub.attempts = tmAttempts;
+      existingSub.timestamp = Date.now();
+    }
+  } else {
+    listSub.push({ studentName, attempts: tmAttempts, timestamp: Date.now() });
+  }
+  saveState();
+
+  tmArea.innerHTML = `
+    <div class="stamp-overlay">
+      <div class="stamp">通過<br>🐼 PASS</div>
+      <div class="stamp-title">Quá đỉnh! Gấu trúc khen bạn xuất sắc!</div>
+      <div class="stamp-sub">Hoàn thành sau ${tmAttempts} lượt thử. (Đã cập nhật vào Bảng xếp hạng thời gian ✨)</div>
+      <button class="btn btn-primary" id="tm-restart" style="margin-top:18px;">Thử lại</button>
+    </div>
+  `;
+  document.getElementById("tm-restart").addEventListener("click", renderTimedIdle);
+}
+
+/* =========================================================
+   PROGRESS VIEW
+   ========================================================= */
+function renderProgress(){
+  const words = allWords();
+  const learnedCount = words.filter(w=>state.learned[w.id]).length;
+  document.getElementById("pg-learned").textContent = learnedCount;
+  document.getElementById("pg-total").textContent = words.length;
+  document.getElementById("pg-streak").textContent = state.streak || 0;
+
+  const topics = topicList();
+  const wrap = document.getElementById("pg-topics");
+  wrap.innerHTML = "";
+  topics.forEach(t=>{
+    const wordsInTopic = words.filter(w=>w.topic===t);
+    const learnedInTopic = wordsInTopic.filter(w=>state.learned[w.id]).length;
+    const pct = wordsInTopic.length ? Math.round((learnedInTopic/wordsInTopic.length)*100) : 0;
+    const row = document.createElement("div");
+    row.className = "bar-row";
+    row.innerHTML = `
+      <div class="label">${t}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="count">${learnedInTopic}/${wordsInTopic.length}</div>
+    `;
+    wrap.appendChild(row);
+  });
+}
+document.getElementById("pg-reset").addEventListener("click", ()=>{
+  if(confirm("Bạn có chắc chắn muốn xoá toàn bộ tiến độ không?")){
+    state.learned = {};
+    state.streak = 0;
+    state.lastStudyDate = null;
+    state.timedBest = {};
+    saveState();
+    renderProgress();
+  }
+});
+
+/* =========================================================
+   MANAGE / WORD BANK VIEW
+   ========================================================= */
+const mgSearch = document.getElementById("mg-search");
+const mgTopicSel = document.getElementById("mg-topic");
+
+function renderManage(){
+  fillTopicSelect(mgTopicSel);
+  const q = mgSearch.value.trim().toLowerCase();
+  const topic = mgTopicSel.value;
+  const words = allWords().filter(w=>{
+    const okTopic = topic==="all" || w.topic===topic;
+    const okSearch = !q || w.hanzi.includes(q) || w.pinyin.toLowerCase().includes(q) || w.meaning.toLowerCase().includes(q);
+    return okTopic && okSearch;
+  });
+
+  const list = document.getElementById("mg-list");
+  list.innerHTML = "";
+  if(words.length===0){
+    list.innerHTML = '<div class="empty-note">Không tìm thấy từ vựng nào.</div>';
+    return;
+  }
+  words.forEach(w=>{
+    const row = document.createElement("div");
+    row.className = "word-row";
+    row.innerHTML = `
+      <div class="emoji">${w.emoji||"🐼"}</div>
+      <div class="hanzi">${w.hanzi}</div>
+      <div class="pinyin">${w.pinyin}</div>
+      <div class="meaning">${w.meaning} <span style="color:var(--ink-soft); font-size:12px; font-weight:normal;">· ${w.topic}</span></div>
+    `;
+    list.appendChild(row);
+  });
+}
+if(mgSearch) mgSearch.addEventListener("input", renderManage);
+if(mgTopicSel) mgTopicSel.addEventListener("change", renderManage);
+
+/* =========================================================
+   DICTATION / MULTI-VIDEO VIEW & LEADERBOARD LOGIC
+   ========================================================= */
+const teacherPanel = document.getElementById("teacher-panel");
+const videoTeacherPassModal = document.getElementById("video-teacher-pass-modal");
+const videoTeacherPasswordInput = document.getElementById("video-teacher-password-input");
+const cancelVideoPassBtn = document.getElementById("cancel-video-pass-btn");
+const submitVideoPassBtn = document.getElementById("submit-video-pass-btn");
+
+document.getElementById("open-teacher-panel-btn").addEventListener("click", () => {
+  if(teacherPanel.classList.contains("active")){
+    teacherPanel.classList.remove("active");
+  } else {
+    videoTeacherPasswordInput.value = "";
+    videoTeacherPassModal.style.display = "flex";
+    videoTeacherPasswordInput.focus();
+  }
+});
+
+cancelVideoPassBtn.addEventListener("click", () => {
+  videoTeacherPassModal.style.display = "none";
+});
+
+submitVideoPassBtn.addEventListener("click", () => {
+  const pass = videoTeacherPasswordInput.value.trim();
+  if(pass === "123455"){
+    videoTeacherPassModal.style.display = "none";
+    teacherPanel.classList.add("active");
+  } else {
+    alert("Mật khẩu quản lý video không chính xác!");
+    videoTeacherPasswordInput.focus();
+  }
+});
+
+videoTeacherPasswordInput.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") submitVideoPassBtn.click();
+});
+
 const dictationVideoSelect = document.getElementById("dictation-video-select");
 const videoDisplayArea = document.getElementById("video-display-area");
 const studentTeacherNoteText = document.getElementById("student-teacher-note-text");
@@ -1246,7 +1877,9 @@ const studentTeacherNoteText = document.getElementById("student-teacher-note-tex
 function getVideoList(){
   const cData = getCurrentClassData();
   if(!cData.videos || cData.videos.length === 0){
-    return [{ id: "default_v", title: "Bài tập chính tả mặc định", url: "https://www.youtube.com/embed/dQw4w9WgXcQ", note: "Chép lại bài nghe cẩn thận nhé!" }];
+    return [
+      { id: "default_v", title: "Bài tập chính tả mặc định", url: cData.globalVideoUrl || "https://www.youtube.com/watch?v=dQw4w9WgXcQ", note: cData.teacherNote || "Chép lại bài nghe cẩn thận nhé!" }
+    ];
   }
   return cData.videos;
 }
@@ -1264,6 +1897,7 @@ function initDictationView(){
     dictationVideoSelect.value = videos[0].id;
     loadSelectedVideo(videos[0]);
   }
+  renderTeacherVideoManagerList();
 }
 
 dictationVideoSelect.addEventListener("change", () => {
@@ -1274,119 +1908,172 @@ dictationVideoSelect.addEventListener("change", () => {
 });
 
 function loadSelectedVideo(vObj){
-  studentTeacherNoteText.textContent = vObj.note || "Chúc các em học tốt! 🐼";
+  studentTeacherNoteText.textContent = vObj.note || "Thầy cô chưa có ghi chú nào cho bài tập này. Chúc các em học tốt! 🐼";
+  
   let embedUrl = vObj.url || "";
-  if(embedUrl.includes("watch?v=")) embedUrl = embedUrl.replace("watch?v=", "embed/");
-  else if(embedUrl.includes("youtu.be/")) embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
+  if(embedUrl.includes("youtube.com/watch?v=")){
+    embedUrl = embedUrl.replace("watch?v=", "embed/");
+  } else if(embedUrl.includes("youtu.be/")){
+    embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
+  }
 
   if(embedUrl){
-    if(!embedUrl.includes("enablejsapi=1")) embedUrl += (embedUrl.includes("?") ? "&" : "?") + "enablejsapi=1";
-    videoDisplayArea.innerHTML = `<iframe id="main-video-iframe" src="${embedUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    videoDisplayArea.innerHTML = `<iframe id="active-media-element" src="${embedUrl}" allowfullscreen></iframe>`;
   } else {
     videoDisplayArea.innerHTML = `<span>Chưa có link video bài học. 📺</span>`;
   }
 }
 
-// Cải tiến chức năng Tua lên / Tua xuống thông qua PostMessage API của YouTube
-function seekVideoByDelta(deltaSec){
-  const iframe = document.getElementById("main-video-iframe");
-  if(iframe && iframe.contentWindow){
-    // Gửi lệnh yêu cầu lấy thời gian hiện tại từ YouTube Player
-    iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "getCurrentTime", args: [] }), "*");
-    
-    // Xử lý tua tương đối dựa trên sự kiện nhận phản hồi hoặc gửi trực tiếp lệnh seekTo nếu hỗ trợ
-    // Lệnh dự phòng: gửi lệnh lấy trạng thái và tăng giảm
-    iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "seekTo", args: [deltaSec, true] }), "*");
-  }
-}
+document.getElementById("add-video-item-btn").addEventListener("click", () => {
+  const title = document.getElementById("new-video-title").value.trim();
+  const url = document.getElementById("new-video-url").value.trim();
+  const note = document.getElementById("new-video-note").value.trim();
 
-// Lắng nghe phản hồi thời gian từ iframe YouTube để tua chính xác hơn
-window.addEventListener("message", (event) => {
-  try {
-    const data = JSON.parse(event.data);
-    if(data && data.event === "infoDelivery" && data.info && typeof data.info.currentTime === "number"){
-      const current = data.info.currentTime;
-      const iframe = document.getElementById("main-video-iframe");
-      const delta = window._pendingSeekDelta || 0;
-      if(iframe && iframe.contentWindow && delta !== 0){
-        const targetTime = Math.max(0, current + delta);
-        iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "seekTo", args: [targetTime, true] }), "*");
-        window._pendingSeekDelta = 0;
+  if(!title || !url){
+    alert("Vui lòng nhập tên bài tập và link video!");
+    return;
+  }
+
+  const cData = getCurrentClassData();
+  if(!cData.videos) cData.videos = [];
+  cData.videos.push({
+    id: "vid_" + Date.now(),
+    title, url, note
+  });
+  saveState();
+
+  document.getElementById("new-video-title").value = "";
+  document.getElementById("new-video-url").value = "";
+  document.getElementById("new-video-note").value = "";
+
+  initDictationView();
+  alert("Đã thêm bài tập video mới thành công! ✨");
+});
+
+function renderTeacherVideoManagerList(){
+  const wrap = document.getElementById("teacher-video-list-manager");
+  if(!wrap) return;
+  wrap.innerHTML = "";
+  const videos = getVideoList();
+  videos.forEach(v => {
+    const row = document.createElement("div");
+    row.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:var(--paper); padding:8px 12px; border-radius:10px; border:2px solid var(--paper-darker); font-size:12px;";
+    row.innerHTML = `
+      <div><strong>🎬 ${v.title}</strong></div>
+      <button class="btn btn-bad delete-video-item-btn" data-id="${v.id}" style="font-size:10px; padding:4px 8px;">Xóa</button>
+    `;
+    wrap.appendChild(row);
+  });
+
+  wrap.querySelectorAll(".delete-video-item-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      const cData = getCurrentClassData();
+      if(cData.videos && cData.videos.length <= 1){
+        alert("Cần giữ lại ít nhất một bài tập video trong lớp!");
+        return;
       }
-    }
-  } catch(e){}
-});
-
-function smartSeek(deltaSec){
-  const iframe = document.getElementById("main-video-iframe");
-  if(iframe && iframe.contentWindow){
-    window._pendingSeekDelta = deltaSec;
-    // Yêu cầu YouTube trả về thời gian hiện tại
-    iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "getCurrentTime", args: [] }), "*");
-    
-    // Đồng thời gọi trực tiếp lệnh seekTo cộng dồn (một số trình duyệt hỗ trợ trực tiếp)
-    setTimeout(() => {
-      iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "seekTo", args: [deltaSec, false] }), "*");
-    }, 50);
-  }
+      if(confirm("Bạn có chắc chắn muốn xóa video này không?")){
+        cData.videos = cData.videos.filter(x => x.id !== id);
+        saveState();
+        initDictationView();
+      }
+    });
+  });
 }
 
-// Nút Tua xuống (Lùi lại)
-document.getElementById("pc-rewind-btn").addEventListener("click", () => {
-  const sec = parseInt(document.getElementById("pc-rewind-sec").value) || 5;
-  smartSeek(-sec);
-});
-
-// Nút Tua lên (Tới nhanh)
-document.getElementById("pc-forward-btn").addEventListener("click", () => {
-  const sec = parseInt(document.getElementById("pc-forward-sec").value) || 5;
-  smartSeek(sec);
-});
-
-// Nút Tốc độ & Dừng/Phát
-const speeds = [0.75, 1.0, 1.25, 1.5];
-let currentSpeedIdx = 1;
-document.getElementById("pc-speed-btn").addEventListener("click", () => {
-  currentSpeedIdx = (currentSpeedIdx + 1) % speeds.length;
-  const sp = speeds[currentSpeedIdx];
-  document.getElementById("pc-speed-label").textContent = sp + "x";
-  document.getElementById("pc-custom-speed").value = sp;
-  setRate(sp);
-});
-
-function setRate(rate){
-  const iframe = document.getElementById("main-video-iframe");
-  if(iframe && iframe.contentWindow){
-    iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "setPlaybackRate", args: [rate] }), "*");
-  }
-}
-
-let isPlaying = true;
-document.getElementById("pc-play-pause-btn").addEventListener("click", () => {
-  isPlaying = !isPlaying;
-  document.getElementById("pc-play-pause-btn").textContent = isPlaying ? "⏸ Dừng / Phát" : "▶ Tiếp tục";
-  const iframe = document.getElementById("main-video-iframe");
-  if(iframe && iframe.contentWindow){
-    iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: isPlaying ? "playVideo" : "pauseVideo", args: [] }), "*");
-  }
-});
-
-// Nộp bài chép chính tả
 document.getElementById("submit-dictation-btn").addEventListener("click", () => {
   const text = document.getElementById("dictation-text").value.trim();
-  if(!text){ alert("Vui lòng nhập nội dung trước khi gửi!"); return; }
-  const studentName = state.studentName || "Học viên";
+  if(!text){
+    alert("Vui lòng nhập nội dung bạn nghe được trước khi gửi!");
+    document.getElementById("dictation-text").focus();
+    return;
+  }
+  const studentName = state.studentName || "Học viên ẩn danh";
   const vId = dictationVideoSelect.value;
+  const videos = getVideoList();
+  const vObj = videos.find(x => x.id === vId);
+  const videoTitle = vObj ? vObj.title : "Bài chép chính tả";
 
   if(!state.dictationSubmissions) state.dictationSubmissions = {};
   if(!state.dictationSubmissions[state.currentClassName]) state.dictationSubmissions[state.currentClassName] = {};
   if(!state.dictationSubmissions[state.currentClassName][vId]) state.dictationSubmissions[state.currentClassName][vId] = [];
 
-  state.dictationSubmissions[state.currentClassName][vId].push({ studentName, text, timestamp: Date.now() });
+  state.dictationSubmissions[state.currentClassName][vId].push({
+    studentName,
+    text,
+    timestamp: Date.now()
+  });
   saveState();
+
   document.getElementById("dictation-text").value = "";
-  alert("Gửi bài chép chính tả thành công! 🚀");
+  alert("Gửi bài chép chính tả thành công! Bài của bạn đã được ghi nhận vào Bảng xếp hạng nộp bài sớm nhất. 🚀✨");
 });
+
+/* =========================================================
+   PLAYER CONTROLS LOGIC (Tính năng điều khiển phương tiện)
+   ========================================================= */
+const playPauseBtn = document.getElementById("pc-play-pause-btn");
+const replayBtn = document.getElementById("pc-replay-btn");
+const progressFill = document.getElementById("pc-progress-fill");
+const progressBar = document.getElementById("pc-progress-bar");
+const currentTimeEl = document.getElementById("pc-current-time");
+const durationEl = document.getElementById("pc-duration");
+
+let isPlaying = false;
+let currentSeconds = 0;
+let totalDurationSeconds = 120; // Giả lập thời gian bài phát (2 phút) hoặc tự cập nhật từ media
+let playerInterval = null;
+
+function formatTime(sec){
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+}
+
+function updatePlayerUI(){
+  currentTimeEl.textContent = formatTime(currentSeconds);
+  durationEl.textContent = formatTime(totalDurationSeconds);
+  const pct = (currentSeconds / totalDurationSeconds) * 100;
+  progressFill.style.width = Math.min(100, Math.max(0, pct)) + "%";
+}
+
+playPauseBtn.addEventListener("click", () => {
+  isPlaying = !isPlaying;
+  if(isPlaying){
+    playPauseBtn.textContent = "❚❚";
+    if(playerInterval) clearInterval(playerInterval);
+    playerInterval = setInterval(() => {
+      currentSeconds++;
+      if(currentSeconds > totalDurationSeconds){
+        currentSeconds = 0;
+        isPlaying = false;
+        playPauseBtn.textContent = "▶";
+        clearInterval(playerInterval);
+      }
+      updatePlayerUI();
+    }, 1000);
+  } else {
+    playPauseBtn.textContent = "▶";
+    clearInterval(playerInterval);
+  }
+});
+
+replayBtn.addEventListener("click", () => {
+  currentSeconds = Math.max(0, currentSeconds - 5);
+  updatePlayerUI();
+});
+
+progressBar.addEventListener("click", (e) => {
+  const rect = progressBar.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const width = rect.width;
+  const clickRatio = clickX / width;
+  currentSeconds = clickRatio * totalDurationSeconds;
+  updatePlayerUI();
+});
+
+updatePlayerUI();
 
 /* =========================================================
    LEADERBOARD VIEW LOGIC
@@ -1399,24 +2086,41 @@ lbTabSelector.addEventListener("change", populateLbSubFilter);
 lbSubFilter.addEventListener("change", renderLeaderboardContent);
 
 function initLeaderboardView(){
+  const teacherDashboardBox = document.getElementById("teacher-dashboard");
+  const teacherLbControls = document.getElementById("teacher-lb-controls");
+  if(teacherDashboardBox && teacherDashboardBox.style.display === "block"){
+    teacherLbControls.style.display = "block";
+  } else {
+    teacherLbControls.style.display = "none";
+  }
   populateLbSubFilter();
 }
 
 function populateLbSubFilter(){
   lbSubFilter.innerHTML = "";
   const mode = lbTabSelector.value;
+
   if(mode === "dictation"){
-    getVideoList().forEach(v => {
+    const videos = getVideoList();
+    videos.forEach(v => {
       const o = document.createElement("option");
-      o.value = v.id; o.textContent = `🎧 ${v.title}`;
+      o.value = v.id;
+      o.textContent = `🎧 ${v.title}`;
       lbSubFilter.appendChild(o);
     });
   } else {
-    topicList().forEach(t => {
+    const topics = topicList();
+    if(topics.length === 0){
       const o = document.createElement("option");
-      o.value = t; o.textContent = `⚡ List: ${t}`;
+      o.value = "all"; o.textContent = "Chưa có list từ vựng";
       lbSubFilter.appendChild(o);
-    });
+    } else {
+      topics.forEach(t => {
+        const o = document.createElement("option");
+        o.value = t; o.textContent = `⚡ List: ${t}`;
+        lbSubFilter.appendChild(o);
+      });
+    }
   }
   renderLeaderboardContent();
 }
@@ -1427,22 +2131,316 @@ function renderLeaderboardContent(){
   const cName = state.currentClassName;
 
   if(mode === "dictation"){
-    const subs = (state.dictationSubmissions?.[cName]?.[subId] || []).slice();
-    if(subs.length === 0){
-      leaderboardContentArea.innerHTML = '<div class="empty-note">Chưa có học viên nào nộp bài. Hãy là người đầu tiên nhé! 🐼</div>';
-      return;
-    }
-    subs.sort((a, b) => a.timestamp - b.timestamp);
-    let html = `<div style="margin-top:16px;"><h4 style="color:var(--seal-dark);">🥇 Top Nộp Bài Sớm Nhất</h4>`;
-    subs.forEach((item, idx) => {
-      html += `<div style="background:#fff; padding:10px; margin-bottom:6px; border-radius:8px; border:1px solid var(--paper-darker);"><strong>#${idx+1} ${item.studentName}</strong>: "${item.text}"</div>`;
-    });
-    html += `</div>`;
-    leaderboardContentArea.innerHTML = html;
+    renderDictationLeaderboard(cName, subId);
+  } else {
+    renderTimedLeaderboard(cName, subId);
   }
 }
 
-// Khởi chạy ứng dụng
+function renderDictationLeaderboard(cName, vId){
+  const subs = (state.dictationSubmissions?.[cName]?.[vId] || []).slice();
+  if(subs.length === 0){
+    leaderboardContentArea.innerHTML = '<div class="empty-note">Chưa có học viên nào nộp bài cho video này. Hãy là người đầu tiên nộp bài nhé! 🐼</div>';
+    return;
+  }
+
+  subs.sort((a, b) => a.timestamp - b.timestamp);
+
+  let html = `
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:16px;">
+      <div style="background:var(--paper); border:2px solid var(--paper-darker); border-radius:18px; padding:16px;">
+        <h4 style="margin:0 0 12px; color:var(--seal-dark); font-family:var(--serif); display:flex; align-items:center; gap:6px;">
+          🥇 Top Nộp Bài Sớm Nhất 🐣
+        </h4>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+  `;
+
+  subs.forEach((item, idx) => {
+    const timeStr = new Date(item.timestamp).toLocaleString("vi-VN");
+    let rankEmoji = "🌸";
+    if(idx === 0) rankEmoji = "🥇";
+    else if(idx === 1) rankEmoji = "🥈";
+    else if(idx === 2) rankEmoji = "🥉";
+
+    html += `
+      <div style="background:#fff; padding:10px 14px; border-radius:12px; border:1px solid var(--paper-darker); display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span style="font-weight:bold; color:var(--seal-dark);">${rankEmoji} #${idx+1} ${item.studentName}</span>
+          <div style="font-size:11px; color:var(--ink-soft);">${timeStr}</div>
+        </div>
+        <div style="font-size:12px; color:var(--jade-dark); font-weight:600; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.text}">"${item.text}"</div>
+      </div>
+    `;
+  });
+
+  html += `
+        </div>
+      </div>
+
+      <div style="background:var(--paper); border:2px solid var(--paper-darker); border-radius:18px; padding:16px;">
+        <h4 style="margin:0 0 12px; color:var(--seal-dark); font-family:var(--serif); display:flex; align-items:center; gap:6px;">
+          🐢 Top Hoàn Thành (Nộp sau) 🐢
+        </h4>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+  `;
+
+  const subsReversed = subs.slice().reverse();
+  subsReversed.forEach((item, idx) => {
+    const timeStr = new Date(item.timestamp).toLocaleString("vi-VN");
+    html += `
+      <div style="background:#fff; padding:10px 14px; border-radius:12px; border:1px solid var(--paper-darker); display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span style="font-weight:bold; color:var(--ink);">🐢 #${subs.length - idx} ${item.studentName}</span>
+          <div style="font-size:11px; color:var(--ink-soft);">${timeStr}</div>
+        </div>
+        <div style="font-size:12px; color:var(--jade-dark); font-weight:600; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.text}">"${item.text}"</div>
+      </div>
+    `;
+  });
+
+  html += `
+        </div>
+      </div>
+    </div>
+  `;
+
+  leaderboardContentArea.innerHTML = html;
+}
+
+function renderTimedLeaderboard(cName, topicName){
+  const subs = (state.timedSubmissions?.[cName]?.[topicName] || []).slice();
+  if(subs.length === 0){
+    leaderboardContentArea.innerHTML = '<div class="empty-note">Chưa có học viên nào hoàn thành thử thách thời gian cho List này. Hãy tham gia ngay nhé! ⚡</div>';
+    return;
+  }
+
+  subs.sort((a, b) => {
+    if(a.attempts !== b.attempts) return a.attempts - b.attempts;
+    return a.timestamp - b.timestamp;
+  });
+
+  let html = `
+    <div style="margin-top:16px; background:var(--paper); border:2px solid var(--paper-darker); border-radius:18px; padding:16px;">
+      <h4 style="margin:0 0 12px; color:var(--seal-dark); font-family:var(--serif);">⚡ Bảng Xếp Hạng Tốc Độ Thử Thách Cho List: "${topicName}"</h4>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+  `;
+
+  subs.forEach((item, idx) => {
+    let rankIcon = "🎋";
+    if(idx === 0) rankIcon = "🥇";
+    else if(idx === 1) rankIcon = "🥈";
+    else if(idx === 2) rankIcon = "🥉";
+
+    const timeStr = new Date(item.timestamp).toLocaleString("vi-VN");
+    html += `
+      <div style="background:#fff; padding:12px 16px; border-radius:12px; border:1px solid var(--paper-darker); display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="font-size:20px;">${rankIcon}</span>
+          <div>
+            <strong style="color:var(--seal-dark); font-size:15px;">${item.studentName}</strong>
+            <div style="font-size:11px; color:var(--ink-soft);">Hoàn thành lúc: ${timeStr}</div>
+          </div>
+        </div>
+        <div style="background:var(--accent-light); color:var(--seal-dark); padding:6px 12px; border-radius:12px; font-weight:700; font-size:13px; border:1px solid rgba(56,142,60,0.3);">
+          ⚡ ${item.attempts} lượt thử
+        </div>
+      </div>
+    `;
+  });
+
+  html += `
+      </div>
+    </div>
+  `;
+
+  leaderboardContentArea.innerHTML = html;
+}
+
+document.getElementById("reset-leaderboard-btn").addEventListener("click", () => {
+  const mode = lbTabSelector.value;
+  const subId = lbSubFilter.value;
+  const cName = state.currentClassName;
+
+  if(confirm(`Bạn có chắc chắn muốn reset/xóa bảng xếp hạng cho mục đang chọn (${mode === 'dictation' ? 'Chép chính tả' : 'Thử thách thời gian'}) của lớp "${cName}" không?`)){
+    if(mode === "dictation"){
+      if(state.dictationSubmissions?.[cName]) {
+        delete state.dictationSubmissions[cName][subId];
+      }
+    } else {
+      if(state.timedSubmissions?.[cName]) {
+        delete state.timedSubmissions[cName][subId];
+      }
+    }
+    saveState();
+    renderLeaderboardContent();
+    alert("Đã reset bảng xếp hạng thành công! ✨");
+  }
+});
+
+
+/* =========================================================
+   SENTENCE PRACTICE VIEW
+   ========================================================= */
+const scTopicSel = document.getElementById("sc-topic");
+const scList = document.getElementById("sc-list");
+
+function renderSentenceStudentList(){
+  fillTopicSelect(scTopicSel, false);
+  const topic = scTopicSel.value;
+  const words = allWords().filter(w => topic === "all" || w.topic === topic);
+
+  scList.innerHTML = "";
+  if(words.length === 0){
+    scList.innerHTML = '<div class="empty-note">Không có từ vựng nào trong List này để đặt câu.</div>';
+    return;
+  }
+
+  words.forEach((w, idx) => {
+    const card = document.createElement("div");
+    card.className = "sentence-card";
+    card.innerHTML = `
+      <div class="sc-head">
+        <span style="font-size:20px;">${w.emoji || "🐼"}</span>
+        <div class="hanzi">${w.hanzi}</div>
+        <div class="pinyin">${w.pinyin}</div>
+        <div class="meaning">(${w.meaning})</div>
+      </div>
+      <textarea placeholder="Nhập câu tiếng Trung sử dụng từ '${w.hanzi}' vào đây..." data-word="${w.hanzi}"></textarea>
+    `;
+    scList.appendChild(card);
+  });
+}
+
+if(scTopicSel) scTopicSel.addEventListener("change", renderSentenceStudentList);
+
+document.getElementById("sc-change-name").addEventListener("click", () => {
+  const newName = prompt("Nhập tên mới của bạn:", state.studentName);
+  if(newName && newName.trim()){
+    state.studentName = newName.trim();
+    saveState();
+    document.getElementById("sc-student-name").textContent = state.studentName;
+    document.getElementById("dc-student-name").textContent = state.studentName;
+  }
+});
+
+document.getElementById("sc-submit-all-btn").addEventListener("click", () => {
+  const textareas = scList.querySelectorAll("textarea");
+  let submissions = [];
+  textareas.forEach(ta => {
+    const val = ta.value.trim();
+    if(val){
+      submissions.push(`Từ [${ta.dataset.word}]: ${val}`);
+    }
+  });
+
+  if(submissions.length === 0){
+    alert("Vui lòng đặt câu cho ít nhất một từ trước khi gửi!");
+    return;
+  }
+
+  const listName = scTopicSel.options[scTopicSel.selectedIndex]?.text || scTopicSel.value;
+  const fullContent = submissions.join(" | ");
+
+  fetch("https://script.google.com/macros/s/AKfycbyoyoRnW6yv3XFiHwhD83ncbVfcqSwzFs5Z_dvjsVedG4RCt1FHWhRO7giKN1LUi68FbQ/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      studentName: `${state.studentName} [Lớp: ${state.currentClassName}]`,
+      word: `[Đặt câu List: ${listName}]`,
+      sentence: fullContent
+    })
+  }).catch(err => console.error(err));
+
+  alert("Đã gửi toàn bộ câu đặt của bạn về cho Giáo viên thành công! 🎋✨");
+});
+
+/* =========================================================
+   TEACHER CLASSES & MANAGEMENT VIEW
+   ========================================================= */
+const teacherAuthBox = document.getElementById("teacher-auth-box");
+const teacherDashboard = document.getElementById("teacher-dashboard");
+const teacherPasswordInput = document.getElementById("teacher-password-input");
+const teacherLoginBtn = document.getElementById("teacher-login-btn");
+const teacherLogoutBtn = document.getElementById("teacher-logout-btn");
+
+teacherLoginBtn.addEventListener("click", () => {
+  if(teacherPasswordInput.value === "123455"){
+    teacherAuthBox.style.display = "none";
+    teacherDashboard.style.display = "block";
+    teacherPasswordInput.value = "";
+    document.getElementById("tl-timer-seconds").value = state.challengeSeconds || 4;
+    document.getElementById("cfg-title-input").value = state.customTitle || "";
+    document.getElementById("cfg-color-paper").value = state.colorPaper || "#F0F7F4";
+    document.getElementById("cfg-color-ink").value = state.colorInk || "#2C4A3E";
+    document.getElementById("cfg-color-jade").value = state.colorJade || "#388E3C";
+    renderTeacherManage();
+  } else {
+    alert("Mật khẩu giáo viên không chính xác!");
+  }
+});
+teacherPasswordInput.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") teacherLoginBtn.click();
+});
+teacherLogoutBtn.addEventListener("click", () => {
+  teacherDashboard.style.display = "none";
+  teacherAuthBox.style.display = "block";
+});
+
+document.getElementById("cfg-save-theme-btn").addEventListener("click", () => {
+  const newTitle = document.getElementById("cfg-title-input").value.trim();
+  if(newTitle) state.customTitle = newTitle;
+  
+  state.colorPaper = document.getElementById("cfg-color-paper").value;
+  state.colorInk = document.getElementById("cfg-color-ink").value;
+  state.colorJade = document.getElementById("cfg-color-jade").value;
+
+  const fileInput = document.getElementById("cfg-image-file");
+  if(fileInput.files && fileInput.files[0]){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      state.bgImage = e.target.result;
+      saveState();
+      applyCustomTheme();
+      alert("Cập nhật giao diện, tiêu đề và hình nền thành công! ✨");
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+  } else {
+    saveState();
+    applyCustomTheme();
+    alert("Cập nhật giao diện và tiêu đề thành công! ✨");
+  }
+});
+
+document.getElementById("cfg-reset-theme-btn").addEventListener("click", () => {
+  if(confirm("Bạn có chắc chắn muốn khôi phục giao diện mặc định không?")){
+    state.customTitle = "🎋 雅趣学堂 · WEB TỪ VỰNG ĐA LỚP HỌC 🎋";
+    state.colorPaper = "#F0F7F4";
+    state.colorInk = "#2C4A3E";
+    state.colorJade = "#388E3C";
+    state.bgImage = "";
+    saveState();
+    applyCustomTheme();
+    document.getElementById("cfg-title-input").value = state.customTitle;
+    document.getElementById("cfg-color-paper").value = state.colorPaper;
+    document.getElementById("cfg-color-ink").value = state.colorInk;
+    document.getElementById("cfg-color-jade").value = state.colorJade;
+    alert("Đã khôi phục giao diện mặc định!");
+  }
+});
+
+document.getElementById("tl-save-timer-btn").addEventListener("click", () => {
+  const sec = parseInt(document.getElementById("tl-timer-seconds").value);
+  if(!sec || sec < 1){
+    alert("Vui lòng nhập số giây hợp lệ!");
+    return;
+  }
+  state.challengeSeconds = sec;
+  saveState();
+  alert(`Đã lưu thời gian thử thách thành công (${sec} giây mỗi từ)!`);
+});
+
+// Khởi chạy khi tải trang
 initClassSelector();
 </script>
 </body>
