@@ -557,6 +557,139 @@
   }
   .sentence-card textarea:focus{outline:none; border-color:var(--jade); box-shadow:0 0 0 3px var(--accent-light);}
 
+
+  /* ---------- Grammar Focus / Ngữ pháp trọng tâm ---------- */
+  .grammar-section-card{
+    background:#fff;
+    border:3px solid var(--paper-darker);
+    border-radius:22px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 6px 20px rgba(44,74,62,0.04);
+  }
+  .grammar-section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:14px;
+  }
+  .grammar-section-title{
+    font-family:var(--serif);
+    color:var(--seal-dark);
+    font-size:21px;
+    font-weight:700;
+    margin:0;
+  }
+  .grammar-section-instruction{
+    margin:5px 0 0;
+    color:var(--ink-soft);
+    font-size:13px;
+    line-height:1.5;
+    white-space:pre-wrap;
+  }
+  .grammar-item-card{
+    background:var(--paper);
+    border:2px solid var(--paper-darker);
+    border-radius:16px;
+    padding:14px;
+    margin-top:10px;
+  }
+  .grammar-item-top{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    margin-bottom:8px;
+  }
+  .grammar-item-number{
+    width:28px;height:28px;flex:0 0 28px;
+    border-radius:50%;
+    background:var(--jade);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:800;
+  }
+  .grammar-item-name{
+    font-family:var(--serif);
+    font-size:18px;
+    font-weight:700;
+    color:var(--seal-dark);
+  }
+  .grammar-item-desc{
+    color:var(--ink-soft);
+    font-size:12px;
+    margin-top:3px;
+    line-height:1.45;
+    white-space:pre-wrap;
+  }
+  .grammar-answer{
+    width:100%;
+    min-height:120px;
+    display:block;
+    resize:vertical;
+    padding:12px;
+    border-radius:14px;
+    border:2px solid var(--paper-darker);
+    background:#fff;
+    font-family:var(--sans);
+    font-size:14px;
+  }
+  .grammar-answer:focus{
+    outline:none;
+    border-color:var(--jade);
+    box-shadow:0 0 0 3px var(--accent-light);
+  }
+  .grammar-empty{
+    text-align:center;
+    color:var(--ink-soft);
+    background:#fff;
+    border:3px dashed var(--paper-darker);
+    border-radius:22px;
+    padding:36px 20px;
+  }
+  .grammar-submit-bar{
+    position:sticky;
+    bottom:12px;
+    z-index:20;
+    background:rgba(255,255,255,.96);
+    border:3px solid var(--paper-darker);
+    border-radius:20px;
+    padding:12px 14px;
+    box-shadow:0 8px 24px rgba(44,74,62,.12);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .grammar-submit-status{
+    font-size:12px;
+    color:var(--ink-soft);
+    font-weight:700;
+  }
+  .grammar-teacher-section{
+    background:var(--paper);
+    border:2px solid var(--paper-darker);
+    border-radius:18px;
+    padding:14px;
+    margin-bottom:12px;
+  }
+  .grammar-teacher-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    background:#fff;
+    border:2px solid var(--paper-darker);
+    border-radius:12px;
+    padding:8px 10px;
+    margin-top:7px;
+  }
+  .grammar-teacher-item small{
+    display:block;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
   /* ---------- Dictation / Video Tab Styles (Cute Note Style) ---------- */
   .dictation-box {
     background: #fff;
@@ -789,6 +922,7 @@
   <button data-view="flashcard" class="active">🎋 Thẻ ghi nhớ</button>
   <button data-view="quiz">🐼 Kiểm tra</button>
   <button data-view="timed">⚡ Thử thách thời gian</button>
+  <button data-view="grammar">📖 Ngữ pháp trọng tâm</button>
   <button data-view="dictation">🎧 Chép chính tả video</button>
   <button data-view="leaderboard">🏆 Bảng Xếp Hạng</button>
   <button data-view="progress">📈 Tiến độ</button>
@@ -860,6 +994,26 @@
     <div id="tm-area"></div>
   </section>
 
+
+  <!-- ============ GRAMMAR FOCUS VIEW ============ -->
+  <section class="view" id="view-grammar">
+    <div class="student-bar">
+      <div class="who">Học viên: <strong id="grammar-student-name">—</strong></div>
+      <div class="stat-pill">📖 Ngữ pháp trọng tâm</div>
+    </div>
+    <div style="background:#fffdf4;border:2px solid var(--jade);border-radius:18px;padding:14px 16px;margin-bottom:16px;">
+      <strong style="color:var(--seal-dark);font-family:var(--serif);font-size:17px;">✍️ Học viên làm bài tại đây</strong>
+      <div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">
+        Mỗi điểm ngữ pháp đều có một ô bên dưới để bạn tự viết câu trả lời. Làm xong tất cả rồi bấm <strong>Nộp bài ngữ pháp 🚀</strong>.
+      </div>
+    </div>
+    <div id="grammar-student-area"></div>
+    <div class="grammar-submit-bar" id="grammar-submit-bar">
+      <div class="grammar-submit-status" id="grammar-submit-status">Hãy hoàn thành các phần bên trên rồi bấm nộp bài.</div>
+      <button class="btn btn-ok" id="submit-grammar-btn">Nộp bài ngữ pháp 🚀</button>
+    </div>
+  </section>
+
   <!-- ============ DICTATION / VIDEO VIEW ============ -->
   <section class="view" id="view-dictation">
     <div class="student-bar">
@@ -911,11 +1065,12 @@
         </div>
         <div class="video-controls" id="video-controls">
           <button type="button" class="video-control-btn" id="video-play-pause-btn" title="Phát hoặc tạm dừng video">▶️ Phát</button>
+          <button type="button" class="video-control-btn" id="video-rewind-btn" title="Tua ngược theo số giây đã cài đặt">⏪ -<span id="video-rewind-label">6</span>s</button>
           <button type="button" class="video-control-btn" id="video-forward-btn" title="Tua lên theo số giây đã cài đặt">⏩ +<span id="video-forward-label">6</span>s</button>
           <span class="video-time" id="video-time-label">00:00 / 00:00</span>
           <div class="video-seek-settings">
-            <label for="video-forward-seconds">Tua lên:</label>
-            <input type="number" id="video-forward-seconds" min="1" max="60" value="6" step="1" aria-label="Số giây tua lên">
+            <label for="video-forward-seconds">Tua ±:</label>
+            <input type="number" id="video-forward-seconds" min="1" max="60" value="6" step="1" aria-label="Số giây tua ngược hoặc tua lên">
             <span>giây</span>
           </div>
           <div class="video-control-hint">💡 Có thể đổi 6 → 7 → 10 giây tùy tốc độ của bạn. Nút Phát/Tạm dừng và Tua lên hoạt động trực tiếp trên video.</div>
@@ -994,6 +1149,14 @@
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
         <h3 style="font-family:var(--serif); color:var(--seal-dark); margin:0;">⚙️ Bảng Quản Trị Đa Lớp Học</h3>
         <button class="btn btn-outline" id="teacher-logout-btn" style="font-size:12px; padding:6px 12px;">Đăng xuất</button>
+      </div>
+
+      <div id="grammar-quick-access" style="background:linear-gradient(135deg,#fffdf4,#f4fbf7); border:3px solid var(--jade); border-radius:20px; padding:14px 16px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div>
+          <div style="font-family:var(--serif); font-weight:800; color:var(--seal-dark); font-size:18px;">📖 NGỮ PHÁP TRỌNG TÂM</div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:3px;">Tạo phần ngữ pháp, thêm/xóa điểm ngữ pháp và nhận bài học viên.</div>
+        </div>
+        <button class="btn btn-primary" id="grammar-scroll-btn" style="font-weight:800;">⚡ TẠO PHẦN NGỮ PHÁP</button>
       </div>
 
       <!-- SAO LƯU & KHÔI PHỤC DỮ LIỆU -->
@@ -1085,6 +1248,58 @@
         </div>
       </div>
 
+
+      <!-- QUẢN LÝ NGỮ PHÁP TRỌNG TÂM -->
+      <div id="grammar-teacher-panel" style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 8px; color:var(--seal-dark); font-family:var(--serif);">📖 Ngữ Pháp Trọng Tâm · Giao Bài Cho Lớp Hiện Tại</h4>
+        <p style="font-size:12px; color:var(--ink-soft); margin:0 0 14px;">
+          Giáo viên có thể tạo nhiều <strong>phần/bài</strong>. Mỗi phần có tên riêng, hướng dẫn riêng và nhiều điểm ngữ pháp.
+          Học viên sẽ làm từng điểm ngữ pháp rồi bấm <strong>Nộp bài</strong>.
+        </p>
+
+        <div style="background:var(--paper); border:2px solid var(--jade); border-radius:16px; padding:16px; margin-bottom:14px;">
+          <div style="font-family:var(--serif);font-weight:800;color:var(--seal-dark);font-size:17px;margin-bottom:10px;">✍️ BƯỚC 1 — TẠO PHẦN NGỮ PHÁP MỚI</div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-bottom:12px;">Ví dụ: “Phần 1 · Đặt câu”, “Phần 2 · Sửa câu”, “Phần 3 · Điền vào chỗ trống”.</div>
+          <h5 style="margin:0 0 10px; color:var(--seal-dark);">Tên phần & hướng dẫn</h5>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">Tên phần *</label>
+              <input type="text" id="grammar-new-section-title" placeholder="Ví dụ: Phần 1 · Đặt câu với 着" style="width:100%;">
+            </div>
+            <div>
+              <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">Hướng dẫn làm bài</label>
+              <input type="text" id="grammar-new-section-instruction" placeholder="Ví dụ: Dùng mỗi ngữ pháp để đặt ít nhất 1 câu." style="width:100%;">
+            </div>
+          </div>
+          <button class="btn btn-primary" id="grammar-add-section-btn" style="margin-top:10px;">+ Tạo phần ngữ pháp</button>
+        </div>
+
+        <div id="grammar-teacher-manager"></div>
+
+        <div style="background:#FFFDE7; border:2px dashed #FBC02D; border-radius:14px; padding:12px; margin-top:14px;">
+          <strong style="font-size:12px;color:#F57F17;">💡 Gợi ý:</strong>
+          <span style="font-size:12px;color:#5D4037;">
+            Ví dụ tạo “Phần 1 · Đặt câu” → thêm 着, 把, 越来越...;
+            sau đó tạo “Phần 2 · Sửa câu” → thêm các điểm ngữ pháp khác.
+          </span>
+        </div>
+      </div>
+
+      <!-- KẾT NỐI GOOGLE SHEETS -->
+      <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
+        <h4 style="margin:0 0 8px; color:var(--seal-dark); font-family:var(--serif);">📊 Nhận bài nộp về Google Sheets</h4>
+        <p style="font-size:12px;color:var(--ink-soft);margin:0 0 10px;">
+          Dán <strong>Web App URL của Google Apps Script</strong> vào đây. Khi học viên bấm nộp, website sẽ gửi dữ liệu bài làm lên Sheet.
+          Nếu chưa cấu hình, bài vẫn được lưu trong trình duyệt để không mất dữ liệu.
+        </p>
+        <input type="text" id="grammar-sheet-webhook-url" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%;margin-bottom:10px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="grammar-save-sheet-url-btn">💾 Lưu kết nối Google Sheets</button>
+          <button class="btn btn-outline" id="grammar-export-submissions-btn">⬇️ Xuất bài nộp CSV</button>
+        </div>
+        <div id="grammar-sheet-status" style="font-size:12px;color:var(--ink-soft);margin-top:8px;"></div>
+      </div>
+
       <!-- ĐỔI TÊN LIST / CHỦ ĐỀ CỦA LỚP HIỆN TẠI -->
       <div style="background:#fff; border:3px solid var(--paper-darker); border-radius:22px; padding:20px; margin-bottom:20px;">
         <h4 style="margin:0 0 10px; color:var(--seal-dark); font-family:var(--serif);">🏷️ Đổi Tên List / Chủ Đề (Lớp hiện tại)</h4>
@@ -1144,6 +1359,14 @@
 <footer>🐼 Chúc bạn học tập cùng gấu trúc thật vui vẻ và tiến bộ mỗi ngày! 🎋</footer>
 
 <script>
+
+/*
+GOOGLE SHEETS SETUP
+- In the teacher dashboard, paste the deployed Google Apps Script Web App URL.
+- Expected POST JSON:
+  {id, studentName, className, submittedAt, answers:[{sectionTitle, grammar, instruction, answer}]}
+*/
+
 /* =========================================================
    STATE & LOCALSTORAGE (MULTI-CLASS SUPPORT)
    ========================================================= */
@@ -1167,7 +1390,9 @@ function loadState(){
           {id:"w1", hanzi:"反省", pinyin:"fǎnxǐng", meaning:"tự kiểm điểm, suy ngẫm lại", emoji:"🍵", topic:"Chuyên đề", level:"HSK2", example:"他犯错后认真反省。"},
           {id:"w2", hanzi:"据说", pinyin:"jùshuō", meaning:"nghe nói rằng", emoji:"🎋", topic:"Chuyên đề", level:"HSK2", example:"据说明天会下雨。"}
         ],
-        deletedDefaultIds: []
+        deletedDefaultIds: [],
+        grammarSections: [],
+        grammarSubmissions: []
       },
       "Lớp Nâng Cao HSK 3-4": {
         password: "456",
@@ -1178,7 +1403,9 @@ function loadState(){
           {id:"w3", hanzi:"个性", pinyin:"gèxìng", meaning:"cá tính", emoji:"🐼", topic:"Chuyên đề", level:"HSK2", example:"她的个性很独立。"},
           {id:"w4", hanzi:"冒险", pinyin:"màoxiǎn", meaning:"mạo hiểm, phiêu lưu", emoji:"🧗", topic:"Chuyên đề", level:"HSK2", example:"年轻人喜欢冒险。"}
         ],
-        deletedDefaultIds: []
+        deletedDefaultIds: [],
+        grammarSections: [],
+        grammarSubmissions: []
       }
     },
     dictationSubmissions: {}, 
@@ -1192,7 +1419,8 @@ function loadState(){
     colorPaper: "#F0F7F4",
     colorInk: "#2C4A3E",
     colorJade: "#388E3C",
-    bgImage: ""
+    bgImage: "",
+    grammarSheetWebhookUrl: ""
   };
 }
 function saveState(){
@@ -1228,7 +1456,10 @@ function getCurrentClassData(){
     const keys = Object.keys(state.classes);
     state.currentClassName = keys[0] || "Lớp Mặc Định";
   }
-  return state.classes[state.currentClassName];
+  const cData = state.classes[state.currentClassName];
+  if(!Array.isArray(cData.grammarSections)) cData.grammarSections = [];
+  if(!Array.isArray(cData.grammarSubmissions)) cData.grammarSubmissions = [];
+  return cData;
 }
 
 const DEFAULT_WORDS = [
@@ -1384,6 +1615,10 @@ function refreshActiveViewData(){
   if(activeViewId === "view-timed") renderTimedIdle();
   if(activeViewId === "view-progress") renderProgress();
   if(activeViewId === "view-manage") renderManage();
+  if(activeViewId === "view-grammar") {
+    document.getElementById("grammar-student-name").textContent = state.studentName || "Học viên";
+    renderGrammarStudent();
+  }
   if(activeViewId === "view-dictation") {
     document.getElementById("dc-student-name").textContent = state.studentName || "Học viên";
     initDictationView();
@@ -1907,10 +2142,14 @@ let activeVideoType = null;
 let ytApiReadyPromise = null;
 
 const videoPlayPauseBtn = document.getElementById("video-play-pause-btn");
+const videoRewindBtn = document.getElementById("video-rewind-btn");
 const videoForwardBtn = document.getElementById("video-forward-btn");
 const videoForwardSeconds = document.getElementById("video-forward-seconds");
+const videoRewindLabel = document.getElementById("video-rewind-label");
 const videoForwardLabel = document.getElementById("video-forward-label");
 const videoTimeLabel = document.getElementById("video-time-label");
+
+updateSeekLabels();
 
 function formatVideoTime(seconds){
   if(!Number.isFinite(seconds) || seconds < 0) seconds = 0;
@@ -1935,6 +2174,7 @@ function resetVideoControls(){
   activeYouTubePlayer = null;
   activeVideoType = null;
   videoPlayPauseBtn.disabled = false;
+  videoRewindBtn.disabled = false;
   videoForwardBtn.disabled = false;
   videoPlayPauseBtn.textContent = "▶️ Phát";
   videoTimeLabel.textContent = "00:00 / 00:00";
@@ -1951,7 +2191,8 @@ function updateHtmlVideoControls(){
 function seekHtmlVideo(seconds){
   if(!activeVideoElement) return;
   const duration = Number.isFinite(activeVideoElement.duration) ? activeVideoElement.duration : Infinity;
-  activeVideoElement.currentTime = Math.min(activeVideoElement.currentTime + seconds, duration);
+  const nextTime = activeVideoElement.currentTime + seconds;
+  activeVideoElement.currentTime = Math.max(0, Math.min(nextTime, duration));
   updateHtmlVideoControls();
 }
 
@@ -1976,24 +2217,43 @@ async function createYouTubePlayer(videoId){
   const holder = document.getElementById("video-display-area");
   const playerId = "youtube-dictation-player";
   holder.innerHTML = `<div id="${playerId}" style="width:100%;height:100%;"></div>`;
-  await loadYouTubeApi();
 
-  activeVideoType = "youtube";
-  activeYouTubePlayer = new YT.Player(playerId, {
-    videoId,
-    playerVars: {
-      autoplay: 0,
-      controls: 1,
-      rel: 0,
-      modestbranding: 1,
-      playsinline: 1,
-      enablejsapi: 1
-    },
-    events: {
-      onReady: () => updateYouTubeControls(),
-      onStateChange: () => updateYouTubeControls()
-    }
-  });
+  try {
+    await Promise.race([
+      loadYouTubeApi(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("YouTube API timeout")), 8000))
+    ]);
+    if(!window.YT || !YT.Player) throw new Error("YouTube API unavailable");
+
+    activeVideoType = "youtube";
+    videoRewindBtn.disabled = false;
+    videoForwardBtn.disabled = false;
+    activeYouTubePlayer = new YT.Player(playerId, {
+      videoId,
+      playerVars: {
+        autoplay: 0, controls: 1, rel: 0, modestbranding: 1,
+        playsinline: 1, enablejsapi: 1,
+        origin: (location.protocol === "http:" || location.protocol === "https:") ? location.origin : undefined
+      },
+      events: {
+        onReady: () => updateYouTubeControls(),
+        onStateChange: () => updateYouTubeControls(),
+        onError: () => showExternalVideoFallback(videoId)
+      }
+    });
+  } catch(err) {
+    showExternalVideoFallback(videoId);
+  }
+}
+
+function showExternalVideoFallback(videoId){
+  activeVideoType = "external";
+  activeYouTubePlayer = null;
+  videoDisplayArea.innerHTML = `<iframe src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}?playsinline=1&rel=0" title="YouTube video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+  videoPlayPauseBtn.disabled = true;
+  videoRewindBtn.disabled = true;
+    videoForwardBtn.disabled = true;
+  videoTimeLabel.textContent = "Dùng điều khiển của YouTube";
 }
 
 function updateYouTubeControls(){
@@ -2009,7 +2269,8 @@ function seekYouTube(seconds){
   if(!activeYouTubePlayer) return;
   const current = activeYouTubePlayer.getCurrentTime() || 0;
   const duration = activeYouTubePlayer.getDuration() || Infinity;
-  activeYouTubePlayer.seekTo(Math.min(current + seconds, duration), true);
+  const nextTime = Math.max(0, Math.min(current + seconds, duration));
+  activeYouTubePlayer.seekTo(nextTime, true);
   setTimeout(updateYouTubeControls, 100);
 }
 
@@ -2029,8 +2290,28 @@ videoPlayPauseBtn.addEventListener("click", () => {
   }
 });
 
+function updateSeekLabels(){
+  const seconds = Math.max(1, Math.min(60, parseInt(videoForwardSeconds.value, 10) || 6));
+  videoForwardSeconds.value = seconds;
+  videoRewindLabel.textContent = seconds;
+  videoForwardLabel.textContent = seconds;
+}
+
+function updateForwardLabel(){
+  updateSeekLabels();
+}
+
+videoForwardSeconds.addEventListener("input", updateSeekLabels);
+
+videoRewindBtn.addEventListener("click", () => {
+  updateSeekLabels();
+  const seconds = parseInt(videoForwardSeconds.value, 10);
+  if(activeVideoType === "html5") seekHtmlVideo(-seconds);
+  else if(activeVideoType === "youtube") seekYouTube(-seconds);
+});
+
 videoForwardBtn.addEventListener("click", () => {
-  updateForwardLabel();
+  updateSeekLabels();
   const seconds = parseInt(videoForwardSeconds.value, 10);
   if(activeVideoType === "html5") seekHtmlVideo(seconds);
   else if(activeVideoType === "youtube") seekYouTube(seconds);
@@ -2044,6 +2325,7 @@ function loadSelectedVideo(vObj){
   if(!rawUrl){
     videoDisplayArea.innerHTML = `<span>Chưa có link video bài học. 📺</span>`;
     videoPlayPauseBtn.disabled = true;
+    videoRewindBtn.disabled = true;
     videoForwardBtn.disabled = true;
     return;
   }
@@ -2052,6 +2334,8 @@ function loadSelectedVideo(vObj){
   const isDirectVideo = /\.(mp4|webm|ogg)(\?.*)?$/i.test(rawUrl);
   if(isDirectVideo){
     activeVideoType = "html5";
+    videoRewindBtn.disabled = false;
+    videoForwardBtn.disabled = false;
     videoDisplayArea.innerHTML = `
       <video id="dictation-html5-video" preload="metadata" playsinline controls>
         <source src="${rawUrl}" />
@@ -2060,6 +2344,13 @@ function loadSelectedVideo(vObj){
     `;
     activeVideoElement = document.getElementById("dictation-html5-video");
     activeVideoElement.addEventListener("loadedmetadata", updateHtmlVideoControls);
+    activeVideoElement.addEventListener("error", () => {
+      videoDisplayArea.innerHTML = `<div style="padding:20px;text-align:center;color:#fff;background:#111;">⚠️ Không thể phát trực tiếp file video này.<br><small>Hãy dùng link MP4/WebM trực tiếp hoặc YouTube.</small></div>`;
+      videoPlayPauseBtn.disabled = true;
+      videoRewindBtn.disabled = true;
+    videoForwardBtn.disabled = true;
+      videoTimeLabel.textContent = "Video không phát được";
+    });
     activeVideoElement.addEventListener("timeupdate", updateHtmlVideoControls);
     activeVideoElement.addEventListener("play", updateHtmlVideoControls);
     activeVideoElement.addEventListener("pause", updateHtmlVideoControls);
@@ -2067,19 +2358,42 @@ function loadSelectedVideo(vObj){
     return;
   }
 
-  // YouTube: dùng YouTube IFrame API để Play/Pause + Seek chính xác.
-  const ytMatch = rawUrl.match(/(?:youtube\.com\/watch\?[^#]*v=|youtube\.com\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{11})/i);
-  if(ytMatch){
-    createYouTubePlayer(ytMatch[1]);
+  // YouTube: nhận watch, youtu.be, shorts và embed.
+  let ytVideoId = null;
+  try {
+    const u = new URL(rawUrl);
+    const host = u.hostname.replace(/^www\./, "").toLowerCase();
+    if(host === "youtu.be") ytVideoId = u.pathname.split("/").filter(Boolean)[0] || null;
+    else if(host === "youtube.com" || host === "m.youtube.com") {
+      if(u.pathname === "/watch") ytVideoId = u.searchParams.get("v");
+      else if(u.pathname.startsWith("/shorts/")) ytVideoId = u.pathname.split("/")[2];
+      else if(u.pathname.startsWith("/embed/")) ytVideoId = u.pathname.split("/")[2];
+    }
+  } catch(e) {}
+
+  if(ytVideoId && /^[A-Za-z0-9_-]{11}$/.test(ytVideoId)){
+    createYouTubePlayer(ytVideoId);
     return;
   }
 
-  // Nguồn khác (ví dụ Douyin): vẫn nhúng video, nhưng quyền điều khiển
-  // phụ thuộc vào chính sách của nền tảng bên ngoài.
+  // Google Drive share link -> iframe preview.
+  const driveMatch = rawUrl.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+  if(driveMatch){
+    activeVideoType = "external";
+    videoDisplayArea.innerHTML = `<iframe src="https://drive.google.com/file/d/${encodeURIComponent(driveMatch[1])}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    videoPlayPauseBtn.disabled = true;
+    videoRewindBtn.disabled = true;
+    videoForwardBtn.disabled = true;
+    videoTimeLabel.textContent = "Dùng điều khiển của trình phát";
+    return;
+  }
+
+  // Nguồn ngoài (Douyin/TikTok/Facebook...) chỉ nhúng được nếu website cho phép iframe.
   activeVideoType = "external";
-  videoDisplayArea.innerHTML = `<iframe src="${rawUrl}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+  videoDisplayArea.innerHTML = `<iframe src="${rawUrl.replace(/"/g, "&quot;")}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   videoPlayPauseBtn.disabled = true;
-  videoForwardBtn.disabled = true;
+  videoRewindBtn.disabled = true;
+    videoForwardBtn.disabled = true;
   videoTimeLabel.textContent = "Điều khiển phụ thuộc nền tảng";
 }
 
@@ -2167,6 +2481,344 @@ document.getElementById("submit-dictation-btn").addEventListener("click", () => 
 
   document.getElementById("dictation-text").value = "";
   alert("Gửi bài chép chính tả thành công! Bài của bạn đã được ghi nhận vào Bảng xếp hạng nộp bài sớm nhất. 🚀✨");
+});
+
+
+/* =========================================================
+   GRAMMAR FOCUS / NGỮ PHÁP TRỌNG TÂM
+   ========================================================= */
+function escapeHtml(value){
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[ch]));
+}
+
+function getGrammarSections(){
+  const cData = getCurrentClassData();
+  if(!Array.isArray(cData.grammarSections)) cData.grammarSections = [];
+  return cData.grammarSections;
+}
+
+function renderGrammarStudent(){
+  const area = document.getElementById("grammar-student-area");
+  if(!area) return;
+  const sections = getGrammarSections();
+  document.getElementById("grammar-student-name").textContent = state.studentName || "Học viên";
+
+  if(sections.length === 0){
+    area.innerHTML = `
+      <div class="grammar-empty">
+        <div style="font-size:42px;margin-bottom:8px;">📖</div>
+        <strong>Hiện chưa có bài Ngữ pháp trọng tâm.</strong>
+        <div style="margin-top:6px;font-size:13px;">Thầy/Cô sẽ thêm bài tập cho lớp này sớm nhé 🐼</div>
+      </div>`;
+    document.getElementById("grammar-submit-bar").style.display = "none";
+    return;
+  }
+
+  document.getElementById("grammar-submit-bar").style.display = "flex";
+  area.innerHTML = "";
+
+  sections.forEach((section, sIndex) => {
+    const card = document.createElement("div");
+    card.className = "grammar-section-card";
+    card.innerHTML = `
+      <div class="grammar-section-head">
+        <div>
+          <h3 class="grammar-section-title">${sIndex+1}. ${escapeHtml(section.title)}</h3>
+          <p class="grammar-section-instruction">${escapeHtml(section.instruction || "Hoàn thành các câu hỏi bên dưới.")}</p>
+        </div>
+        <span class="stat-pill">${(section.items || []).length} điểm</span>
+      </div>
+      <div class="grammar-items"></div>
+    `;
+    const itemsWrap = card.querySelector(".grammar-items");
+
+    (section.items || []).forEach((item, iIndex) => {
+      const itemCard = document.createElement("div");
+      itemCard.className = "grammar-item-card";
+      itemCard.innerHTML = `
+        <div class="grammar-item-top">
+          <div class="grammar-item-number">${iIndex+1}</div>
+          <div style="flex:1;">
+            <div class="grammar-item-name">${escapeHtml(item.name)}</div>
+            <div class="grammar-item-desc" style="display:block;">
+              ${escapeHtml(item.description || "Hãy dùng điểm ngữ pháp này để đặt câu.")}
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <label style="display:block;font-size:12px;font-weight:800;color:var(--seal-dark);margin-bottom:6px;">
+            ✍️ Câu trả lời của bạn
+          </label>
+          <textarea class="grammar-answer"
+            data-section-id="${escapeHtml(section.id)}"
+            data-item-id="${escapeHtml(item.id)}"
+            placeholder="Nhập câu tiếng Trung của bạn vào đây..."></textarea>
+        </div>
+      `;
+      itemsWrap.appendChild(itemCard);
+    });
+
+    area.appendChild(card);
+  });
+
+  document.getElementById("grammar-submit-status").textContent =
+    `Có ${sections.reduce((n,s)=>n+(s.items||[]).length,0)} điểm ngữ pháp cần hoàn thành.`;
+}
+
+function renderGrammarTeacherManager(){
+  const wrap = document.getElementById("grammar-teacher-manager");
+  if(!wrap) return;
+  const sections = getGrammarSections();
+  wrap.innerHTML = "";
+
+  if(sections.length === 0){
+    wrap.innerHTML = `<div class="empty-note">Chưa có phần ngữ pháp nào. Hãy tạo phần đầu tiên ở trên nhé.</div>`;
+    return;
+  }
+
+  sections.forEach((section, sIndex) => {
+    const box = document.createElement("div");
+    box.className = "grammar-teacher-section";
+    box.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+        <div style="flex:1;">
+          <strong style="color:var(--seal-dark);font-family:var(--serif);font-size:17px;">
+            ${sIndex+1}. ${escapeHtml(section.title)}
+          </strong>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:3px;white-space:pre-wrap;">
+            ${escapeHtml(section.instruction || "")}
+          </div>
+        </div>
+        <button class="btn btn-bad grammar-delete-section-btn" data-id="${escapeHtml(section.id)}" style="font-size:11px;padding:5px 9px;">🗑️ Xóa phần</button>
+      </div>
+
+      <div style="margin-top:12px;background:#fff;border:2px solid var(--paper-darker);border-radius:14px;padding:12px;">
+        <div style="font-weight:700;font-size:12px;color:var(--seal-dark);margin-bottom:8px;">📌 Các điểm ngữ pháp trong phần này</div>
+        <div class="grammar-teacher-items">
+          ${(section.items || []).length ? "" : `<div style="font-size:12px;color:var(--ink-soft);">Chưa có điểm ngữ pháp nào.</div>`}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+          <input type="text" class="grammar-new-item-name" placeholder="Ví dụ: 着">
+          <input type="text" class="grammar-new-item-desc" placeholder="Yêu cầu: Đặt 1 câu với 着">
+        </div>
+        <button class="btn btn-primary grammar-add-item-btn" data-id="${escapeHtml(section.id)}" style="margin-top:8px;font-size:12px;padding:7px 12px;">+ Thêm ngữ pháp</button>
+      </div>
+    `;
+
+    const itemsWrap = box.querySelector(".grammar-teacher-items");
+    (section.items || []).forEach((item, iIndex) => {
+      const row = document.createElement("div");
+      row.className = "grammar-teacher-item";
+      row.innerHTML = `
+        <div style="flex:1;">
+          <strong style="font-size:13px;">${iIndex+1}. ${escapeHtml(item.name)}</strong>
+          <small>${escapeHtml(item.description || "")}</small>
+        </div>
+        <button class="btn btn-bad grammar-delete-item-btn" data-section-id="${escapeHtml(section.id)}" data-item-id="${escapeHtml(item.id)}" style="font-size:10px;padding:4px 8px;">Xóa</button>
+      `;
+      itemsWrap.appendChild(row);
+    });
+
+    wrap.appendChild(box);
+  });
+
+  wrap.querySelectorAll(".grammar-delete-section-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const cData = getCurrentClassData();
+      if(!confirm("Bạn có chắc muốn xóa toàn bộ phần ngữ pháp này không?")) return;
+      cData.grammarSections = cData.grammarSections.filter(s => s.id !== btn.dataset.id);
+      saveState();
+      renderGrammarTeacherManager();
+      renderGrammarStudent();
+    });
+  });
+
+  wrap.querySelectorAll(".grammar-add-item-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const box = btn.closest(".grammar-teacher-section");
+      const nameInput = box.querySelector(".grammar-new-item-name");
+      const descInput = box.querySelector(".grammar-new-item-desc");
+      const name = nameInput.value.trim();
+      const description = descInput.value.trim();
+      if(!name){
+        alert("Vui lòng nhập tên điểm ngữ pháp!");
+        nameInput.focus();
+        return;
+      }
+      const cData = getCurrentClassData();
+      const section = cData.grammarSections.find(s => s.id === btn.dataset.id);
+      if(!section) return;
+      if(!Array.isArray(section.items)) section.items = [];
+      section.items.push({
+        id: "gitem_" + Date.now() + "_" + Math.random().toString(36).slice(2,7),
+        name,
+        description
+      });
+      saveState();
+      renderGrammarTeacherManager();
+      renderGrammarStudent();
+    });
+  });
+
+  wrap.querySelectorAll(".grammar-delete-item-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const cData = getCurrentClassData();
+      const section = cData.grammarSections.find(s => s.id === btn.dataset.sectionId);
+      if(!section) return;
+      if(!confirm("Xóa điểm ngữ pháp này?")) return;
+      section.items = (section.items || []).filter(i => i.id !== btn.dataset.itemId);
+      saveState();
+      renderGrammarTeacherManager();
+      renderGrammarStudent();
+    });
+  });
+}
+
+document.getElementById("grammar-add-section-btn").addEventListener("click", () => {
+  const title = document.getElementById("grammar-new-section-title").value.trim();
+  const instruction = document.getElementById("grammar-new-section-instruction").value.trim();
+  if(!title){
+    alert("Vui lòng nhập tên phần ngữ pháp!");
+    document.getElementById("grammar-new-section-title").focus();
+    return;
+  }
+  const cData = getCurrentClassData();
+  if(!Array.isArray(cData.grammarSections)) cData.grammarSections = [];
+  cData.grammarSections.push({
+    id: "gsec_" + Date.now() + "_" + Math.random().toString(36).slice(2,7),
+    title,
+    instruction,
+    items: []
+  });
+  saveState();
+  document.getElementById("grammar-new-section-title").value = "";
+  document.getElementById("grammar-new-section-instruction").value = "";
+  renderGrammarTeacherManager();
+  renderGrammarStudent();
+  alert("Đã tạo phần ngữ pháp mới! ✨");
+});
+
+document.getElementById("grammar-save-sheet-url-btn").addEventListener("click", () => {
+  const url = document.getElementById("grammar-sheet-webhook-url").value.trim();
+  state.grammarSheetWebhookUrl = url;
+  saveState();
+  document.getElementById("grammar-sheet-status").textContent =
+    url ? "✅ Đã lưu Web App URL cho lớp/website này." : "⚠️ Đã xóa kết nối Google Sheets.";
+  alert(url ? "Đã lưu kết nối Google Sheets! ✨" : "Đã xóa kết nối Google Sheets.");
+});
+
+async function sendGrammarSubmissionToSheet(payload){
+  const url = (state.grammarSheetWebhookUrl || "").trim();
+  if(!url) return {ok:false, skipped:true};
+
+  try{
+    await fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {"Content-Type":"text/plain;charset=utf-8"},
+      body: JSON.stringify(payload)
+    });
+    return {ok:true};
+  }catch(err){
+    return {ok:false, error:err};
+  }
+}
+
+document.getElementById("submit-grammar-btn").addEventListener("click", async () => {
+  const textareas = Array.from(document.querySelectorAll("#grammar-student-area .grammar-answer"));
+  const sections = getGrammarSections();
+  if(!sections.length){
+    alert("Hiện chưa có bài ngữ pháp để nộp.");
+    return;
+  }
+
+  const answers = textareas.map(t => ({
+    sectionId: t.dataset.sectionId,
+    itemId: t.dataset.itemId,
+    answer: t.value.trim()
+  }));
+
+  const missing = answers.find(a => !a.answer);
+  if(missing){
+    alert("Bạn hãy hoàn thành tất cả các điểm ngữ pháp trước khi nộp nhé! 🐼");
+    const target = textareas.find(t => t.dataset.itemId === missing.itemId && t.dataset.sectionId === missing.sectionId);
+    if(target) target.focus();
+    return;
+  }
+
+  const cData = getCurrentClassData();
+  const submission = {
+    id: "gsub_" + Date.now() + "_" + Math.random().toString(36).slice(2,7),
+    studentName: state.studentName || "Học viên ẩn danh",
+    className: state.currentClassName,
+    submittedAt: new Date().toISOString(),
+    answers: answers.map(a => {
+      const section = sections.find(s => s.id === a.sectionId);
+      const item = section?.items?.find(i => i.id === a.itemId);
+      return {
+        sectionTitle: section?.title || "",
+        grammar: item?.name || "",
+        instruction: item?.description || "",
+        answer: a.answer
+      };
+    })
+  };
+
+  if(!Array.isArray(cData.grammarSubmissions)) cData.grammarSubmissions = [];
+  cData.grammarSubmissions.push(submission);
+  saveState();
+
+  const status = document.getElementById("grammar-submit-status");
+  status.textContent = "⏳ Đang ghi nhận bài nộp...";
+  const result = await sendGrammarSubmissionToSheet(submission);
+
+  document.querySelectorAll("#grammar-student-area .grammar-answer").forEach(t => t.value = "");
+  status.textContent = result.ok
+    ? "✅ Đã nộp và gửi dữ liệu lên Google Sheets."
+    : result.skipped
+      ? "✅ Đã nộp và lưu trên website. Chưa cấu hình Google Sheets."
+      : "⚠️ Đã lưu bài trên website nhưng gửi Google Sheets chưa thành công.";
+
+  alert(
+    result.ok
+      ? "Nộp bài thành công! Bài đã được gửi về Google Sheets của giáo viên. 🚀✨"
+      : "Nộp bài thành công! Bài đã được lưu trên website. Nếu chưa thấy trong Sheet, kiểm tra phần kết nối Google Sheets."
+  );
+});
+
+document.getElementById("grammar-export-submissions-btn").addEventListener("click", () => {
+  const cData = getCurrentClassData();
+  const submissions = Array.isArray(cData.grammarSubmissions) ? cData.grammarSubmissions : [];
+  if(!submissions.length){
+    alert("Lớp hiện tại chưa có bài ngữ pháp nào được nộp.");
+    return;
+  }
+
+  const rows = [["Thời gian","Học viên","Lớp","Phần","Ngữ pháp","Yêu cầu","Câu trả lời"]];
+  submissions.forEach(sub => {
+    (sub.answers || []).forEach(a => {
+      rows.push([
+        sub.submittedAt || "",
+        sub.studentName || "",
+        sub.className || "",
+        a.sectionTitle || "",
+        a.grammar || "",
+        a.instruction || "",
+        a.answer || ""
+      ]);
+    });
+  });
+
+  const csv = "\uFEFF" + rows.map(row => row.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `nguphap_nopbai_${(state.currentClassName || "lop").replace(/[^\wÀ-ỹ-]+/g,"_")}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 });
 
 /* =========================================================
@@ -2391,7 +3043,9 @@ teacherLoginBtn.addEventListener("click", () => {
     document.getElementById("cfg-color-paper").value = state.colorPaper || "#F0F7F4";
     document.getElementById("cfg-color-ink").value = state.colorInk || "#2C4A3E";
     document.getElementById("cfg-color-jade").value = state.colorJade || "#388E3C";
+    document.getElementById("grammar-sheet-webhook-url").value = state.grammarSheetWebhookUrl || "";
     renderTeacherManage();
+    renderGrammarTeacherManager();
   } else {
     alert("Mật khẩu giáo viên không chính xác!");
   }
@@ -2402,6 +3056,14 @@ teacherPasswordInput.addEventListener("keydown", (e) => {
 teacherLogoutBtn.addEventListener("click", () => {
   teacherDashboard.style.display = "none";
   teacherAuthBox.style.display = "block";
+});
+
+document.getElementById("grammar-scroll-btn").addEventListener("click", () => {
+  const panel = document.getElementById("grammar-teacher-panel");
+  if(panel){
+    panel.scrollIntoView({behavior:"smooth", block:"start"});
+    setTimeout(() => document.getElementById("grammar-new-section-title")?.focus(), 450);
+  }
 });
 
 document.getElementById("cfg-save-theme-btn").addEventListener("click", () => {
@@ -2474,7 +3136,9 @@ document.getElementById("create-class-btn").addEventListener("click", () => {
       {id: "v_init", title: "Bài tập video đầu tiên", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", note: "Chào mừng các em đến với lớp học mới! Chúc các em học tập vui vẻ ~ 🐼"}
     ],
     customWords: [],
-    deletedDefaultIds: []
+    deletedDefaultIds: [],
+    grammarSections: [],
+    grammarSubmissions: []
   };
   saveState();
   document.getElementById("new-class-name").value = "";
