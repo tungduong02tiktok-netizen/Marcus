@@ -1,0 +1,6 @@
+{
+  "name": "Web Từ Vựng Tiếng Trung Gamification",
+  "description": "Hệ thống Gamification học từ vựng Tiếng Trung với Túi Trúc, Cấp độ Gấu Trúc, Vườn Trúc, Bảng Xếp Hạng, Bảng Tin và CMS Giáo Viên.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
